@@ -110,7 +110,7 @@ export default function NewsPage() {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  const getCategoryLabel = (cat: string) => ({ company: '公司动态', industry: '行业资讯', policy: '政策法规' }[cat] || cat);
+  const getCategoryLabel = (cat: string) => ({ company: '公司', industry: '行业', policy: '政策' }[cat] || cat);
   const getCategoryColor = (cat: string) => ({ company: 'bg-blue-100 text-blue-700', industry: 'bg-green-100 text-green-700', policy: 'bg-amber-100 text-amber-700' }[cat] || 'bg-gray-100');
 
   if (loading) return <div className="flex justify-center p-8"><div className="animate-spin h-8 w-8 border-b-2 border-emerald-600"></div></div>;
@@ -138,36 +138,49 @@ export default function NewsPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">标题</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">分类</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">状态</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">发布时间</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredNews.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4"><div className="font-medium text-gray-900 line-clamp-1">{item.title}</div><div className="text-sm text-gray-500 line-clamp-1">{item.summary || '-'}</div></td>
-                <td className="px-6 py-4"><span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(item.category)}`}>{getCategoryLabel(item.category)}</span></td>
-                <td className="px-6 py-4"><span className={`px-2 py-1 text-xs rounded-full ${item.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>{item.isPublished ? '已发布' : '草稿'}</span></td>
-                <td className="px-6 py-4 text-sm text-gray-500">{item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('zh-CN') : '-'}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => handleTogglePublish(item)} className={`p-2 rounded-lg transition-colors ${item.isPublished ? 'text-amber-600 hover:bg-amber-50' : 'text-green-600 hover:bg-green-50'}`} title={item.isPublished ? '取消发布' : '发布'}>
-                      {item.isPublished ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                    <button onClick={() => handleEdit(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"><Edit className="w-4 h-4" /></button>
-                    <button onClick={() => handleDelete(item.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 className="w-4 h-4" /></button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[800px]">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[40%]">标题</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[10%]">分类</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[10%]">状态</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[15%]">发布时间</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[15%]">操作</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredNews.map((item) => (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-4">
+                    <div className="font-medium text-gray-900 line-clamp-1" title={item.title}>{item.title}</div>
+                    <div className="text-sm text-gray-500 line-clamp-1" title={item.summary || ''}>{item.summary || '-'}</div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <span className={`inline-block px-2 py-1 text-xs rounded-full whitespace-nowrap ${getCategoryColor(item.category)}`}>
+                      {getCategoryLabel(item.category)}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4">
+                    <span className={`inline-block px-2 py-1 text-xs rounded-full whitespace-nowrap ${item.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                      {item.isPublished ? '已发布' : '草稿'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">{item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('zh-CN') : '-'}</td>
+                  <td className="px-4 py-4">
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => handleTogglePublish(item)} className={`p-2 rounded-lg transition-colors ${item.isPublished ? 'text-amber-600 hover:bg-amber-50' : 'text-green-600 hover:bg-green-50'}`} title={item.isPublished ? '取消发布' : '发布'}>
+                        {item.isPublished ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                      <button onClick={() => handleEdit(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"><Edit className="w-4 h-4" /></button>
+                      <button onClick={() => handleDelete(item.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {filteredNews.length === 0 && <div className="text-center py-12 text-gray-500">暂无新闻数据</div>}
       </div>
 
