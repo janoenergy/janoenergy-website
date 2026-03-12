@@ -1,0 +1,63 @@
+[
+  {
+    "ip": "203.0.113.45",
+    "count": 4,
+    "countries": [
+      "China"
+    ],
+    "cities": [
+      "Beijing",
+      "Shanghai"
+    ],
+    "first_seen": "2026-03-10T10:30:00Z",
+    "last_seen": "2026-03-10T14:00:00Z"
+  },
+  {
+    "ip": "198.51.100.22",
+    "count": 3,
+    "countries": [
+      "United States"
+    ],
+    "cities": [
+      "Los Angeles"
+    ],
+    "first_seen": "2026-03-10T11:00:00Z",
+    "last_seen": "2026-03-10T11:10:00Z"
+  },
+  {
+    "ip": "192.0.2.100",
+    "count": 1,
+    "countries": [
+      "Japan"
+    ],
+    "cities": [
+      "Tokyo"
+    ],
+    "first_seen": "2026-03-10T12:00:00Z",
+    "last_seen": "2026-03-10T12:00:00Z"
+  },
+  {
+    "ip": "198.51.100.50",
+    "count": 1,
+    "countries": [
+      "Singapore"
+    ],
+    "cities": [
+      "Singapore"
+    ],
+    "first_seen": "2026-03-10T13:00:00Z",
+    "last_seen": "2026-03-10T13:00:00Z"
+  },
+  {
+    "ip": "192.0.2.200",
+    "count": 1,
+    "countries": [
+      "Germany"
+    ],
+    "cities": [
+      "Frankfurt"
+    ],
+    "first_seen": "2026-03-10T15:00:00Z",
+    "last_seen": "2026-03-10T15:00:00Z"
+  }
+]

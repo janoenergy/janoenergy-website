@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# 禁止爬虫访问后台管理页面
+Disallow: /admin/
+
+# 网站地图
+Sitemap: https://janoenergy.com/sitemap.xml
+
+# 爬虫抓取频率
+Crawl-delay: 10
+# Cache bust Wed Mar 11 21:46:39 CST 2026
