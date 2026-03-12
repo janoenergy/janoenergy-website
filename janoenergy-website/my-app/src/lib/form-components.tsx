@@ -1,37 +1,45 @@
+import { typography, spacing, sizes } from './admin-theme';
+
 // 统一的后台表单组件样式
 export const formStyles = {
-  // 输入框基础样式 - 统一高度 44px
-  input: "w-full px-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm",
+  // 输入框基础样式 - 统一高度 44px，字体大小 text-sm
+  input: `${sizes.input} w-full px-4 border border-gray-300 ${sizes.rounded} focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all ${typography.body}`,
   
-  // 选择框样式 - 统一高度 44px
-  select: "w-full px-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm bg-white appearance-none cursor-pointer",
+  // 选择框样式 - 统一高度 44px，字体大小 text-sm
+  select: `${sizes.input} w-full px-4 border border-gray-300 ${sizes.rounded} focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all ${typography.body} bg-white appearance-none cursor-pointer`,
   
-  // 文本域样式
-  textarea: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm resize-none",
+  // 文本域样式 - 字体大小 text-sm
+  textarea: `w-full px-4 py-3 border border-gray-300 ${sizes.rounded} focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all ${typography.body} resize-none`,
   
-  // 标签样式
-  label: "block text-sm font-medium text-gray-700 mb-2",
+  // 标签样式 - 字体大小 text-sm，中等粗细
+  label: `${typography.label} ${spacing.label}`,
   
   // 字段容器样式 - 统一间距
-  fieldWrapper: "mb-5",
+  fieldWrapper: spacing.field,
   
-  // 按钮样式
+  // 按钮样式 - 字体大小 text-sm
   button: {
-    primary: "inline-flex items-center justify-center px-4 h-10 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-all active:scale-95",
-    secondary: "inline-flex items-center justify-center px-4 h-10 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-300 transition-all active:scale-95",
-    danger: "inline-flex items-center justify-center px-4 h-10 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all active:scale-95",
-    ghost: "inline-flex items-center justify-center px-4 h-10 hover:bg-gray-100 text-gray-600 font-medium rounded-lg transition-all",
+    primary: `${sizes.button} inline-flex items-center justify-center px-4 bg-emerald-600 hover:bg-emerald-700 text-white ${typography.button} ${sizes.rounded} transition-all active:scale-95`,
+    secondary: `${sizes.button} inline-flex items-center justify-center px-4 bg-white hover:bg-gray-50 text-gray-700 ${typography.button} ${sizes.rounded} border border-gray-300 transition-all active:scale-95`,
+    danger: `${sizes.button} inline-flex items-center justify-center px-4 bg-red-600 hover:bg-red-700 text-white ${typography.button} ${sizes.rounded} transition-all active:scale-95`,
+    ghost: `${sizes.button} inline-flex items-center justify-center px-4 hover:bg-gray-100 text-gray-600 ${typography.button} ${sizes.rounded} transition-all`,
   },
   
-  // 搜索框样式
-  search: "w-full pl-10 pr-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none",
+  // 搜索框样式 - 字体大小 text-sm
+  search: `${sizes.input} w-full pl-10 pr-4 border border-gray-300 ${sizes.rounded} focus:ring-2 focus:ring-emerald-500 outline-none ${typography.body}`,
   
-  // 筛选下拉样式
-  filter: "px-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white",
+  // 筛选下拉样式 - 字体大小 text-sm
+  filter: `px-4 ${sizes.input} border border-gray-300 ${sizes.rounded} focus:ring-2 focus:ring-emerald-500 outline-none bg-white ${typography.body}`,
+  
+  // 辅助文字样式 - 字体大小 text-xs
+  helper: `${typography.helper} mt-1`,
+  
+  // 占位符样式
+  placeholder: "placeholder-gray-400",
 };
 
 // 统一的表单组件 - Input
-export function FormInput({ label, value, onChange, type = 'text', placeholder = '', required = false }: any) {
+export function FormInput({ label, value, onChange, type = 'text', placeholder = '', required = false, helper }: any) {
   return (
     <div className={formStyles.fieldWrapper}>
       <label className={formStyles.label}>
@@ -44,14 +52,15 @@ export function FormInput({ label, value, onChange, type = 'text', placeholder =
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className={formStyles.input}
+        className={`${formStyles.input} ${formStyles.placeholder}`}
       />
+      {helper && <p className={formStyles.helper}>{helper}</p>}
     </div>
   );
 }
 
 // 统一的表单组件 - Select
-export function FormSelect({ label, value, onChange, options, required = false }: any) {
+export function FormSelect({ label, value, onChange, options, required = false, helper }: any) {
   return (
     <div className={formStyles.fieldWrapper}>
       <label className={formStyles.label}>
@@ -76,12 +85,13 @@ export function FormSelect({ label, value, onChange, options, required = false }
           </svg>
         </div>
       </div>
+      {helper && <p className={formStyles.helper}>{helper}</p>}
     </div>
   );
 }
 
 // 统一的表单组件 - TextArea
-export function FormTextArea({ label, value, onChange, rows = 4, placeholder = '' }: any) {
+export function FormTextArea({ label, value, onChange, rows = 4, placeholder = '', helper }: any) {
   return (
     <div className={formStyles.fieldWrapper}>
       <label className={formStyles.label}>{label}</label>
@@ -90,8 +100,9 @@ export function FormTextArea({ label, value, onChange, rows = 4, placeholder = '
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
         placeholder={placeholder}
-        className={formStyles.textarea}
+        className={`${formStyles.textarea} ${formStyles.placeholder}`}
       />
+      {helper && <p className={formStyles.helper}>{helper}</p>}
     </div>
   );
 }
@@ -121,7 +132,7 @@ export function FormModal({ isOpen, onClose, title, children }: any) {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          <h3 className={`${typography.sectionTitle}`}>{title}</h3>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
@@ -140,3 +151,6 @@ export function FormModal({ isOpen, onClose, title, children }: any) {
     </div>
   );
 }
+
+// 导出主题配置供其他组件使用
+export { typography, spacing, sizes };

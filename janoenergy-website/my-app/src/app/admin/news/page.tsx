@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Eye, EyeOff, Search } from 'lucide-react';
 import { API_ENDPOINTS } from '@/lib/api';
 import { toast } from 'sonner';
-import { FormInput, FormSelect, FormTextArea, FormButton, FormModal, formStyles } from '@/lib/form-components';
+import { FormInput, FormSelect, FormTextArea, FormButton, FormModal, formStyles, typography, spacing } from '@/lib/form-components';
 
 interface NewsItem {
   id: number;
@@ -127,10 +127,10 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className={spacing.page}>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">新闻管理</h1>
+        <h1 className={typography.pageTitle}>新闻管理</h1>
         <FormButton onClick={() => { resetForm(); setIsModalOpen(true); }}>
           <Plus className="w-4 h-4 mr-2" />
           发布新闻
@@ -178,32 +178,34 @@ export default function NewsPage() {
           <table className="w-full min-w-[800px]">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[40%]">标题</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[10%]">分类</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[10%]">状态</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[15%]">发布时间</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[15%]">操作</th>
+                <th className={`${spacing.tableHeader} w-[40%] ${typography.tableHeader}`}>标题</th>
+                <th className={`${spacing.tableHeader} w-[10%] ${typography.tableHeader}`}>分类</th>
+                <th className={`${spacing.tableHeader} w-[10%] ${typography.tableHeader}`}>状态</th>
+                <th className={`${spacing.tableHeader} w-[15%] ${typography.tableHeader}`}>发布时间</th>
+                <th className={`${spacing.tableHeader} w-[15%] ${typography.tableHeader}`}>操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredNews.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-4">
-                    <div className="font-medium text-gray-900 line-clamp-1" title={item.title}>{item.title}</div>
-                    <div className="text-sm text-gray-500 line-clamp-1" title={item.summary || ''}>{item.summary || '-'}</div>
+                  <td className={spacing.tableCell}>
+                    <div className={`${typography.bodyEmphasis} line-clamp-1`} title={item.title}>{item.title}</div>
+                    <div className={`${typography.body} line-clamp-1`} title={item.summary || ''}>{item.summary || '-'}</div>
                   </td>
-                  <td className="px-4 py-4">
+                  <td className={spacing.tableCell}>
                     <span className={`inline-block px-2 py-1 text-xs rounded-full whitespace-nowrap ${getCategoryColor(item.category)}`}>
                       {getCategoryLabel(item.category)}
                     </span>
                   </td>
-                  <td className="px-4 py-4">
+                  <td className={spacing.tableCell}>
                     <span className={`inline-block px-2 py-1 text-xs rounded-full whitespace-nowrap ${item.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                       {item.isPublished ? '已发布' : '草稿'}
                     </span>
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">{item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('zh-CN') : '-'}</td>
-                  <td className="px-4 py-4">
+                  <td className={`${spacing.tableCell} whitespace-nowrap ${typography.body}`}>
+                    {item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('zh-CN') : '-'}
+                  </td>
+                  <td className={spacing.tableCell}>
                     <div className="flex items-center gap-1">
                       <button onClick={() => handleTogglePublish(item)} className={`p-2 rounded-lg transition-colors ${item.isPublished ? 'text-amber-600 hover:bg-amber-50' : 'text-green-600 hover:bg-green-50'}`} title={item.isPublished ? '取消发布' : '发布'}>
                         {item.isPublished ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -275,7 +277,7 @@ export default function NewsPage() {
             onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
             className="w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
           />
-          <label htmlFor="isPublished" className="text-sm text-gray-700">
+          <label htmlFor="isPublished" className={typography.body}>
             立即发布
           </label>
         </div>
