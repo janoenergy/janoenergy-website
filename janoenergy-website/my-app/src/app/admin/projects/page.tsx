@@ -27,16 +27,20 @@ interface Project {
   createdAt: string;
 }
 
-// 按钮组件
+// 按钮组件 - 统一高度 44px
 function Button({ children, onClick, variant = 'primary', size = 'md', disabled = false, loading = false }: any) {
   const base = 'inline-flex items-center justify-center rounded-lg font-medium transition-all active:scale-95';
   const variants = {
     primary: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm hover:shadow',
-    secondary: 'bg-gray-100 hover:bg-gray-200 text-gray-800',
+    secondary: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300',
     danger: 'bg-red-600 hover:bg-red-700 text-white',
     ghost: 'hover:bg-gray-100 text-gray-700',
   };
-  const sizes = { sm: 'px-3 py-1.5 text-sm', md: 'px-4 py-3 text-sm', lg: 'px-6 py-3' };
+  const sizes = { 
+    sm: 'px-3 py-2 text-sm h-9', 
+    md: 'px-4 py-2.5 text-base h-11', 
+    lg: 'px-6 py-3 text-base h-12' 
+  };
   
   return (
     <button 
@@ -52,43 +56,45 @@ function Button({ children, onClick, variant = 'primary', size = 'md', disabled 
 
 // 弹窗组件
 function Modal({ isOpen, onClose, title, children, size = 'lg' }: any) {
+  if (!isOpen) return null;
+  
   return (
     <AnimatePresence>
-      {isOpen && (
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" 
+        onClick={onClose}
+      >
         <motion.div 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" 
-          onClick={onClose}
+          initial={{ scale: 0.95, opacity: 0 }} 
+          animate={{ scale: 1, opacity: 1 }} 
+          exit={{ scale: 0.95, opacity: 0 }}
+          transition={{ type: "spring", duration: 0.3 }}
+          className={`bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col`} 
+          onClick={e => e.stopPropagation()}
         >
-          <motion.div 
-            initial={{ scale: 0.95, opacity: 0 }} 
-            animate={{ scale: 1, opacity: 1 }} 
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: "spring", duration: 0.3 }}
-            className={`bg-white rounded-xl shadow-2xl w-full max-w-${size} max-h-[90vh] overflow-y-auto`} 
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white">
-              <h3 className="text-lg font-semibold">{title}</h3>
-              <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-6">{children}</div>
-          </motion.div>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+            <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+            <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+          <div className="p-6 overflow-y-auto flex-1">
+            {children}
+          </div>
         </motion.div>
-      )}
+      </motion.div>
     </AnimatePresence>
   );
 }
 
-// 输入组件
+// 输入组件 - 统一高度 48px，字体 16px
 function Input({ label, value, onChange, type = 'text', placeholder = '', required = false }: any) {
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+    <div className="mb-5">
+      <label className="block text-base font-medium text-gray-700 mb-2">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <input
@@ -97,27 +103,34 @@ function Input({ label, value, onChange, type = 'text', placeholder = '', requir
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className="w-full px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+        className="w-full h-12 px-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all placeholder:text-gray-400"
       />
     </div>
   );
 }
 
-// 选择组件
+// 选择组件 - 统一高度 48px，字体 16px
 function Select({ label, value, onChange, options, required = false }: any) {
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+    <div className="mb-5">
+      <label className="block text-base font-medium text-gray-700 mb-2">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        className="w-full px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
-      >
-        {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-      </select>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+          className="w-full h-12 px-4 pr-10 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all bg-white appearance-none cursor-pointer"
+        >
+          {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+        </select>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }
@@ -125,13 +138,13 @@ function Select({ label, value, onChange, options, required = false }: any) {
 // 文本域组件
 function TextArea({ label, value, onChange, rows = 4 }: any) {
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <div className="mb-5">
+      <label className="block text-base font-medium text-gray-700 mb-2">{label}</label>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
-        className="w-full px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none"
+        className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none placeholder:text-gray-400"
       />
     </div>
   );
@@ -155,8 +168,8 @@ function ImageUpload({ value, onChange, label = '项目图片' }: any) {
   };
   
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <div className="mb-5">
+      <label className="block text-base font-medium text-gray-700 mb-2">{label}</label>
       <div className="flex items-center gap-4">
         {preview ? (
           <div className="relative w-32 h-32 rounded-lg overflow-hidden border">
@@ -171,7 +184,7 @@ function ImageUpload({ value, onChange, label = '项目图片' }: any) {
         ) : (
           <label className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-colors">
             <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
-            <span className="text-xs text-gray-500">点击上传</span>
+            <span className="text-sm text-gray-500">点击上传</span>
             <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
           </label>
         )}
@@ -371,7 +384,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Filters - 统一高度 48px */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -386,33 +399,47 @@ export default function ProjectsPage() {
               placeholder="搜索项目名称或地点..." 
               value={searchQuery} 
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+              className="w-full h-12 pl-10 pr-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all placeholder:text-gray-400"
             />
           </div>
-          <select 
-            value={filterCategory} 
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
-          >
-            <option value="all">全部类型</option>
-            <option value="wind">风电</option>
-            <option value="solar">光伏</option>
-            <option value="storage">储能</option>
-          </select>
-          <select 
-            value={filterStatus} 
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
-          >
-            <option value="all">全部状态</option>
-            <option value="planning">规划中</option>
-            <option value="construction">建设中</option>
-            <option value="operation">运营中</option>
-          </select>
+          <div className="relative">
+            <select 
+              value={filterCategory} 
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="h-12 px-4 pr-10 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white appearance-none cursor-pointer min-w-[140px]"
+            >
+              <option value="all">全部类型</option>
+              <option value="wind">风电</option>
+              <option value="solar">光伏</option>
+              <option value="storage">储能</option>
+            </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+          <div className="relative">
+            <select 
+              value={filterStatus} 
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="h-12 px-4 pr-10 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white appearance-none cursor-pointer min-w-[140px]"
+            >
+              <option value="all">全部状态</option>
+              <option value="planning">规划中</option>
+              <option value="construction">建设中</option>
+              <option value="operation">运营中</option>
+            </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
       </motion.div>
 
-      {/* Table */}
+      {/* Table - 修复状态列宽度 */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -423,11 +450,11 @@ export default function ProjectsPage() {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">项目信息</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类型</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">容量</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[35%]">项目信息</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">类型</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">容量</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[18%]">状态</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[20%]">操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -449,21 +476,21 @@ export default function ProjectsPage() {
                             <ImageIcon className="w-5 h-5 text-gray-400" />
                           </div>
                         )}
-                        <div>
-                          <div className="font-medium text-gray-900">{project.title}</div>
-                          <div className="text-sm text-gray-500">{project.location}</div>
+                        <div className="min-w-0">
+                          <div className="font-medium text-gray-900 text-base truncate">{project.title}</div>
+                          <div className="text-sm text-gray-500 truncate">{project.location}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         {getCategoryIcon(project.category)}
-                        <span className="text-sm">{getCategoryLabel(project.category)}</span>
+                        <span className="text-base">{getCategoryLabel(project.category)}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{project.capacity}</td>
+                    <td className="px-6 py-4 text-base font-medium text-gray-900">{project.capacity}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 text-xs rounded-full border ${getStatusColor(project.status)}`}>
+                      <span className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full border whitespace-nowrap ${getStatusColor(project.status)}`}>
                         {getStatusLabel(project.status)}
                       </span>
                     </td>
@@ -496,7 +523,7 @@ export default function ProjectsPage() {
         {paginatedProjects.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             <Search className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-            <p>没有找到匹配的项目</p>
+            <p className="text-base">没有找到匹配的项目</p>
           </div>
         )}
         
@@ -529,15 +556,14 @@ export default function ProjectsPage() {
         )}
       </motion.div>
 
-      {/* Modal */}
+      {/* Modal - 新建/编辑项目 */}
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => { setIsModalOpen(false); resetForm(); }} 
         title={editingProject ? '编辑项目' : '新建项目'}
-        size="2xl"
       >
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+          <div className="md:col-span-2">
             <ImageUpload 
               value={formData.imageUrl} 
               onChange={(v: string) => setFormData({...formData, imageUrl: v})} 
@@ -605,7 +631,7 @@ export default function ProjectsPage() {
           onChange={(v: string) => setFormData({...formData, description: v})} 
           rows={4} 
         />
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
           <Button variant="secondary" onClick={() => { setIsModalOpen(false); resetForm(); }}>
             取消
           </Button>
