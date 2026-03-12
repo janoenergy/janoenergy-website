@@ -169,7 +169,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                         name="name"
                         required
                         disabled={submitting}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
+                        className="w-full px-4 h-11 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
                         placeholder={t.form.namePlaceholder}
                         value={formData.name}
                         onChange={e => setFormData({...formData, name: e.target.value})}
@@ -182,7 +182,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                         name="phone"
                         required
                         disabled={submitting}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
+                        className="w-full px-4 h-11 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
                         placeholder={t.form.phonePlaceholder}
                         value={formData.phone}
                         onChange={e => setFormData({...formData, phone: e.target.value})}
@@ -197,7 +197,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                       name="email"
                       required
                       disabled={submitting}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
+                      className="w-full px-4 h-11 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
                       placeholder={t.form.emailPlaceholder}
                       value={formData.email}
                       onChange={e => setFormData({...formData, email: e.target.value})}
@@ -211,7 +211,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                       rows={4} 
                       required
                       disabled={submitting}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none disabled:bg-gray-100"
+                      className="w-full px-4 h-11 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none disabled:bg-gray-100"
                       placeholder={t.form.contentPlaceholder}
                       value={formData.content}
                       onChange={e => setFormData({...formData, content: e.target.value})}
