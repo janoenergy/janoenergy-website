@@ -26,7 +26,7 @@ function Button({ children, onClick, variant = 'primary', size = 'md', disabled 
     danger: 'bg-red-600 hover:bg-red-700 text-white',
     ghost: 'hover:bg-gray-100 text-gray-600',
   };
-  const sizes = { sm: 'px-3 py-1.5 text-sm', md: 'px-4 py-2 text-sm', lg: 'px-6 py-2.5' };
+  const sizes = { sm: 'px-3 py-1.5 text-sm', md: 'px-4 py-2 text-sm', lg: 'px-6 py-3' };
   
   return (
     <button
@@ -83,7 +83,7 @@ function Input({ label, value, onChange, type = 'text', placeholder = '', requir
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm"
       />
     </div>
   );
@@ -101,7 +101,7 @@ function Select({ label, value, onChange, options, required = false }: any) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required={required}
-        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm bg-white"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm bg-white"
       >
         {options.map((opt: any) => (
           <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -121,7 +121,7 @@ function TextArea({ label, value, onChange, rows = 4, placeholder = '' }: any) {
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
         placeholder={placeholder}
-        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm resize-none"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm resize-none"
       />
     </div>
   );
@@ -456,7 +456,7 @@ export default function NewsPage() {
             value={formData.summary}
             onChange={(v: string) => setFormData({ ...formData, summary: v })}
             placeholder="请输入新闻摘要"
-            rows={3}
+            rows={4}
           />
 
           {/* 正文 */}
@@ -465,7 +465,7 @@ export default function NewsPage() {
             value={formData.content}
             onChange={(v: string) => setFormData({ ...formData, content: v })}
             placeholder="请输入新闻正文内容"
-            rows={6}
+            rows={5}
           />
 
           {/* 发布选项 */}
