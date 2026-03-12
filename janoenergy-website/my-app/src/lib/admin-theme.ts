@@ -84,7 +84,7 @@ export const colors = {
 // 后台管理系统 - 统一的尺寸标准
 export const sizes = {
   // 输入框高度
-  input: "h-11",
+  input: "h-12",
   
   // 按钮高度
   button: "h-10",
