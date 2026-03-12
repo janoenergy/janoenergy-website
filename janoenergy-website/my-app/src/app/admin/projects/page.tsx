@@ -31,7 +31,7 @@ interface Project {
 function Button({ children, onClick, variant = 'primary', size = 'md', disabled = false, loading = false }: any) {
   const base = 'inline-flex items-center justify-center rounded-lg font-medium transition-all active:scale-95';
   const variants = {
-    primary: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm hover:shadow',
+    primary: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm',
     secondary: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300',
     danger: 'bg-red-600 hover:bg-red-700 text-white',
     ghost: 'hover:bg-gray-100 text-gray-700',
@@ -55,7 +55,7 @@ function Button({ children, onClick, variant = 'primary', size = 'md', disabled 
 }
 
 // 弹窗组件
-function Modal({ isOpen, onClose, title, children, size = 'lg' }: any) {
+function Modal({ isOpen, onClose, title, children }: any) {
   if (!isOpen) return null;
   
   return (
@@ -72,7 +72,7 @@ function Modal({ isOpen, onClose, title, children, size = 'lg' }: any) {
           animate={{ scale: 1, opacity: 1 }} 
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", duration: 0.3 }}
-          className={`bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col`} 
+          className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" 
           onClick={e => e.stopPropagation()}
         >
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
@@ -203,7 +203,6 @@ export default function ProjectsPage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // 分页状态
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   
@@ -314,14 +313,12 @@ export default function ProjectsPage() {
     setIsModalOpen(true);
   };
 
-  // 导出 Excel
   const handleExport = () => {
     const data = formatProjectsForExport(filteredProjects);
     exportToExcel(data, '项目列表');
     toast.success('导出成功');
   };
 
-  // 过滤项目
   const filteredProjects = projects.filter(p => {
     const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          p.location.toLowerCase().includes(searchQuery.toLowerCase());
@@ -330,7 +327,6 @@ export default function ProjectsPage() {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  // 分页
   const totalPages = Math.ceil(filteredProjects.length / pageSize);
   const paginatedProjects = filteredProjects.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
@@ -366,7 +362,7 @@ export default function ProjectsPage() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
-      className="p-6"
+      className="p-4 md:p-6"
     >
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
@@ -384,7 +380,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* Filters - 统一高度 48px */}
+      {/* Filters */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -439,7 +435,7 @@ export default function ProjectsPage() {
         </div>
       </motion.div>
 
-      {/* Table - 修复状态列宽度 */}
+      {/* Table - 使用 min-w 确保表格不压缩 */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -447,14 +443,14 @@ export default function ProjectsPage() {
         className="bg-white rounded-xl shadow-sm overflow-hidden"
       >
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[700px]">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[35%]">项目信息</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">类型</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">容量</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[18%]">状态</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[20%]">操作</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '35%' }}>项目信息</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '12%' }}>类型</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '15%' }}>容量</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '18%' }}>状态</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '20%' }}>操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -467,34 +463,34 @@ export default function ProjectsPage() {
                     transition={{ delay: index * 0.05 }}
                     className="hover:bg-gray-50 transition-colors"
                   >
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
                         {project.imageUrl ? (
-                          <img src={project.imageUrl} alt="" className="w-10 h-10 rounded-lg object-cover" />
+                          <img src={project.imageUrl} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
                         ) : (
-                          <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
                             <ImageIcon className="w-5 h-5 text-gray-400" />
                           </div>
                         )}
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <div className="font-medium text-gray-900 text-base truncate">{project.title}</div>
                           <div className="text-sm text-gray-500 truncate">{project.location}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-2">
                         {getCategoryIcon(project.category)}
-                        <span className="text-base">{getCategoryLabel(project.category)}</span>
+                        <span className="text-base whitespace-nowrap">{getCategoryLabel(project.category)}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-base font-medium text-gray-900">{project.capacity}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4 text-base font-medium text-gray-900 whitespace-nowrap">{project.capacity}</td>
+                    <td className="px-4 py-4">
                       <span className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full border whitespace-nowrap ${getStatusColor(project.status)}`}>
                         {getStatusLabel(project.status)}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-1">
                         <button 
                           onClick={() => handleEdit(project)} 
@@ -519,7 +515,6 @@ export default function ProjectsPage() {
           </table>
         </div>
         
-        {/* Empty State */}
         {paginatedProjects.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             <Search className="w-12 h-12 mx-auto mb-3 text-gray-300" />
@@ -527,7 +522,6 @@ export default function ProjectsPage() {
           </div>
         )}
         
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
             <div className="text-sm text-gray-500">
@@ -556,7 +550,7 @@ export default function ProjectsPage() {
         )}
       </motion.div>
 
-      {/* Modal - 新建/编辑项目 */}
+      {/* Modal */}
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => { setIsModalOpen(false); resetForm(); }} 
