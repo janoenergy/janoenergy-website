@@ -29,13 +29,23 @@ jobs:
         retry-delay: 5s
         retry-all: true
     
-    - name: Notify on failure
+    - name: Send email on failure
       if: failure()
-      uses: slackapi/slack-github-action@v1.24.0
+      uses: dawidd6/action-send-mail@v3
       with:
-        payload: |
-          {
-            "text": "🚨 江能集团网站异常！\n• 网站: https://www.janoenergy.com\n• API: https://api.janoenergy.com\n• 时间: ${{ github.event.schedule }}"
-          }
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        server_address: smtp.exmail.qq.com
+        server_port: 465
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: '🚨 江能集团网站异常告警'
+        to: lihua@janoenergy.cn
+        from: 网站监控系统 <monitor@janoenergy.cn>
+        body: |
+          网站或 API 访问异常！
+          
+          • 网站: https://www.janoenergy.com
+          • API: https://api.janoenergy.com
+          • 检查时间: ${{ github.event.schedule }}
+          • 工作流: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          
+          请立即检查网站状态！
