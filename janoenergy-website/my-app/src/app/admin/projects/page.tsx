@@ -97,7 +97,7 @@ function Input({ label, value, onChange, type = 'text', placeholder = '', requir
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+        className="w-full px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
       />
     </div>
   );
@@ -114,7 +114,7 @@ function Select({ label, value, onChange, options, required = false }: any) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required={required}
-        className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+        className="w-full px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
       >
         {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
       </select>
@@ -131,7 +131,7 @@ function TextArea({ label, value, onChange, rows = 4 }: any) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
-        className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none"
+        className="w-full px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none"
       />
     </div>
   );
@@ -392,7 +392,7 @@ export default function ProjectsPage() {
           <select 
             value={filterCategory} 
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+            className="px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
           >
             <option value="all">全部类型</option>
             <option value="wind">风电</option>
@@ -402,7 +402,7 @@ export default function ProjectsPage() {
           <select 
             value={filterStatus} 
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+            className="px-4 h-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
           >
             <option value="all">全部状态</option>
             <option value="planning">规划中</option>
