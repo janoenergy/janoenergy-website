@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, X, Search, User } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Search } from 'lucide-react';
 import { API_ENDPOINTS } from '@/lib/api';
 
 interface UserItem {
@@ -108,38 +108,44 @@ export default function UsersPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">用户</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">账号</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">部门</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">角色</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredUsers.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center"><span className="text-emerald-600 font-bold">{user.name[0]}</span></div>
-                    <div><div className="font-medium text-gray-900">{user.name}</div><div className="text-sm text-gray-500">{user.email}</div></div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-900">{user.username}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{user.department || '-'}</td>
-                <td className="px-6 py-4"><span className={`px-2 py-1 text-xs rounded-full ${getRoleColor(user.role)}`}>{getRoleLabel(user.role)}</span></td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => handleEdit(user)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"><Edit className="w-4 h-4" /></button>
-                    <button onClick={() => handleDelete(user.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 className="w-4 h-4" /></button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[700px]">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[30%]">用户</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[20%]">账号</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[15%]">部门</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[15%]">角色</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-[20%]">操作</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredUsers.map((user) => (
+                <tr key={user.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0"><span className="text-emerald-600 font-bold">{user.name[0]}</span></div>
+                      <div className="min-w-0"><div className="font-medium text-gray-900 truncate">{user.name}</div><div className="text-sm text-gray-500 truncate">{user.email}</div></div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4 text-sm text-gray-900">{user.username}</td>
+                  <td className="px-4 py-4 text-sm text-gray-500">{user.department || '-'}</td>
+                  <td className="px-4 py-4">
+                    <span className={`inline-block px-2 py-1 text-xs rounded-full whitespace-nowrap ${getRoleColor(user.role)}`}>
+                      {getRoleLabel(user.role)}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => handleEdit(user)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"><Edit className="w-4 h-4" /></button>
+                      <button onClick={() => handleDelete(user.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {filteredUsers.length === 0 && <div className="text-center py-12 text-gray-500">暂无用户数据</div>}
       </div>
 
