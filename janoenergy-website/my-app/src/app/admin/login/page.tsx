@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Lock, User, Eye, EyeOff, Building2 } from 'lucide-react';
+import { Lock, User, Eye, EyeOff } from 'lucide-react';
 import { API_ENDPOINTS } from '@/lib/api';
 
-export default function OALoginPage() {
+export default function WebsiteAdminLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -35,8 +35,8 @@ export default function OALoginPage() {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
-      // 跳转到 OA 综合管理平台
-      window.location.href = '/oa/dashboard';
+      // 跳转到网站后台管理
+      window.location.href = '/admin/dashboard';
     } catch (err) {
       setError('登录失败，请重试');
       setLoading(false);
@@ -44,14 +44,14 @@ export default function OALoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Building2 className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl text-white font-bold">江</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">OA综合管理平台</h1>
-          <p className="text-gray-500 mt-2">江能集团内部办公系统</p>
+          <h1 className="text-2xl font-bold text-gray-900">网站后台管理</h1>
+          <p className="text-gray-500 mt-2">江能集团官网管理系统</p>
         </div>
 
         {error && (
@@ -62,15 +62,15 @@ export default function OALoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">员工账号</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">管理员账号</label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="请输入员工账号"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                placeholder="请输入管理员账号"
                 required
               />
             </div>
@@ -84,7 +84,7 @@ export default function OALoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
                 placeholder="请输入密码"
                 required
               />
@@ -101,7 +101,7 @@ export default function OALoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-lg disabled:opacity-50 flex items-center justify-center"
+            className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg hover:shadow-lg disabled:opacity-50 flex items-center justify-center"
           >
             {loading ? <span className="animate-spin">⌛</span> : '登录'}
           </button>
@@ -109,7 +109,7 @@ export default function OALoginPage() {
 
         <div className="mt-6 text-center text-sm text-gray-400">
           <p>© 2026 江能新能源集团</p>
-          <p className="mt-1">OA综合管理平台系统</p>
+          <p className="mt-1">网站管理系统</p>
         </div>
       </div>
     </div>

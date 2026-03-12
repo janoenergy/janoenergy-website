@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/oa/login';
+      window.location.href = '/admin/login';
       return;
     }
 
@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/oa/login';
+    window.location.href = '/admin/login';
   };
 
   const menuItems = [
