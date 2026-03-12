@@ -17,16 +17,21 @@ interface NewsItem {
   createdAt: string;
 }
 
+// 统一的表单控件样式
+const inputBaseClass = "w-full px-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm";
+const labelBaseClass = "block text-sm font-medium text-gray-700 mb-2";
+const fieldWrapperClass = "mb-5";
+
 // 优化后的按钮组件
 function Button({ children, onClick, variant = 'primary', size = 'md', disabled = false, className = '' }: any) {
   const base = 'inline-flex items-center justify-center rounded-lg font-medium transition-all active:scale-95';
   const variants = {
     primary: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm hover:shadow',
-    secondary: 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300',
+    secondary: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300',
     danger: 'bg-red-600 hover:bg-red-700 text-white',
     ghost: 'hover:bg-gray-100 text-gray-600',
   };
-  const sizes = { sm: 'px-3 py-1.5 text-sm', md: 'px-4 py-2 text-sm', lg: 'px-6 py-3' };
+  const sizes = { sm: 'px-3 h-8 text-sm', md: 'px-4 h-10 text-sm', lg: 'px-6 h-11' };
   
   return (
     <button
@@ -69,11 +74,11 @@ function Modal({ isOpen, onClose, title, children }: any) {
   );
 }
 
-// 优化后的输入组件
+// 优化后的输入组件 - 统一高度 h-11 (44px)
 function Input({ label, value, onChange, type = 'text', placeholder = '', required = false }: any) {
   return (
-    <div className="mb-5">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+    <div className={fieldWrapperClass}>
+      <label className={labelBaseClass}>
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -83,30 +88,38 @@ function Input({ label, value, onChange, type = 'text', placeholder = '', requir
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm"
+        className={inputBaseClass}
       />
     </div>
   );
 }
 
-// 优化后的选择组件
+// 优化后的选择组件 - 统一高度 h-11 (44px)
 function Select({ label, value, onChange, options, required = false }: any) {
   return (
-    <div className="mb-5">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+    <div className={fieldWrapperClass}>
+      <label className={labelBaseClass}>
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm bg-white"
-      >
-        {options.map((opt: any) => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+          className={`${inputBaseClass} appearance-none cursor-pointer pr-10`}
+        >
+          {options.map((opt: any) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+        {/* 自定义下拉箭头 */}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }
@@ -114,14 +127,14 @@ function Select({ label, value, onChange, options, required = false }: any) {
 // 优化后的文本域组件
 function TextArea({ label, value, onChange, rows = 4, placeholder = '' }: any) {
   return (
-    <div className="mb-5">
-      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+    <div className={fieldWrapperClass}>
+      <label className={labelBaseClass}>{label}</label>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
         placeholder={placeholder}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm resize-none"
+        className={`${inputBaseClass} resize-none py-3`}
       />
     </div>
   );
@@ -279,13 +292,13 @@ export default function NewsPage() {
               placeholder="搜索新闻标题..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full pl-10 pr-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
             />
           </div>
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+            className="px-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
           >
             <option value="all">全部分类</option>
             <option value="company">公司动态</option>
@@ -295,7 +308,7 @@ export default function NewsPage() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+            className="px-4 h-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
           >
             <option value="all">全部状态</option>
             <option value="published">已发布</option>
@@ -419,7 +432,7 @@ export default function NewsPage() {
         }}
         title={editingNews ? '编辑新闻' : '发布新闻'}
       >
-        <div className="space-y-1">
+        <div className="space-y-0">
           {/* 标题 */}
           <Input
             label="新闻标题"
