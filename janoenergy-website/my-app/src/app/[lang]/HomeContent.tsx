@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Wind, Sun, Battery, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Wind, Sun, Battery, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
+import AnimatedCounter from '@/components/AnimatedCounter';
 
 // 本地图片路径
 const heroSlides = [
@@ -23,65 +24,170 @@ const heroSlides = [
   },
 ];
 
-// 默认统计数据（硬编码，避免API调用）
-const defaultStats = {
-  capacity: 210, // 50+100+60
-  projects: 3,
-  provinces: 3,
+// API 项目数据类型
+interface ApiProject {
+  id: number;
+  title: string;
+  titleEn: string;
+  category: string;
+  location: string;
+  locationEn: string;
+  capacity: string;
+  description: string;
+  descriptionEn: string;
+  imageUrl: string | null;
+  status: string;
+  startDate: string | null;
+  endDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// 统计数据类型
+interface Stats {
+  capacity: number;
+  projects: number;
+  provinces: number;
+  year: number;
+}
+
+// 默认统计数据
+const defaultStats: Stats = {
+  capacity: 370,
+  projects: 6,
+  provinces: 6,
   year: 2018,
 };
 
-function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
-  const [displayValue, setDisplayValue] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const ref = useRef<HTMLSpanElement>(null);
-  
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true);
-          const duration = 2000;
-          const steps = 60;
-          const increment = value / steps;
-          let current = 0;
-          
-          const timer = setInterval(() => {
-            current += increment;
-            if (current >= value) {
-              setDisplayValue(value);
-              clearInterval(timer);
-            } else {
-              setDisplayValue(Math.floor(current));
-            }
-          }, duration / steps);
-          
-          return () => clearInterval(timer);
-        }
-      },
-      { threshold: 0.3 }
-    );
+// 从容量字符串提取数字
+function parseCapacity(capacityStr: string): number {
+  if (!capacityStr) return 0;
+  const match = capacityStr.match(/(\d+)/);
+  return match ? parseInt(match[1], 10) : 0;
+}
 
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [value, hasAnimated]);
-
-  return <span ref={ref} className="tabular-nums">{displayValue}{suffix}</span>;
+// 从地址提取省份
+function extractProvince(location: string): string {
+  if (!location) return '';
+  const match = location.match(/^([^省市]+)[省市]/);
+  return match ? match[1] : location.split('省')[0].split('市')[0];
 }
 
 export default function HomeContent({ lang }: { lang: Lang }) {
   const t = translations[lang];
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [stats, setStats] = useState<Stats>({ capacity: 0, projects: 0, provinces: 0, year: 2018 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
+  // 确保只在客户端执行
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 获取项目数据并计算统计
+  useEffect(() => {
+    if (!mounted) return;
+
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('https://api.janoenergy.com/api/projects');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch projects');
+        }
+
+        const projects: ApiProject[] = await response.json();
+
+        // 计算统计数据
+        const capacity = projects.reduce((sum, p) => sum + parseCapacity(p.capacity), 0);
+        const projectCount = projects.length;
+        const provinces = new Set(projects.map(p => extractProvince(p.location)).filter(Boolean));
+        const uniqueProvinces = provinces.size;
+
+        setStats({
+          capacity,
+          projects: projectCount,
+          provinces: uniqueProvinces || defaultStats.provinces,
+          year: defaultStats.year,
+        });
+        setError(false);
+      } catch (err) {
+        console.error('Failed to fetch projects:', err);
+        setStats(defaultStats);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [mounted]);
+
+  // 轮播图自动切换
+  useEffect(() => {
+    if (!mounted) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [mounted]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+
+  // 服务端渲染时显示加载状态
+  if (!mounted) {
+    return (
+      <div>
+        {/* Hero */}
+        <section className="relative h-[600px] lg:h-[700px] overflow-hidden">
+          <div className="absolute inset-0">
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${heroSlides[0].image})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/80 to-cyan-900/70" />
+          </div>
+          <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+            <div className="max-w-3xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                {lang === 'zh' ? heroSlides[0].title : heroSlides[0].titleEn}
+              </h1>
+              <p className="text-xl md:text-2xl text-emerald-100 mb-8">
+                {t.home.hero.subtitle}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <a 
+                  href={`/${lang}/business`}
+                  className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all hover:scale-105"
+                >
+                  {t.home.hero.cta1}
+                </a>
+                <a 
+                  href={`/${lang}/projects`}
+                  className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg backdrop-blur-sm transition-all hover:scale-105 border border-white/30"
+                >
+                  {t.home.hero.cta2}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Stats - 加载状态 */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -155,35 +261,46 @@ export default function HomeContent({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* Stats - 使用硬编码的真实数据 */}
+      {/* Stats - 使用动画计数器 */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-              <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                <AnimatedNumber value={defaultStats.capacity} />+
-              </div>
-              <div className="text-gray-600">{t.home.stats.capacity}</div>
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
             </div>
-            <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-              <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                <AnimatedNumber value={defaultStats.projects} />+
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
+                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
+                  <AnimatedCounter target={stats.capacity} suffix="+" />
+                </div>
+                <div className="text-gray-600">{t.home.stats.capacity}</div>
               </div>
-              <div className="text-gray-600">{t.home.stats.projects}</div>
-            </div>
-            <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-              <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                <AnimatedNumber value={defaultStats.provinces} />
+              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
+                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
+                  <AnimatedCounter target={stats.projects} suffix="+" />
+                </div>
+                <div className="text-gray-600">{t.home.stats.projects}</div>
               </div>
-              <div className="text-gray-600">{t.home.stats.provinces}</div>
-            </div>
-            <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-              <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                {defaultStats.year}
+              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
+                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
+                  <AnimatedCounter target={stats.provinces} />
+                </div>
+                <div className="text-gray-600">{t.home.stats.provinces}</div>
               </div>
-              <div className="text-gray-600">{t.home.stats.founded}</div>
+              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
+                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
+                  <AnimatedCounter target={stats.year} />
+                </div>
+                <div className="text-gray-600">{t.home.stats.founded}</div>
+              </div>
             </div>
-          </div>
+          )}
+          {error && (
+            <p className="text-center text-sm text-gray-400 mt-4">
+              {lang === 'zh' ? '使用本地缓存数据' : 'Using cached data'}
+            </p>
+          )}
         </div>
       </section>
 

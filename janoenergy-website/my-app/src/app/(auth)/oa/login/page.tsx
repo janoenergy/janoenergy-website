@@ -107,9 +107,8 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>管理员账号: admin</p>
-          <p>密码: jano</p>
+        <div className="mt-6 text-center text-sm text-gray-400">
+          <p>© 2026 江能新能源集团</p>
         </div>
       </div>
     </div>
