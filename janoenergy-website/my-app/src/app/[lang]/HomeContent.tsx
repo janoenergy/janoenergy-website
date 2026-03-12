@@ -375,6 +375,36 @@ export default function HomeContent({ lang }: { lang: Lang }) {
         </div>
       </section>
 
+      {/* Partners */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {lang === 'zh' ? '合作伙伴' : 'Partners'}
+            </h2>
+            <p className="text-xl text-gray-600">
+              {lang === 'zh' ? '携手行业领先企业，共创绿色未来' : 'Partnering with industry leaders for a green future'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
+            {/* Partner Logos - Placeholder */}
+            {[
+              '国家电网', '南方电网', '华能集团', '大唐集团',
+              '国家能源', '中广核', '三峡集团', '国家电投',
+              '华为数字能源', '阳光电源', '宁德时代', '比亚迪'
+            ].map((partner, index) => (
+              <div 
+                key={index}
+                className="flex items-center justify-center p-6 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-all hover:scale-105"
+              >
+                <span className="text-lg font-semibold text-gray-600">{partner}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

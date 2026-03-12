@@ -1,0 +1,41 @@
+name: Health Check
+
+on:
+  schedule:
+    # 每 5 分钟检查一次
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check website availability
+      uses: jtalk/url-health-check-action@v3
+      with:
+        url: https://www.janoenergy.com
+        follow-redirect: true
+        max-attempts: 3
+        retry-delay: 5s
+        retry-all: true
+    
+    - name: Check API availability
+      uses: jtalk/url-health-check-action@v3
+      with:
+        url: https://api.janoenergy.com/api/projects
+        follow-redirect: true
+        max-attempts: 3
+        retry-delay: 5s
+        retry-all: true
+    
+    - name: Notify on failure
+      if: failure()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "🚨 江能集团网站异常！\n• 网站: https://www.janoenergy.com\n• API: https://api.janoenergy.com\n• 时间: ${{ github.event.schedule }}"
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

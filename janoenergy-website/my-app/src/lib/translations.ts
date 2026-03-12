@@ -1,7 +1,7 @@
 // 翻译内容
 export const translations = {
   zh: {
-    nav: { home: '首页', about: '关于江能', business: '业务板块', projects: '项目案例', news: '新闻中心', contact: '联系我们' },
+    nav: { home: '首页', about: '关于江能', team: '管理团队', business: '业务板块', projects: '项目案例', news: '新闻中心', contact: '联系我们' },
     home: {
       hero: { title: '清洁能源，绿色未来', subtitle: '江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商', cta1: '了解业务', cta2: '项目案例' },
       stats: { capacity: 'MW装机规模', projects: '个项目', provinces: '个省份', founded: '年成立' },
@@ -63,7 +63,7 @@ export const translations = {
     footer: { quickLinks: '快速链接', contact: '联系我们', copyright: '版权所有' },
   },
   en: {
-    nav: { home: 'Home', about: 'About Us', business: 'Business', projects: 'Projects', news: 'News', contact: 'Contact' },
+    nav: { home: 'Home', about: 'About Us', team: 'Team', business: 'Business', projects: 'Projects', news: 'News', contact: 'Contact' },
     home: {
       hero: { title: 'Clean Energy, Green Future', subtitle: 'JanoEnergy Group - A full-chain service provider specializing in wind, solar, and energy storage development, investment, construction, and operation', cta1: 'Our Business', cta2: 'Our Projects' },
       stats: { capacity: 'MW Capacity', projects: 'Projects', provinces: 'Provinces', founded: 'Founded' },

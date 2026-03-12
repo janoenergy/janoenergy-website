@@ -28,6 +28,7 @@ interface NavItem {
 interface NavbarProps {
   lang: Lang;
   t: {
+    team: string;
     home: string;
     about: string;
     business: string;
@@ -51,6 +52,7 @@ export function Navbar({ lang, t }: NavbarProps) {
   const navItems: NavItem[] = [
     { label: t.home, href: `/${lang}` },
     { label: t.about, href: `/${lang}/about` },
+    { label: t.team, href: `/${lang}/team` },
     { label: t.business, href: `/${lang}/business` },
     { label: t.projects, href: `/${lang}/projects` },
     { label: t.news, href: `/${lang}/news` },

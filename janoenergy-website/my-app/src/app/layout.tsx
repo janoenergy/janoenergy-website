@@ -3,6 +3,8 @@ import "./globals.css";
 import { BackToTop } from "@/components/BackToTop";
 import PageLoader from "@/components/PageLoader";
 import Analytics from "@/components/Analytics";
+import ChatWidget from "@/components/ChatWidget";
+import StructuredData from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   title: "江能集团 - 清洁能源，绿色未来",
@@ -31,12 +33,17 @@ export default function RootLayout({
         {/* 预连接优化 */}
         <link rel="preconnect" href="https://api.janoenergy.com" />
         <link rel="dns-prefetch" href="https://api.janoenergy.com" />
+        
+        {/* 结构化数据 */}
+        <StructuredData type="Organization" />
+        <StructuredData type="WebSite" />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
         <PageLoader />
         {children}
         <BackToTop />
         <Analytics baiduId={BAIDU_ID} googleId={GOOGLE_ID} />
+        <ChatWidget lang="zh" />
       </body>
     </html>
   );
