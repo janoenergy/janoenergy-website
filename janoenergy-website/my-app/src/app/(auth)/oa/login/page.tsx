@@ -107,7 +107,12 @@ export default function OALoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-400">
+        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+          <p className="text-sm text-gray-500 text-center">默认账号: <span className="font-medium text-gray-700">jano</span></p>
+          <p className="text-sm text-gray-500 text-center mt-1">默认密码: <span className="font-medium text-gray-700">jano</span></p>
+        </div>
+
+        <div className="mt-4 text-center text-sm text-gray-400">
           <p>© 2026 江能新能源集团</p>
           <p className="mt-1">OA综合管理平台系统</p>
         </div>

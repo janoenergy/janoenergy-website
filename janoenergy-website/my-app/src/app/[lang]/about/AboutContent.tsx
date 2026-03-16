@@ -114,17 +114,17 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
             <p className="text-base md:text-lg text-gray-600 mb-4 leading-relaxed">{t.intro.p1}</p>
             <p className="text-base md:text-lg text-gray-600 leading-relaxed">{t.intro.p2}</p>
             
-            {/* 核心数据 */}
+            {/* 核心数据 - 更新为与项目案例一致 */}
             <div className="grid grid-cols-3 gap-4 md:gap-6 mt-8">
               <div className="text-center p-3 md:p-4 bg-white rounded-xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
-                  <AnimatedNumber value={500} suffix="+" />
+                  <AnimatedNumber value={1135} suffix="+" />
                 </div>
                 <div className="text-xs md:text-sm text-gray-500 mt-1">MW{lang === 'zh' ? '装机' : ' Capacity'}</div>
               </div>
               <div className="text-center p-3 md:p-4 bg-white rounded-xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
-                  <AnimatedNumber value={8} />
+                  <AnimatedNumber value={12} />
                 </div>
                 <div className="text-xs md:text-sm text-gray-500 mt-1">{lang === 'zh' ? '省份覆盖' : 'Provinces'}</div>
               </div>

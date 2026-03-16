@@ -26,16 +26,21 @@ export function Footer({ lang, t }: { lang: Lang; t: typeof translations.zh.foot
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-2xl font-bold mb-4">{lang === 'zh' ? '江能集团' : 'JanoEnergy'}</h3>
             <p className="text-slate-400 mb-6 max-w-md">{t.description}</p>
+            {/* 社交媒体链接暂时注释，待配置后启用
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">
+              <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" title="微信公众号">
                 <span className="text-lg">📱</span>
               </a>
-              <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">
+              <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" title="微博">
                 <span className="text-lg">💬</span>
               </a>
-              <a href="#" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">
+              <a href="mailto:contact@janoenergy.com" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" title="发送邮件">
                 <span className="text-lg">📧</span>
               </a>
+            </div>
+            */}
+            <div className="text-slate-500 text-sm">
+              <p>关注我们即将开放</p>
             </div>
           </div>
 
