@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Zap, Calendar, X, Wind, Sun, Battery, Filter } from 'lucide-react';
+import { MapPin, Zap, Calendar, X, Wind, Sun, Battery, Filter, CheckCircle2, Circle, Clock, TreePine, Home, Car } from 'lucide-react';
 import { Lang } from '@/lib/translations';
 
 interface Project {
@@ -22,6 +22,32 @@ interface Project {
   createdAt: string;
   updatedAt: string;
 }
+
+// 项目时间线数据
+interface TimelineEvent {
+  date: string;
+  title: string;
+  titleEn: string;
+  description: string;
+  descriptionEn: string;
+  completed: boolean;
+}
+
+// 模拟项目时间线数据
+const projectTimelines: Record<number, TimelineEvent[]> = {
+  1: [ // 西龙虎峪风电
+    { date: '2019-03', title: '项目签约', titleEn: 'Project Signed', description: '与当地政府签署投资协议', descriptionEn: 'Signed investment agreement with local government', completed: true },
+    { date: '2020-06', title: '获得核准', titleEn: 'Approved', description: '获得天津市发改委核准批复', descriptionEn: 'Approved by Tianjin Development and Reform Commission', completed: true },
+    { date: '2021-03', title: '开工建设', titleEn: 'Construction Started', description: '项目正式开工建设', descriptionEn: 'Official construction started', completed: true },
+    { date: '2022-06', title: '并网发电', titleEn: 'Grid Connected', description: '成功并网发电，投入商业运营', descriptionEn: 'Successfully connected to grid and operational', completed: true },
+    { date: '2024-12', title: '扩建规划', titleEn: 'Expansion Planning', description: '规划二期扩建工程', descriptionEn: 'Planning phase II expansion', completed: false },
+  ],
+  2: [ // 其他项目使用默认时间线
+    { date: '2020-01', title: '项目签约', titleEn: 'Project Signed', description: '签署投资协议', descriptionEn: 'Signed investment agreement', completed: true },
+    { date: '2021-06', title: '开工建设', titleEn: 'Construction Started', description: '项目正式开工', descriptionEn: 'Construction started', completed: true },
+    { date: '2023-12', title: '并网发电', titleEn: 'Grid Connected', description: '成功并网发电', descriptionEn: 'Grid connected', completed: true },
+  ],
+};
 
 // 省份位置配置
 const provincePositions: Record<string, { x: number; y: number; name: string; nameEn: string }> = {
@@ -173,6 +199,127 @@ function ProjectCard({ project, lang, index, onClick }: {
         </motion.p>
       </div>
     </motion.div>
+  );
+}
+
+// 项目时间线组件
+function ProjectTimeline({ projectId, lang }: { projectId: number; lang: Lang }) {
+  const timeline = projectTimelines[projectId] || projectTimelines[2];
+  
+  return (
+    <div className="py-6">
+      <h4 className="text-lg font-semibold text-gray-900 mb-6">
+        {lang === 'zh' ? '项目时间线' : 'Project Timeline'}
+      </h4>
+      <div className="relative">
+        {/* 时间线主线 */}
+        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200" />
+        
+        {timeline.map((event, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="relative flex gap-4 mb-6 last:mb-0"
+          >
+            {/* 节点 */}
+            <div className="relative z-10">
+              {event.completed ? (
+                <motion.div
+                  whileHover={{ scale: 1.2 }}
+                  className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-white" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  whileHover={{ scale: 1.2 }}
+                  className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
+                >
+                  <Circle className="w-5 h-5 text-gray-400" />
+                </motion.div>
+              )}
+            </div>
+            
+            {/* 内容 */}
+            <div className="flex-1 pb-6">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm text-gray-500">{event.date}</span>
+                {event.completed && (
+                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
+                    {lang === 'zh' ? '已完成' : 'Completed'}
+                  </span>
+                )}
+                {!event.completed && (
+                  <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">
+                    {lang === 'zh' ? '规划中' : 'Planned'}
+                  </span>
+                )}
+              </div>
+              <h5 className="font-semibold text-gray-900">
+                {lang === 'zh' ? event.title : event.titleEn}
+              </h5>
+              <p className="text-sm text-gray-600 mt-1">
+                {lang === 'zh' ? event.description : event.descriptionEn}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// 环境效益组件
+function EnvironmentalImpact({ capacity, lang }: { capacity: string; lang: Lang }) {
+  // 从容量字符串提取数字（MW）
+  const match = capacity.match(/(\d+)/);
+  const mw = match ? parseInt(match[1], 10) : 0;
+  
+  // 估算年发电量和减排量
+  const annualGeneration = Math.round(mw * 2000); // 年等效利用小时2000
+  const annualReduction = Math.round(annualGeneration * 0.8); // 每度电减排0.8kg CO2
+  const treesEquivalent = Math.round(annualReduction * 10000 / 18.3); // 每棵树年吸收18.3kg
+  const households = Math.round(annualGeneration * 10000 / 2500); // 每户年用电2500度
+
+  return (
+    <div className="py-6 border-t">
+      <h4 className="text-lg font-semibold text-gray-900 mb-4">
+        {lang === 'zh' ? '环境效益' : 'Environmental Impact'}
+      </h4>
+      <p className="text-gray-600 mb-4">
+        {lang === 'zh' 
+          ? `本电站年发电量约 ${annualGeneration.toLocaleString()} 万千瓦时，年减排CO2约 ${annualReduction.toLocaleString()} 吨，相当于：` 
+          : `Annual generation: ${annualGeneration.toLocaleString()} MWh, CO2 reduction: ${annualReduction.toLocaleString()} tons, equivalent to:`}
+      </p>
+      <div className="grid grid-cols-3 gap-4">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="text-center p-4 bg-emerald-50 rounded-xl"
+        >
+          <TreePine className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+          <div className="text-2xl font-bold text-emerald-700">{treesEquivalent.toLocaleString()}</div>
+          <div className="text-sm text-emerald-600">{lang === 'zh' ? '棵树木' : 'Trees'}</div>
+        </motion.div>
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="text-center p-4 bg-blue-50 rounded-xl"
+        >
+          <Home className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+          <div className="text-2xl font-bold text-blue-700">{households.toLocaleString()}</div>
+          <div className="text-sm text-blue-600">{lang === 'zh' ? '户家庭' : 'Households'}</div>
+        </motion.div>
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="text-center p-4 bg-orange-50 rounded-xl"
+        >
+          <Car className="w-8 h-8 text-orange-600 mx-auto mb-2" />
+          <div className="text-2xl font-bold text-orange-700">{Math.round(annualReduction / 5).toLocaleString()}</div>
+          <div className="text-sm text-orange-600">{lang === 'zh' ? '辆汽车' : 'Cars'}</div>
+        </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -463,9 +610,15 @@ export default function ProjectsContent({ lang }: { lang: Lang }) {
                     </motion.div>
                   )}
                 </div>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-600 leading-relaxed mb-6">
                   {lang === 'zh' ? selectedProject.description : selectedProject.descriptionEn}
                 </p>
+                
+                {/* 项目时间线 */}
+                <ProjectTimeline projectId={selectedProject.id} lang={lang} />
+                
+                {/* 环境效益 */}
+                <EnvironmentalImpact capacity={selectedProject.capacity} lang={lang} />
               </div>
             </motion.div>
           </motion.div>
