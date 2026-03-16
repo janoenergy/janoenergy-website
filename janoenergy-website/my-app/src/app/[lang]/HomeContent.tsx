@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Wind, Sun, Battery, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
 import AnimatedCounter from '@/components/AnimatedCounter';
@@ -71,6 +72,44 @@ function extractProvince(location: string): string {
   if (!location) return '';
   const match = location.match(/^([^省市]+)[省市]/);
   return match ? match[1] : location.split('省')[0].split('市')[0];
+}
+
+// 打字机效果组件
+function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
+  const [displayText, setDisplayText] = useState('');
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const startTimeout = setTimeout(() => setStarted(true), delay);
+    return () => clearTimeout(startTimeout);
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index <= text.length) {
+        setDisplayText(text.slice(0, index));
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [started, text]);
+
+  return (
+    <span>
+      {displayText}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.5, repeat: Infinity }}
+        className="inline-block w-1 h-[1em] bg-white ml-1 align-middle"
+      />
+    </span>
+  );
 }
 
 export default function HomeContent({ lang }: { lang: Lang }) {
@@ -194,68 +233,106 @@ export default function HomeContent({ lang }: { lang: Lang }) {
       {/* Hero */}
       <section className="relative h-[600px] lg:h-[700px] overflow-hidden">
         {heroSlides.map((slide, index) => (
-          <div
+          <motion.div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: index === currentSlide ? 1 : 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0"
           >
-            <div 
+            <motion.div 
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${slide.image})` }}
+              animate={{ scale: index === currentSlide ? 1.05 : 1 }}
+              transition={{ duration: 5, ease: "linear" }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/80 to-cyan-900/70" />
-          </div>
+          </motion.div>
         ))}
 
         <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              {lang === 'zh' ? heroSlides[currentSlide].title : heroSlides[currentSlide].titleEn}
-            </h1>
-            <p className="text-xl md:text-2xl text-emerald-100 mb-8">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+              >
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                  <TypewriterText 
+                    text={lang === 'zh' ? heroSlides[currentSlide].title : heroSlides[currentSlide].titleEn} 
+                    delay={300}
+                  />
+                </h1>
+              </motion.div>
+            </AnimatePresence>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="text-xl md:text-2xl text-emerald-100 mb-8"
+            >
               {t.home.hero.subtitle}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <a 
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1 }}
+              className="flex flex-wrap gap-4"
+            >
+              <motion.a 
                 href={`/${lang}/business`}
-                className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all hover:scale-105"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors"
               >
                 {t.home.hero.cta1}
-              </a>
-              <a 
+              </motion.a>
+              <motion.a 
                 href={`/${lang}/projects`}
-                className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg backdrop-blur-sm transition-all hover:scale-105 border border-white/30"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg backdrop-blur-sm transition-colors border border-white/30"
               >
                 {t.home.hero.cta2}
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
           </div>
         </div>
 
         {/* Slide Controls */}
-        <button 
+        <motion.button 
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-colors"
         >
           <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button 
+        </motion.button>
+        <motion.button 
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-colors"
         >
           <ChevronRight className="w-6 h-6" />
-        </button>
+        </motion.button>
 
         {/* Slide Indicators */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
           {heroSlides.map((_, index) => (
-            <button
+            <motion.button
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`h-3 rounded-full transition-all ${
-                index === currentSlide ? 'bg-white w-8' : 'bg-white/50 w-3'
+                index === currentSlide ? 'bg-white' : 'bg-white/50'
               }`}
+              animate={{ width: index === currentSlide ? 32 : 12 }}
+              transition={{ duration: 0.3 }}
             />
           ))}
         </div>
@@ -270,30 +347,27 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                  <AnimatedCounter target={stats.capacity} suffix="+" />
-                </div>
-                <div className="text-gray-600">{t.home.stats.capacity}</div>
-              </div>
-              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                  <AnimatedCounter target={stats.projects} suffix="+" />
-                </div>
-                <div className="text-gray-600">{t.home.stats.projects}</div>
-              </div>
-              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                  <AnimatedCounter target={stats.provinces} />
-                </div>
-                <div className="text-gray-600">{t.home.stats.provinces}</div>
-              </div>
-              <div className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-all hover:scale-105">
-                <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                  <AnimatedCounter target={stats.year} />
-                </div>
-                <div className="text-gray-600">{t.home.stats.founded}</div>
-              </div>
+              {[
+                { value: stats.capacity, suffix: '+', label: t.home.stats.capacity },
+                { value: stats.projects, suffix: '+', label: t.home.stats.projects },
+                { value: stats.provinces, suffix: '', label: t.home.stats.provinces },
+                { value: stats.year, suffix: '', label: t.home.stats.founded },
+              ].map((stat, index) => (
+                <motion.div 
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-colors shadow-sm hover:shadow-lg"
+                >
+                  <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
+                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="text-gray-600">{stat.label}</div>
+                </motion.div>
+              ))}
             </div>
           )}
           {error && (
@@ -307,99 +381,162 @@ export default function HomeContent({ lang }: { lang: Lang }) {
       {/* Project Types */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {t.home.projects.title}
             </h2>
             <p className="text-xl text-gray-600">
               {t.home.projects.subtitle}
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Wind */}
-            <div className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg hover:shadow-2xl transition-all hover:scale-105">
-              <img 
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0 }}
+              whileHover={{ scale: 1.03, y: -10 }}
+              className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg"
+            >
+              <motion.img 
                 src="/images/projects/wind.jpg" 
                 alt="风电项目"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="absolute inset-0 w-full h-full object-cover"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.6 }}
               />
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/80 to-cyan-700/80" />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6">
-                <Wind className="w-16 h-16 mb-4 transition-transform group-hover:scale-125" />
+                <motion.div
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Wind className="w-16 h-16 mb-4" />
+                </motion.div>
                 <h3 className="text-2xl font-bold mb-2">{t.home.projects.wind}</h3>
                 <p className="text-center text-white/80">{t.home.projects.windDesc}</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Solar */}
-            <div className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg hover:shadow-2xl transition-all hover:scale-105">
-              <img 
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ scale: 1.03, y: -10 }}
+              className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg"
+            >
+              <motion.img 
                 src="/images/projects/solar.jpg" 
                 alt="光伏项目"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="absolute inset-0 w-full h-full object-cover"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.6 }}
               />
               <div className="absolute inset-0 bg-gradient-to-br from-amber-600/80 to-orange-700/80" />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6">
-                <Sun className="w-16 h-16 mb-4 transition-transform group-hover:scale-125" />
+                <motion.div
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Sun className="w-16 h-16 mb-4" />
+                </motion.div>
                 <h3 className="text-2xl font-bold mb-2">{t.home.projects.solar}</h3>
                 <p className="text-center text-white/80">{t.home.projects.solarDesc}</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Storage */}
-            <div className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg hover:shadow-2xl transition-all hover:scale-105">
-              <img 
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ scale: 1.03, y: -10 }}
+              className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg"
+            >
+              <motion.img 
                 src="/images/projects/storage.jpg" 
                 alt="储能项目"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="absolute inset-0 w-full h-full object-cover"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.6 }}
               />
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/80 to-teal-700/80" />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6">
-                <Battery className="w-16 h-16 mb-4 transition-transform group-hover:scale-125" />
+                <motion.div
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Battery className="w-16 h-16 mb-4" />
+                </motion.div>
                 <h3 className="text-2xl font-bold mb-2">{t.home.projects.storage}</h3>
                 <p className="text-center text-white/80">{t.home.projects.storageDesc}</p>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="text-center mt-10">
-            <a 
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mt-10"
+          >
+            <motion.a 
               href={`/${lang}/projects`}
-              className="inline-flex items-center px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-all hover:scale-105"
+              whileHover={{ scale: 1.05, x: 5 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors"
             >
               {t.home.projects.viewAll}
               <ChevronRight className="w-5 h-5 ml-2" />
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
         </div>
       </section>
 
       {/* Partners */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {lang === 'zh' ? '合作伙伴' : 'Partners'}
             </h2>
             <p className="text-xl text-gray-600">
               {lang === 'zh' ? '携手行业领先企业，共创绿色未来' : 'Partnering with industry leaders for a green future'}
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-            {/* Partner Logos - Placeholder */}
             {[
               '国家电网', '南方电网', '华能集团', '大唐集团',
               '国家能源', '中广核', '三峡集团', '国家电投',
               '华为数字能源', '阳光电源', '宁德时代', '比亚迪'
             ].map((partner, index) => (
-              <div 
+              <motion.div 
                 key={index}
-                className="flex items-center justify-center p-6 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-all hover:scale-105"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="flex items-center justify-center p-6 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-colors shadow-sm hover:shadow-md"
               >
                 <span className="text-lg font-semibold text-gray-600">{partner}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -408,19 +545,36 @@ export default function HomeContent({ lang }: { lang: Lang }) {
       {/* CTA */}
       <section className="py-20 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-bold text-white mb-4"
+          >
             {t.home.cta.title}
-          </h2>
-          <p className="text-xl text-emerald-100 mb-8">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-xl text-emerald-100 mb-8"
+          >
             {t.home.cta.subtitle}
-          </p>
-          <a 
+          </motion.p>
+          <motion.a 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
             href={`/${lang}/contact`}
-            className="inline-flex items-center px-8 py-4 bg-white text-emerald-700 font-semibold rounded-lg hover:scale-105 transition-transform"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center px-8 py-4 bg-white text-emerald-700 font-semibold rounded-lg transition-colors"
           >
             {t.home.cta.button}
             <ChevronRight className="w-5 h-5 ml-2" />
-          </a>
+          </motion.a>
         </div>
       </section>
     </div>
