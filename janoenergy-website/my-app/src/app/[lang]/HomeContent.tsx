@@ -1,17 +1,14 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Wind, Sun, Battery, Zap, MapPin, 
+  Wind, Sun, Battery, Zap, MapPin, Leaf,
   TrendingUp, TrendingDown, Activity, Power,
   ArrowRight
 } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
 import AnimatedCounter from '@/components/AnimatedCounter';
 import { useThemeStyles } from '@/lib/theme';
-
-// API 项目数据类型
 interface ApiProject {
   id: number;
   title: string;
