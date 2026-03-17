@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface AnimatedCounterProps {
   target: number;
@@ -18,9 +18,26 @@ export default function AnimatedCounter({
   className = '',
 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const targetRef = useRef(target);
 
   useEffect(() => {
-    if (target === 0) return;
+    // 如果已经动画过，且目标值相同，不再重复动画
+    if (hasAnimated && target === targetRef.current) {
+      setCount(target);
+      return;
+    }
+
+    // 如果目标值变化，更新 ref
+    if (target !== targetRef.current) {
+      targetRef.current = target;
+    }
+
+    // 目标为 0 时，直接显示 0
+    if (target === 0) {
+      setCount(0);
+      return;
+    }
 
     let startTime: number | null = null;
     let animationFrame: number;
@@ -39,6 +56,7 @@ export default function AnimatedCounter({
         animationFrame = requestAnimationFrame(animate);
       } else {
         setCount(target);
+        setHasAnimated(true);
       }
     };
 
@@ -53,7 +71,7 @@ export default function AnimatedCounter({
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [target, duration]);
+  }, [target, duration, hasAnimated]);
 
   return (
     <span className={className}>
