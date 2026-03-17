@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { useCompanyApi } from '@/hooks/useApi';
 import { ErrorBoundary } from '@/components/error/ErrorBoundary';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ImageUpload } from '@/components/ui/image-upload';
 
 const SECTIONS = [
   { id: 'intro', label: '公司简介', icon: Building2 },
@@ -493,7 +494,14 @@ function TeamSection(props: any) {
             <div><Label>职位 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
             <div><Label>英文职位</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
           </div>
-          <div><Label>照片 URL</Label><Input value={formData.imageUrl || ''} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." /></div>
+          <div>
+            <Label>照片</Label>
+            <ImageUpload
+              value={formData.imageUrl}
+              onChange={(url) => setFormData({...formData, imageUrl: url})}
+              className="mt-2"
+            />
+          </div>
           <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
@@ -532,7 +540,14 @@ function CertificatesSection(props: any) {
           <div><Label>英文名称</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
           <div><Label>颁发机构</Label><Input value={formData.issuer || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
           <div><Label>颁发日期</Label><Input type="date" value={formData.issueDate || ''} onChange={(e) => setFormData({...formData, issueDate: e.target.value})} /></div>
-          <div><Label>证书图片 URL</Label><Input value={formData.imageUrl || ''} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." /></div>
+          <div>
+            <Label>证书图片</Label>
+            <ImageUpload
+              value={formData.imageUrl}
+              onChange={(url) => setFormData({...formData, imageUrl: url})}
+              className="mt-2"
+            />
+          </div>
           <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
@@ -571,7 +586,14 @@ function HonorsSection(props: any) {
           <div><Label>英文名称</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
           <div><Label>颁发机构</Label><Input value={formData.issuer || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
           <div><Label>年份</Label><Input value={formData.year || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} placeholder="如: 2024" /></div>
-          <div><Label>奖项图片 URL</Label><Input value={formData.imageUrl || ''} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." /></div>
+          <div>
+            <Label>奖项图片</Label>
+            <ImageUpload
+              value={formData.imageUrl}
+              onChange={(url) => setFormData({...formData, imageUrl: url})}
+              className="mt-2"
+            />
+          </div>
           <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
