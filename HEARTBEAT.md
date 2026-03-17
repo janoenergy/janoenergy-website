@@ -8,6 +8,8 @@
 ## 系统检查（每天）
 - [ ] 检查 cron 任务状态
 - [ ] 检查通道健康状态
+
+## 系统检查（每周一 9:00）
 - [ ] **检查 dev.janoenergy.com 访问日志** — 运行 `bash ~/.openclaw/workspace/scripts/check-access.sh`
 - [ ] **分析 Cloudflare 访问日志并推送告警** — 运行 `python3 ~/.openclaw/workspace/scripts/cf-monitor.py`
 
@@ -27,6 +29,7 @@
 - **位置**: `~/.openclaw/workspace/scripts/check-access.sh`
 - **功能**: 统计 dev.janoenergy.com 访问次数和独立 IP
 - **报告**: 生成在 `memory/access-report-YYYY-MM-DD.md`
+- **频率**: 每周一 9:00 自动运行
 
 ### Cloudflare 监控脚本
 - **位置**: `~/.openclaw/workspace/scripts/cf-monitor.py`
@@ -35,6 +38,7 @@
   - 提取 IP、地理位置、访问时间
   - 检测异常（高频访问、多国家、深夜访问）
   - 推送告警到企业微信
+- **频率**: 每周一 9:00 自动运行
 - **环境变量**:
   ```bash
   export CF_API_TOKEN="你的 Cloudflare API Token"
@@ -45,7 +49,6 @@
   - 单日访问 > 100 次 → 高频告警
   - 同一 IP 从 >2 个国家访问 → VPN/代理告警
   - 0-5 点访问 >10 次 → 深夜访问提醒
-  - 每天早上 9 点发送日报
 
 ### 手动运行
 ```bash
@@ -56,11 +59,7 @@ python3 ~/.openclaw/workspace/scripts/cf-monitor.py
 
 # 仅分析不推送
 python3 ~/.openclaw/workspace/scripts/cf-monitor.py
-```
 
-### 定时任务（cron）
-如需更频繁的检查，可以添加 cron：
-```bash
-# 每 6 小时检查一次
-0 */6 * * * /usr/bin/env python3 /Users/jano/.openclaw/workspace/scripts/cf-monitor.py >> /tmp/cf-monitor.log 2>&1
+# 检查访问日志
+bash ~/.openclaw/workspace/scripts/check-access.sh
 ```

@@ -24,6 +24,10 @@
     "desktop-control": {
       "version": "1.0.0",
       "installedAt": 1773081620916
+    },
+    "office": {
+      "version": "1.0.0",
+      "installedAt": 1773582063000
     }
   }
 }
