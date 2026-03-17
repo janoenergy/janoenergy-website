@@ -27,11 +27,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
 
-  // 检查是否是登录页面
-  const isLoginPage = pathname.startsWith("/login")
-
   useEffect(() => {
     setMounted(true);
+    
+    // 在客户端检查是否是登录页面
+    const isLoginPage = pathname === '/login' || pathname.startsWith('/login/');
     
     // 登录页面不检查 token，直接显示
     if (isLoginPage) {
@@ -51,7 +51,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
     }
-  }, []); // 只在组件挂载时执行一次
+  }, [pathname, router]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -67,6 +67,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { id: 'company', label: '公司内容', icon: Building2, href: '/admin/company' },
     { id: 'settings', label: '系统设置', icon: Settings, href: '/admin/settings' },
   ];
+
+  // 在客户端检查是否是登录页面
+  const isLoginPage = typeof window !== 'undefined' && (pathname === '/login' || pathname.startsWith('/login/'));
 
   // 登录页面只渲染内容，不渲染侧边栏
   if (isLoginPage) {
