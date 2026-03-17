@@ -5,107 +5,103 @@ import { getPrisma } from '../lib/prisma';
 
 const app = new Hono();
 
-// 获取新闻列表
+// 获取证书列表
 app.get('/', rateLimitMiddleware({ windowMs: 60000, maxRequests: 60 }), async (c) => {
   try {
     const prisma = getPrisma(c.env);
-    const news = await prisma.news.findMany({
-      orderBy: { publishedAt: 'desc' },
+    const certificates = await prisma.certificate.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: 'asc' },
     });
-    return c.json(news);
+    return c.json(certificates);
   } catch (error: any) {
-    console.error('Get news error:', error);
+    console.error('Get certificates error:', error);
     return c.json({ error: 'Database error', message: error?.message }, 500);
   }
 });
 
-// 获取单个新闻
+// 获取单个证书
 app.get('/:id', rateLimitMiddleware({ windowMs: 60000, maxRequests: 60 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const prisma = getPrisma(c.env);
-    const news = await prisma.news.findUnique({ where: { id } });
+    const certificate = await prisma.certificate.findUnique({ where: { id } });
     
-    if (!news) {
-      return c.json({ error: 'News not found' }, 404);
+    if (!certificate) {
+      return c.json({ error: 'Certificate not found' }, 404);
     }
     
-    return c.json(news);
+    return c.json(certificate);
   } catch (error: any) {
-    console.error('Get news error:', error);
+    console.error('Get certificate error:', error);
     return c.json({ error: 'Database error', message: error?.message }, 500);
   }
 });
 
-// 创建新闻
+// 创建证书
 app.post('/', authMiddleware, rateLimitMiddleware({ windowMs: 60000, maxRequests: 10 }), async (c) => {
   try {
     const data = await c.req.json();
     const prisma = getPrisma(c.env);
     
-    const news = await prisma.news.create({
+    const certificate = await prisma.certificate.create({
       data: {
         title: data.title,
         titleEn: data.titleEn,
-        content: data.content,
-        contentEn: data.contentEn,
-        summary: data.summary,
-        summaryEn: data.summaryEn,
-        category: data.category,
+        issuer: data.issuer,
+        issuerEn: data.issuerEn,
+        issueDate: data.issueDate,
         imageUrl: data.imageUrl,
-        publishedAt: data.publishedAt || new Date(),
-        isPublished: data.isPublished ?? true,
+        sortOrder: data.sortOrder || 0,
+        isActive: true,
       },
     });
     
-    return c.json(news, 201);
+    return c.json(certificate, 201);
   } catch (error: any) {
-    console.error('Create news error:', error);
+    console.error('Create certificate error:', error);
     return c.json({ error: 'Database error', message: error?.message }, 500);
   }
 });
 
-// 更新新闻
+// 更新证书
 app.put('/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60000, maxRequests: 10 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const data = await c.req.json();
     const prisma = getPrisma(c.env);
     
-    const news = await prisma.news.update({
+    const certificate = await prisma.certificate.update({
       where: { id },
       data: {
         title: data.title,
         titleEn: data.titleEn,
-        content: data.content,
-        contentEn: data.contentEn,
-        summary: data.summary,
-        summaryEn: data.summaryEn,
-        category: data.category,
+        issuer: data.issuer,
+        issuerEn: data.issuerEn,
+        issueDate: data.issueDate,
         imageUrl: data.imageUrl,
-        publishedAt: data.publishedAt,
-        isPublished: data.isPublished,
-        updatedAt: new Date(),
+        sortOrder: data.sortOrder,
+        isActive: data.isActive,
       },
     });
     
-    return c.json(news);
+    return c.json(certificate);
   } catch (error: any) {
-    console.error('Update news error:', error);
+    console.error('Update certificate error:', error);
     return c.json({ error: 'Database error', message: error?.message }, 500);
   }
 });
 
-// 删除新闻
+// 删除证书
 app.delete('/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60000, maxRequests: 10 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const prisma = getPrisma(c.env);
     
-    await prisma.news.delete({ where: { id } });
+    await prisma.certificate.delete({ where: { id } });
     return c.json({ success: true });
   } catch (error: any) {
-    console.error('Delete news error:', error);
+    console.error('Delete certificate error:', error);
     return c.json({ error: 'Database error', message: error?.message }, 500);
   }
 });

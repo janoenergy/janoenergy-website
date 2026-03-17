@@ -8,6 +8,9 @@ import authRoutes from './routes/auth';
 import projectRoutes from './routes/projects';
 import newsRoutes from './routes/news';
 import companyRoutes from './routes/company';
+import teamRoutes from './routes/team';
+import certificateRoutes from './routes/certificates';
+import honorRoutes from './routes/honors';
 
 export interface Env {
   DATABASE_URL: string;
@@ -28,6 +31,9 @@ app.route('/api/auth', authRoutes);
 app.route('/api/projects', projectRoutes);
 app.route('/api/news', newsRoutes);
 app.route('/api/company', companyRoutes);
+app.route('/api/team', teamRoutes);
+app.route('/api/certificates', certificateRoutes);
+app.route('/api/honors', honorRoutes);
 
 // 获取统计数据（用于仪表盘）
 app.get('/api/stats', rateLimitMiddleware({ windowMs: 60000, maxRequests: 60 }), async (c) => {
