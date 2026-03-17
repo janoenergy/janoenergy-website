@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { Building2, History, Heart, Users, Briefcase, Award, Trophy, Save, Loader2 } from 'lucide-react';
+import { Building2, History, Heart, Users, Award, Trophy, Save, Loader2, Plus, Edit, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,29 +11,88 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useCompanyApi } from '@/hooks/useApi';
 import { ErrorBoundary } from '@/components/error/ErrorBoundary';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const SECTIONS = [
   { id: 'intro', label: '公司简介', icon: Building2 },
   { id: 'milestones', label: '发展历程', icon: History },
   { id: 'values', label: '核心价值观', icon: Heart },
   { id: 'team', label: '管理团队', icon: Users },
-  { id: 'business', label: '业务板块', icon: Briefcase },
   { id: 'certificates', label: '资质证书', icon: Award },
   { id: 'honors', label: '荣誉奖项', icon: Trophy },
 ];
 
+// 弹窗组件
+function Modal({ isOpen, onClose, title, children }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }) {
+  if (!isOpen) return null;
+  
+  return (
+    <AnimatePresence>
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" 
+        onClick={onClose}
+      >
+        <motion.div 
+          initial={{ scale: 0.95, opacity: 0 }} 
+          animate={{ scale: 1, opacity: 1 }} 
+          exit={{ scale: 0.95, opacity: 0 }}
+          transition={{ type: "spring", duration: 0.3 }}
+          className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" 
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+            <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+            <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+          <div className="p-6 overflow-y-auto flex-1">
+            {children}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function CompanyContent() {
   const [activeTab, setActiveTab] = useState('intro');
-  const [data, setData] = useState<any>({});
   const [saving, setSaving] = useState(false);
   
   const {
     loading,
     error,
-    getCompanyInfo,
+    companyInfo,
+    milestones,
+    values,
+    teamMembers,
+    certificates,
+    honors,
+    fetchCompanyInfo,
+    fetchMilestones,
+    fetchValues,
+    fetchTeamMembers,
+    fetchCertificates,
+    fetchHonors,
     updateCompanyInfo,
-    getMilestones,
-    getBusinessSections,
+    createMilestone,
+    updateMilestone,
+    deleteMilestone,
+    createValue,
+    updateValue,
+    deleteValue,
+    createTeamMember,
+    updateTeamMember,
+    deleteTeamMember,
+    createCertificate,
+    updateCertificate,
+    deleteCertificate,
+    createHonor,
+    updateHonor,
+    deleteHonor,
   } = useCompanyApi();
 
   useEffect(() => {
@@ -41,21 +100,26 @@ function CompanyContent() {
   }, [activeTab]);
 
   const loadData = async () => {
-    let result;
     switch (activeTab) {
       case 'intro':
-        result = await getCompanyInfo();
+        await fetchCompanyInfo();
         break;
       case 'milestones':
-        result = await getMilestones();
+        await fetchMilestones();
         break;
-      case 'business':
-        result = await getBusinessSections();
+      case 'values':
+        await fetchValues();
         break;
-      default:
-        result = null;
+      case 'team':
+        await fetchTeamMembers();
+        break;
+      case 'certificates':
+        await fetchCertificates();
+        break;
+      case 'honors':
+        await fetchHonors();
+        break;
     }
-    if (result) setData(result);
   };
 
   const handleSaveIntro = async (formData: { intro: string; introEn: string }) => {
@@ -63,7 +127,6 @@ function CompanyContent() {
     const result = await updateCompanyInfo(formData);
     if (result) {
       toast.success('保存成功');
-      loadData();
     } else {
       toast.error('保存失败');
     }
@@ -75,6 +138,12 @@ function CompanyContent() {
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-600">
           加载失败: {error}
+          <button 
+            onClick={loadData}
+            className="ml-4 px-3 py-1 bg-red-600 text-white rounded text-sm"
+          >
+            重试
+          </button>
         </div>
       </div>
     );
@@ -88,7 +157,7 @@ function CompanyContent() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-4 lg:grid-cols-7 gap-2">
+        <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2">
           {SECTIONS.map((section) => {
             const Icon = section.icon;
             return (
@@ -101,43 +170,75 @@ function CompanyContent() {
         </TabsList>
 
         <TabsContent value="intro" className="mt-6">
-          <IntroSection data={data} onSave={handleSaveIntro} saving={saving} />
+          <IntroSection 
+            data={companyInfo} 
+            onSave={handleSaveIntro} 
+            saving={saving} 
+            loading={loading}
+          />
         </TabsContent>
 
         <TabsContent value="milestones" className="mt-6">
-          <Card>
-            <CardHeader><CardTitle>发展历程</CardTitle></CardHeader>
-            <CardContent>
-              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <p>功能开发中...</p>}
-            </CardContent>
-          </Card>
+          <MilestonesSection 
+            data={milestones}
+            loading={loading}
+            onCreate={createMilestone}
+            onUpdate={updateMilestone}
+            onDelete={deleteMilestone}
+            onRefresh={fetchMilestones}
+          />
         </TabsContent>
 
-        <TabsContent value="business" className="mt-6">
-          <Card>
-            <CardHeader><CardTitle>业务板块</CardTitle></CardHeader>
-            <CardContent>
-              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <p>功能开发中...</p>}
-            </CardContent>
-          </Card>
+        <TabsContent value="values" className="mt-6">
+          <ValuesSection 
+            data={values}
+            loading={loading}
+            onCreate={createValue}
+            onUpdate={updateValue}
+            onDelete={deleteValue}
+            onRefresh={fetchValues}
+          />
         </TabsContent>
 
-        {['values', 'team', 'certificates', 'honors'].map((tab) => (
-          <TabsContent key={tab} value={tab} className="mt-6">
-            <Card>
-              <CardHeader><CardTitle>{SECTIONS.find(s => s.id === tab)?.label}</CardTitle></CardHeader>
-              <CardContent>
-                <p className="text-gray-500">功能开发中...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        ))}
+        <TabsContent value="team" className="mt-6">
+          <TeamSection 
+            data={teamMembers}
+            loading={loading}
+            onCreate={createTeamMember}
+            onUpdate={updateTeamMember}
+            onDelete={deleteTeamMember}
+            onRefresh={fetchTeamMembers}
+          />
+        </TabsContent>
+
+        <TabsContent value="certificates" className="mt-6">
+          <CertificatesSection 
+            data={certificates}
+            loading={loading}
+            onCreate={createCertificate}
+            onUpdate={updateCertificate}
+            onDelete={deleteCertificate}
+            onRefresh={fetchCertificates}
+          />
+        </TabsContent>
+
+        <TabsContent value="honors" className="mt-6">
+          <HonorsSection 
+            data={honors}
+            loading={loading}
+            onCreate={createHonor}
+            onUpdate={updateHonor}
+            onDelete={deleteHonor}
+            onRefresh={fetchHonors}
+          />
+        </TabsContent>
       </Tabs>
     </div>
   );
 }
 
-function IntroSection({ data, onSave, saving }: { data: any, onSave: (data: any) => void, saving: boolean }) {
+// 公司简介
+function IntroSection({ data, onSave, saving, loading }: { data: any, onSave: (data: any) => void, saving: boolean, loading: boolean }) {
   const [formData, setFormData] = useState({ intro: '', introEn: '' });
 
   useEffect(() => {
@@ -145,6 +246,19 @@ function IntroSection({ data, onSave, saving }: { data: any, onSave: (data: any)
       setFormData({ intro: data.intro || '', introEn: data.introEn || '' });
     }
   }, [data]);
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader><CardTitle>公司简介</CardTitle></CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-6 h-6 animate-spin" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -156,6 +270,7 @@ function IntroSection({ data, onSave, saving }: { data: any, onSave: (data: any)
             value={formData.intro}
             onChange={(e) => setFormData({ ...formData, intro: e.target.value })}
             rows={6}
+            placeholder="请输入公司中文简介..."
           />
         </div>
         <div className="space-y-2">
@@ -164,6 +279,7 @@ function IntroSection({ data, onSave, saving }: { data: any, onSave: (data: any)
             value={formData.introEn}
             onChange={(e) => setFormData({ ...formData, introEn: e.target.value })}
             rows={6}
+            placeholder="请输入公司英文简介..."
           />
         </div>
         <Button onClick={() => onSave(formData)} disabled={saving}>
@@ -172,6 +288,294 @@ function IntroSection({ data, onSave, saving }: { data: any, onSave: (data: any)
         </Button>
       </CardContent>
     </Card>
+  );
+}
+
+// 通用列表管理组件
+function ListSection({ 
+  title, 
+  data, 
+  loading, 
+  onCreate, 
+  onUpdate, 
+  onDelete, 
+  onRefresh,
+  renderItem,
+  formFields,
+  emptyText = '暂无数据'
+}: any) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
+  const [formData, setFormData] = useState<any>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    const result = editingItem 
+      ? await onUpdate(editingItem.id, formData)
+      : await onCreate(formData);
+    
+    if (result) {
+      toast.success(editingItem ? '更新成功' : '创建成功');
+      setIsModalOpen(false);
+      setEditingItem(null);
+      setFormData({});
+      onRefresh();
+    } else {
+      toast.error('操作失败');
+    }
+    setSubmitting(false);
+  };
+
+  const handleEdit = (item: any) => {
+    setEditingItem(item);
+    setFormData(item);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('确定要删除吗？')) return;
+    const result = await onDelete(id);
+    if (result) {
+      toast.success('删除成功');
+      onRefresh();
+    } else {
+      toast.error('删除失败');
+    }
+  };
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader><CardTitle>{title}</CardTitle></CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-6 h-6 animate-spin" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle>{title}</CardTitle>
+        <Button size="sm" onClick={() => { setEditingItem(null); setFormData({}); setIsModalOpen(true); }}>
+          <Plus className="w-4 h-4 mr-2" /> 添加
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {data?.map((item: any) => renderItem({ item, onEdit: () => handleEdit(item), onDelete: () => handleDelete(item.id) }))}
+          {(!data || data.length === 0) && (
+            <div className="text-center py-8 text-gray-500">{emptyText}</div>
+          )}
+        </div>
+      </CardContent>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingItem ? '编辑' : '添加'}>
+        <div className="space-y-4">
+          {formFields({ formData, setFormData })}
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>取消</Button>
+            <Button onClick={handleSubmit} disabled={submitting}>
+              {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              保存
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </Card>
+  );
+}
+
+// 发展历程
+function MilestonesSection(props: any) {
+  return (
+    <ListSection
+      {...props}
+      title="发展历程"
+      renderItem={({ item, onEdit, onDelete }: any) => (
+        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-emerald-600">{item.year}</span>
+              <span className="font-medium">{item.title}</span>
+            </div>
+            <p className="text-sm text-gray-500 mt-1">{item.description}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm" onClick={onEdit}><Edit className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={onDelete}><Trash2 className="w-4 h-4 text-red-500" /></Button>
+          </div>
+        </div>
+      )}
+      formFields={({ formData, setFormData }: any) => (
+        <>
+          <div><Label>年份 *</Label><Input value={formData.year || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} placeholder="如: 2024" /></div>
+          <div><Label>标题 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="中文标题" /></div>
+          <div><Label>英文标题</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} placeholder="English Title" /></div>
+          <div><Label>描述</Label><Textarea value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} /></div>
+          <div><Label>英文描述</Label><Textarea value={formData.descriptionEn || ''} onChange={(e) => setFormData({...formData, descriptionEn: e.target.value})} /></div>
+          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+        </>
+      )}
+    />
+  );
+}
+
+// 核心价值观
+function ValuesSection(props: any) {
+  return (
+    <ListSection
+      {...props}
+      title="核心价值观"
+      renderItem={({ item, onEdit, onDelete }: any) => (
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-start justify-between">
+            <div>
+              <h4 className="font-medium text-emerald-600">{item.title}</h4>
+              <p className="text-sm text-gray-600 mt-1">{item.description}</p>
+            </div>
+            <div className="flex gap-1">
+              <Button variant="ghost" size="sm" onClick={onEdit}><Edit className="w-4 h-4" /></Button>
+              <Button variant="ghost" size="sm" onClick={onDelete}><Trash2 className="w-4 h-4 text-red-500" /></Button>
+            </div>
+          </div>
+        </div>
+      )}
+      formFields={({ formData, setFormData }: any) => (
+        <>
+          <div><Label>标题 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+          <div><Label>英文标题</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+          <div><Label>描述</Label><Textarea value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} /></div>
+          <div><Label>英文描述</Label><Textarea value={formData.descriptionEn || ''} onChange={(e) => setFormData({...formData, descriptionEn: e.target.value})} /></div>
+          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+        </>
+      )}
+    />
+  );
+}
+
+// 管理团队
+function TeamSection(props: any) {
+  return (
+    <ListSection
+      {...props}
+      title="管理团队"
+      renderItem={({ item, onEdit, onDelete }: any) => (
+        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+            {item.imageUrl ? (
+              <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-xl font-bold text-emerald-600">{item.name?.charAt(0)}</span>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium">{item.name}</h4>
+            <p className="text-sm text-emerald-600">{item.title}</p>
+          </div>
+          <div className="flex gap-1">
+            <Button variant="ghost" size="sm" onClick={onEdit}><Edit className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={onDelete}><Trash2 className="w-4 h-4 text-red-500" /></Button>
+          </div>
+        </div>
+      )}
+      formFields={({ formData, setFormData }: any) => (
+        <>
+          <div className="grid grid-cols-2 gap-4">
+            <div><Label>姓名 *</Label><Input value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} /></div>
+            <div><Label>英文姓名</Label><Input value={formData.nameEn || ''} onChange={(e) => setFormData({...formData, nameEn: e.target.value})} /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div><Label>职位 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+            <div><Label>英文职位</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+          </div>
+          <div><Label>照片 URL</Label><Input value={formData.imageUrl || ''} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." /></div>
+          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+        </>
+      )}
+    />
+  );
+}
+
+// 资质证书
+function CertificatesSection(props: any) {
+  return (
+    <ListSection
+      {...props}
+      title="资质证书"
+      renderItem={({ item, onEdit, onDelete }: any) => (
+        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="w-16 h-16 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+            {item.imageUrl ? (
+              <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+            ) : (
+              <Award className="w-8 h-8 text-emerald-600" />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium">{item.title}</h4>
+            <p className="text-sm text-gray-500">{item.issuer}</p>
+          </div>
+          <div className="flex gap-1">
+            <Button variant="ghost" size="sm" onClick={onEdit}><Edit className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={onDelete}><Trash2 className="w-4 h-4 text-red-500" /></Button>
+          </div>
+        </div>
+      )}
+      formFields={({ formData, setFormData }: any) => (
+        <>
+          <div><Label>证书名称 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+          <div><Label>英文名称</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+          <div><Label>颁发机构</Label><Input value={formData.issuer || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
+          <div><Label>颁发日期</Label><Input type="date" value={formData.issueDate || ''} onChange={(e) => setFormData({...formData, issueDate: e.target.value})} /></div>
+          <div><Label>证书图片 URL</Label><Input value={formData.imageUrl || ''} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." /></div>
+          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+        </>
+      )}
+    />
+  );
+}
+
+// 荣誉奖项
+function HonorsSection(props: any) {
+  return (
+    <ListSection
+      {...props}
+      title="荣誉奖项"
+      renderItem={({ item, onEdit, onDelete }: any) => (
+        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <div className="w-16 h-16 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+            {item.imageUrl ? (
+              <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+            ) : (
+              <Trophy className="w-8 h-8 text-amber-600" />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium">{item.title}</h4>
+            <p className="text-sm text-gray-500">{item.issuer} · {item.year}</p>
+          </div>
+          <div className="flex gap-1">
+            <Button variant="ghost" size="sm" onClick={onEdit}><Edit className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={onDelete}><Trash2 className="w-4 h-4 text-red-500" /></Button>
+          </div>
+        </div>
+      )}
+      formFields={({ formData, setFormData }: any) => (
+        <>
+          <div><Label>奖项名称 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+          <div><Label>英文名称</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+          <div><Label>颁发机构</Label><Input value={formData.issuer || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
+          <div><Label>年份</Label><Input value={formData.year || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} placeholder="如: 2024" /></div>
+          <div><Label>奖项图片 URL</Label><Input value={formData.imageUrl || ''} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." /></div>
+          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+        </>
+      )}
+    />
   );
 }
 

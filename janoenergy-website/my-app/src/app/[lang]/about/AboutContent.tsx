@@ -2,57 +2,84 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { translations } from '@/lib/translations';
+import { API_BASE_URL } from '@/lib/config';
 
 const images = {
   company: '/images/about/company.jpg',
 };
 
-// 团队成员数据
-const teamMembers = [
-  { name: '张总', nameEn: 'CEO', title: '首席执行官', titleEn: 'Chief Executive Officer', image: '/images/team/ceo.jpg' },
-  { name: '李总', nameEn: 'CTO', title: '技术总监', titleEn: 'Chief Technology Officer', image: '/images/team/cto.jpg' },
-  { name: '王总', nameEn: 'COO', title: '运营总监', titleEn: 'Chief Operating Officer', image: '/images/team/coo.jpg' },
-  { name: '赵总', nameEn: 'CFO', title: '财务总监', titleEn: 'Chief Financial Officer', image: '/images/team/cfo.jpg' },
-];
+// API 端点
+const API_ENDPOINTS = {
+  companyInfo: `${API_BASE_URL}/api/company/info`,
+  milestones: `${API_BASE_URL}/api/company/milestones`,
+  values: `${API_BASE_URL}/api/company/values`,
+  teamMembers: `${API_BASE_URL}/api/team/members`,
+  certificates: `${API_BASE_URL}/api/certificates`,
+  honors: `${API_BASE_URL}/api/honors`,
+  projects: `${API_BASE_URL}/api/projects`,
+};
 
-// 资质证书
-const certificates = [
-  { name: 'ISO 9001', desc: '质量管理体系认证', image: '/images/certificates/iso9001.jpg' },
-  { name: 'ISO 14001', desc: '环境管理体系认证', image: '/images/certificates/iso14001.jpg' },
-  { name: 'ISO 45001', desc: '职业健康安全管理体系', image: '/images/certificates/iso45001.jpg' },
-  { name: '电力工程施工总承包', desc: '一级资质', image: '/images/certificates/epc.jpg' },
-];
+// 数据类型定义
+interface CompanyInfo {
+  id: number;
+  intro: string;
+  introEn: string;
+}
 
-// 发展历程数据
-const timelineData = [
-  { year: '2018', title: '公司成立', titleEn: 'Founded', desc: '江能集团正式成立，开启新能源征程', descEn: 'JanoEnergy Group was established' },
-  { year: '2019', title: '首个项目落地', titleEn: 'First Project', desc: '首个50MW风电项目签约落地', descEn: 'First 50MW wind project signed' },
-  { year: '2020', title: '首个项目并网', titleEn: 'Grid Connected', desc: '首个风电项目成功并网发电', descEn: 'First wind project connected to grid' },
-  { year: '2021', title: '突破100MW', titleEn: '100MW Milestone', desc: '累计装机容量突破100MW', descEn: 'Cumulative capacity exceeded 100MW' },
-  { year: '2022', title: '业务拓展', titleEn: 'Expansion', desc: '进军光伏和储能领域，实现多元化发展', descEn: 'Entered solar and energy storage sectors' },
-  { year: '2023', title: '区域布局', titleEn: 'Regional Layout', desc: '项目覆盖8个省份，形成全国布局', descEn: 'Projects covering 8 provinces' },
-  { year: '2024', title: '规模突破', titleEn: 'Scale Breakthrough', desc: '累计装机容量突破500MW', descEn: 'Cumulative capacity exceeded 500MW' },
-  { year: '2025', title: '战略升级', titleEn: 'Strategic Upgrade', desc: '启动储能+战略，布局新型电力系统', descEn: 'Launched energy storage+ strategy' },
-];
+interface Milestone {
+  id: number;
+  year: string;
+  title: string;
+  titleEn: string;
+  description: string;
+  descriptionEn: string;
+  sortOrder: number;
+}
 
-// 核心价值观数据
-const valuesData = [
-  { 
-    title: '绿色发展', titleEn: 'Green Development',
-    desc: '坚持可持续发展理念，推动清洁能源普及，为碳中和目标贡献力量', 
-    descEn: 'Adhering to sustainable development and promoting clean energy' 
-  },
-  { 
-    title: '创新驱动', titleEn: 'Innovation Driven',
-    desc: '持续技术创新，提升项目效率和收益，引领行业技术进步', 
-    descEn: 'Continuous technological innovation to improve efficiency' 
-  },
-  { 
-    title: '合作共赢', titleEn: 'Win-Win Cooperation',
-    desc: '与合作伙伴共同成长，创造长期价值，构建产业生态圈', 
-    descEn: 'Growing together with partners to create long-term value' 
-  },
-];
+interface CompanyValue {
+  id: number;
+  title: string;
+  titleEn: string;
+  description: string;
+  descriptionEn: string;
+  icon: string;
+  sortOrder: number;
+}
+
+interface TeamMember {
+  id: number;
+  name: string;
+  nameEn: string;
+  title: string;
+  titleEn: string;
+  imageUrl: string;
+  education: string;
+  educationEn: string;
+  experience: string;
+  experienceEn: string;
+  description: string;
+  descriptionEn: string;
+  sortOrder: number;
+  isActive: boolean;
+}
+
+interface Certificate {
+  id: number;
+  title: string;
+  titleEn: string;
+  issuer: string;
+  issuerEn: string;
+  issueDate: string;
+  imageUrl: string;
+  sortOrder: number;
+  isActive: boolean;
+}
+
+interface Project {
+  id: number;
+  capacity: string;
+  location: string;
+}
 
 // 数字动画组件
 function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
@@ -93,6 +120,155 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 
 export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
   const t = translations[lang].about;
+  
+  // 数据状态
+  const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [values, setValues] = useState<CompanyValue[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // 统计数据
+  const [stats, setStats] = useState({
+    capacity: 1135,
+    projects: 12,
+    provinces: 12,
+    year: 2018,
+  });
+
+  // 从容量字符串提取 MW 数值
+  const parseCapacity = (capacityStr: string): number => {
+    if (!capacityStr) return 0;
+    const mwMatch = capacityStr.match(/(\d+)\s*MW/i);
+    if (mwMatch) return parseInt(mwMatch[1], 10);
+    const numMatch = capacityStr.match(/(\d+)/);
+    return numMatch ? parseInt(numMatch[1], 10) : 0;
+  };
+
+  // 从地址提取省份
+  const extractProvince = (location: string): string => {
+    if (!location) return '';
+    const match = location.match(/^([^省市]+)[省市]/);
+    return match ? match[1] : location.split('省')[0].split('市')[0];
+  };
+
+  // 获取所有数据
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // 并行获取所有数据
+        const [
+          companyRes,
+          milestonesRes,
+          valuesRes,
+          teamRes,
+          certificatesRes,
+          projectsRes,
+        ] = await Promise.all([
+          fetch(API_ENDPOINTS.companyInfo),
+          fetch(API_ENDPOINTS.milestones),
+          fetch(API_ENDPOINTS.values),
+          fetch(API_ENDPOINTS.teamMembers),
+          fetch(API_ENDPOINTS.certificates),
+          fetch(API_ENDPOINTS.projects),
+        ]);
+
+        // 处理公司简介
+        if (companyRes.ok) {
+          const info = await companyRes.json();
+          setCompanyInfo(info);
+        }
+
+        // 处理发展历程
+        if (milestonesRes.ok) {
+          const data = await milestonesRes.json();
+          setMilestones(data);
+        }
+
+        // 处理价值观
+        if (valuesRes.ok) {
+          const data = await valuesRes.json();
+          setValues(data);
+        }
+
+        // 处理团队成员
+        if (teamRes.ok) {
+          const data = await teamRes.json();
+          setTeamMembers(data);
+        }
+
+        // 处理证书
+        if (certificatesRes.ok) {
+          const data = await certificatesRes.json();
+          setCertificates(data);
+        }
+
+        // 处理项目（用于计算统计数据）
+        if (projectsRes.ok) {
+          const data = await projectsRes.json();
+          setProjects(data);
+          
+          // 计算统计数据
+          const capacity = data.reduce((sum: number, p: Project) => sum + parseCapacity(p.capacity), 0);
+          const provinces = new Set(data.map((p: Project) => extractProvince(p.location)).filter(Boolean));
+          
+          setStats({
+            capacity,
+            projects: data.length,
+            provinces: provinces.size || 12,
+            year: 2018,
+          });
+        }
+      } catch (err) {
+        console.error('Failed to fetch about data:', err);
+        setError('数据加载失败，请稍后重试');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // 加载中状态
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 错误状态
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+          >
+            重新加载
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 使用 API 数据或默认数据
+  const displayMilestones = milestones.length > 0 ? milestones : [];
+  const displayValues = values.length > 0 ? values : [];
+  const displayTeam = teamMembers.length > 0 ? teamMembers : [];
+  const displayCertificates = certificates.length > 0 ? certificates : [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -111,26 +287,40 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center mb-16 md:mb-24">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">{t.intro.title}</h2>
-            <p className="text-base md:text-lg text-gray-600 mb-4 leading-relaxed">{t.intro.p1}</p>
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed">{t.intro.p2}</p>
             
-            {/* 核心数据 - 更新为与项目案例一致 */}
+            {/* 优先使用 API 返回的公司简介 */}
+            {companyInfo ? (
+              <>
+                <p className="text-base md:text-lg text-gray-600 mb-4 leading-relaxed">
+                  {lang === 'zh' ? companyInfo.intro : companyInfo.introEn}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-base md:text-lg text-gray-600 mb-4 leading-relaxed">{t.intro.p1}</p>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed">{t.intro.p2}</p>
+              </>
+            )}
+            
+            {/* 核心数据 - 动态计算 */}
             <div className="grid grid-cols-3 gap-4 md:gap-6 mt-8">
               <div className="text-center p-3 md:p-4 bg-white rounded-xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
-                  <AnimatedNumber value={1135} suffix="+" />
+                  <AnimatedNumber value={stats.capacity} suffix="+" />
                 </div>
                 <div className="text-xs md:text-sm text-gray-500 mt-1">MW{lang === 'zh' ? '装机' : ' Capacity'}</div>
               </div>
               <div className="text-center p-3 md:p-4 bg-white rounded-xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
-                  <AnimatedNumber value={12} />
+                  <AnimatedNumber value={stats.projects} />
                 </div>
-                <div className="text-xs md:text-sm text-gray-500 mt-1">{lang === 'zh' ? '省份覆盖' : 'Provinces'}</div>
+                <div className="text-xs md:text-sm text-gray-500 mt-1">{lang === 'zh' ? '个项目' : 'Projects'}</div>
               </div>
               <div className="text-center p-3 md:p-4 bg-white rounded-xl shadow-sm">
-                <div className="text-2xl md:text-3xl font-bold text-emerald-600">2018</div>
-                <div className="text-xs md:text-sm text-gray-500 mt-1">{lang === 'zh' ? '年成立' : 'Founded'}</div>
+                <div className="text-2xl md:text-3xl font-bold text-emerald-600">
+                  <AnimatedNumber value={stats.provinces} />
+                </div>
+                <div className="text-xs md:text-sm text-gray-500 mt-1">{lang === 'zh' ? '个省份' : 'Provinces'}</div>
               </div>
             </div>
           </div>
@@ -140,99 +330,131 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         </div>
 
         {/* 资质证书 */}
-        <div className="mb-16 md:mb-24">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8 text-center">
-            {lang === 'zh' ? '资质证书' : 'Certificates'}
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {certificates.map((cert) => (
-              <div key={cert.name} className="bg-white rounded-xl overflow-hidden shadow-sm">
-                <div className="aspect-[4/3] overflow-hidden bg-gray-100">
-                  <img src={cert.image} alt={cert.name} className="w-full h-full object-cover" />
-                </div>
-                <div className="p-3 md:p-4 text-center">
-                  <h3 className="font-bold text-gray-900 text-sm md:text-base mb-1">{cert.name}</h3>
-                  <p className="text-xs md:text-sm text-gray-500">{cert.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* 管理团队 */}
-        <div className="mb-16 md:mb-24">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8 text-center">
-            {lang === 'zh' ? '管理团队' : 'Leadership Team'}
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {teamMembers.map((member) => (
-              <div key={member.name} className="bg-white rounded-xl overflow-hidden shadow-sm">
-                <div className="aspect-square overflow-hidden bg-gray-100">
-                  <img src={member.image} alt={lang === 'zh' ? member.name : member.nameEn} className="w-full h-full object-cover" />
-                </div>
-                <div className="p-3 md:p-4 text-center">
-                  <h3 className="font-bold text-gray-900 text-sm md:text-base mb-1">{lang === 'zh' ? member.name : member.nameEn}</h3>
-                  <p className="text-xs md:text-sm text-emerald-600">{lang === 'zh' ? member.title : member.titleEn}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Timeline - 发展历程 */}
-        <div className="mb-16 md:mb-24">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-10 md:mb-12 text-center">
-            {lang === 'zh' ? '发展历程' : 'Our History'}
-          </h2>
-          <div className="relative max-w-4xl mx-auto">
-            {/* 中线 */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-0.5 md:w-1 bg-emerald-200 transform -translate-x-1/2" />
-            
-            <div className="space-y-8 md:space-y-12">
-              {timelineData.map((item, idx) => {
-                const isLeft = idx % 2 === 0;
-                return (
-                  <div key={item.year} className={`flex items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
-                    <div className={`w-5/12 ${isLeft ? 'text-right pr-4 md:pr-8' : 'text-left pl-4 md:pl-8'}`}>
-                      <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
-                        <h3 className="text-2xl md:text-3xl font-bold text-emerald-600 mb-2">{item.year}</h3>
-                        <h4 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
-                          {lang === 'zh' ? item.title : item.titleEn}
-                        </h4>
-                        <p className="text-sm md:text-base text-gray-600">
-                          {lang === 'zh' ? item.desc : item.descEn}
-                        </p>
+        {displayCertificates.length > 0 && (
+          <div className="mb-16 md:mb-24">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8 text-center">
+              {lang === 'zh' ? '资质证书' : 'Certificates'}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {displayCertificates.map((cert) => (
+                <div key={cert.id} className="bg-white rounded-xl overflow-hidden shadow-sm">
+                  <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+                    {cert.imageUrl ? (
+                      <img src={cert.imageUrl} alt={lang === 'zh' ? cert.title : cert.titleEn} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-emerald-50">
+                        <span className="text-3xl font-bold text-emerald-600">
+                          {lang === 'zh' ? cert.title.substring(0, 2) : cert.titleEn?.substring(0, 2)}
+                        </span>
                       </div>
-                    </div>
-                    <div className="w-2/12 flex justify-center">
-                      <div className="w-4 h-4 bg-emerald-500 rounded-full border-4 border-white shadow-lg z-10" />
-                    </div>
-                    <div className="w-5/12" />
+                    )}
                   </div>
-                );
-              })}
+                  <div className="p-3 md:p-4 text-center">
+                    <h3 className="font-bold text-gray-900 text-sm md:text-base mb-1">
+                      {lang === 'zh' ? cert.title : cert.titleEn}
+                    </h3>
+                    <p className="text-xs md:text-sm text-gray-500">
+                      {lang === 'zh' ? cert.issuer : cert.issuerEn}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
+
+        {/* 管理团队 */}
+        {displayTeam.length > 0 && (
+          <div className="mb-16 md:mb-24">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8 text-center">
+              {lang === 'zh' ? '管理团队' : 'Leadership Team'}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {displayTeam.map((member) => (
+                <div key={member.id} className="bg-white rounded-xl overflow-hidden shadow-sm">
+                  <div className="aspect-square overflow-hidden bg-gray-100">
+                    {member.imageUrl ? (
+                      <img src={member.imageUrl} alt={lang === 'zh' ? member.name : member.nameEn} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-emerald-50">
+                        <span className="text-4xl font-bold text-emerald-600">
+                          {(lang === 'zh' ? member.name : member.nameEn)?.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 md:p-4 text-center">
+                    <h3 className="font-bold text-gray-900 text-sm md:text-base mb-1">
+                      {lang === 'zh' ? member.name : member.nameEn}
+                    </h3>
+                    <p className="text-xs md:text-sm text-emerald-600">
+                      {lang === 'zh' ? member.title : member.titleEn}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Timeline - 发展历程 */}
+        {displayMilestones.length > 0 && (
+          <div className="mb-16 md:mb-24">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-10 md:mb-12 text-center">
+              {lang === 'zh' ? '发展历程' : 'Our History'}
+            </h2>
+            <div className="relative max-w-4xl mx-auto">
+              {/* 中线 */}
+              <div className="absolute left-1/2 top-0 bottom-0 w-0.5 md:w-1 bg-emerald-200 transform -translate-x-1/2" />
+              
+              <div className="space-y-8 md:space-y-12">
+                {displayMilestones.map((item, idx) => {
+                  const isLeft = idx % 2 === 0;
+                  return (
+                    <div key={item.id} className={`flex items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
+                      <div className={`w-5/12 ${isLeft ? 'text-right pr-4 md:pr-8' : 'text-left pl-4 md:pl-8'}`}>
+                        <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
+                          <h3 className="text-2xl md:text-3xl font-bold text-emerald-600 mb-2">{item.year}</h3>
+                          <h4 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
+                            {lang === 'zh' ? item.title : item.titleEn}
+                          </h4>
+                          <p className="text-sm md:text-base text-gray-600">
+                            {lang === 'zh' ? item.description : item.descriptionEn}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="w-2/12 flex justify-center">
+                        <div className="w-4 h-4 bg-emerald-500 rounded-full border-4 border-white shadow-lg z-10" />
+                      </div>
+                      <div className="w-5/12" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Values - 核心价值观 */}
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-10 md:mb-12 text-center">
-            {lang === 'zh' ? '核心价值观' : 'Core Values'}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {valuesData.map((value) => (
-              <div key={value.title} className="bg-white rounded-xl p-6 md:p-8 text-center shadow-sm h-full">
-                <h3 className="text-lg md:text-xl font-bold text-emerald-600 mb-3 md:mb-4">
-                  {lang === 'zh' ? value.title : value.titleEn}
-                </h3>
-                <p className="text-sm md:text-base text-gray-600">
-                  {lang === 'zh' ? value.desc : value.descEn}
-                </p>
-              </div>
-            ))}
+        {displayValues.length > 0 && (
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-10 md:mb-12 text-center">
+              {lang === 'zh' ? '核心价值观' : 'Core Values'}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {displayValues.map((value) => (
+                <div key={value.id} className="bg-white rounded-xl p-6 md:p-8 text-center shadow-sm h-full">
+                  <h3 className="text-lg md:text-xl font-bold text-emerald-600 mb-3 md:mb-4">
+                    {lang === 'zh' ? value.title : value.titleEn}
+                  </h3>
+                  <p className="text-sm md:text-base text-gray-600">
+                    {lang === 'zh' ? value.description : value.descriptionEn}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
