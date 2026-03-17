@@ -220,14 +220,14 @@ function ProjectCard({ project, index, lang }: { project: ApiProject; index: num
 
 export default function HomeContent({ lang }: { lang: Lang }) {
   const t = translations[lang];
-  const [stats, setStats] = useState<Stats>({ capacity: 0, projects: 0, provinces: 0, year: 2018 });
+  const [stats, setStats] = useState<Stats>(defaultStats);
   const [realTimeData, setRealTimeData] = useState<RealTimeData>({
-    todayGeneration: 0,
+    todayGeneration: 1248,
     totalReduction: 0,
     activeProjects: 12,
     onlineRate: '99.9%',
-    co2Saved: 0,
-    homesPowered: 0,
+    co2Saved: 908,
+    homesPowered: 1702500,
   });
   const [projects, setProjects] = useState<ApiProject[]>([]);
   const [loading, setLoading] = useState(true);
