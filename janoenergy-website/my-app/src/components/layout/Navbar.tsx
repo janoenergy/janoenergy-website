@@ -96,7 +96,7 @@ export function Navbar({ lang, t }: NavbarProps) {
     setLangMenuOpen(false);
   };
 
-  if (!mounted) return null;
+  // 始终渲染，不依赖 mounted
 
   return (
     <motion.nav 
