@@ -23,7 +23,7 @@ interface Project {
   updatedAt: string;
 }
 
-// 真实的新能源项目照片 - 使用更精确的分类
+// 真实的新能源项目照片 - 经过验证的URL
 const projectImages = {
   wind: [
     'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 风电场
@@ -35,7 +35,7 @@ const projectImages = {
     'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop', // 光伏电站
     'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop', // 屋顶光伏
     'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=800&auto=format&fit=crop', // 沙漠光伏
-    'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop', // 太阳能板
+    'https://images.unsplash.com/photo-1497440001374-f26997328c1b?w=800&auto=format&fit=crop', // 太阳能板特写
   ],
   storage: [
     'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 电力设施/变电站
@@ -44,12 +44,20 @@ const projectImages = {
   ],
 };
 
-// 为特定项目分配特定图片
+// 为特定项目分配特定图片（覆盖默认分配）
 const projectSpecificImages: Record<number, string> = {
   // 甘肃酒泉储能项目 - 使用储能设施照片
   1: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop',
-  // 浙江宁波光储一体化 - 使用光伏电站照片（光储一体化以光伏为主）
+  // 浙江宁波光储一体化项目 - 使用光伏电站照片
   9: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop',
+  // 云南大理光伏项目 - 使用沙漠光伏照片
+  3: 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=800&auto=format&fit=crop',
+  // 广东清远光伏项目 - 使用屋顶光伏照片
+  10: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop',
+  // 河北张家口光伏项目 - 使用光伏电站照片
+  8: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop',
+  // 山东德州分布式光伏 - 使用屋顶光伏照片
+  6: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop',
   // 江苏盐城储能电站 - 使用储能设施照片
   7: 'https://images.unsplash.com/photo-1565514020176-dbf2277e4955?w=800&auto=format&fit=crop',
 };
