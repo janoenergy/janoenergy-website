@@ -63,8 +63,8 @@ export function Navbar({ lang, t }: NavbarProps) {
   ];
 
   const languages = [
-    { code: 'zh', label: '中文', flag: '🇨🇳' },
-    { code: 'en', label: 'EN', flag: '🇺🇸' },
+    { code: 'zh', label: '中文',  },
+    { code: 'en', label: 'EN',  },
   ];
 
   const currentLang = languages.find(l => l.code === lang);
@@ -151,7 +151,7 @@ export function Navbar({ lang, t }: NavbarProps) {
                 whileTap={{ scale: 0.95 }}
                 className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium border rounded-lg transition-all ${styles.navText} ${styles.border} hover:border-emerald-400`}
               >
-                <span className="text-base">{currentLang?.flag}</span>
+                
                 <span>{currentLang?.label}</span>
                 <motion.div
                   animate={{ rotate: langMenuOpen ? 180 : 0 }}
@@ -226,7 +226,7 @@ export function Navbar({ lang, t }: NavbarProps) {
                         l.code === lang ? 'text-emerald-500 bg-emerald-500/10' : styles.navText
                       }`}
                     >
-                      <span>{l.flag}</span>
+                      
                       <span>{l.label}</span>
                     </button>
                   ))}
