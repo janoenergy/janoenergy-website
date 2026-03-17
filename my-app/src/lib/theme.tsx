@@ -39,6 +39,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setThemeState('dark');
     }
     setMounted(true);
+    // 确保 theme-loaded 类被添加
+    document.documentElement.classList.add("theme-loaded");
 
     // 监听系统主题变化
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
