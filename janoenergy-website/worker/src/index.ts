@@ -34,7 +34,6 @@ function cleanupExpiredRecords() {
 }
 
 // 每 5 分钟清理一次
-setInterval(cleanupExpiredRecords, 5 * 60 * 1000);
 
 function checkRateLimit(
   identifier: string,
