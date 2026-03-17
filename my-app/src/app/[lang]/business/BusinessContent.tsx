@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import { translations, Lang } from '@/lib/translations';
 import { Compass, TrendingUp, Building2, Settings } from 'lucide-react';
 
+// 真实的新能源业务照片
 const images = {
-  development: '/images/business/development.jpg',
-  investment: '/images/business/investment.jpg',
-  epc: '/images/business/epc.jpg',
-  operation: '/images/business/operation.jpg',
+  development: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&auto=format&fit=crop', // 风电场选址
+  investment: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop', // 投资分析
+  epc: 'https://images.unsplash.com/photo-1548337138-e87d889cc369?w=800&auto=format&fit=crop', // EPC施工
+  operation: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 运维监控
 };
 
 const iconComponents = [Compass, TrendingUp, Building2, Settings];
@@ -122,7 +123,11 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
                 </div>
                 <div className={idx % 2 === 1 ? 'lg:order-1' : ''}>
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg group">
-                    <img src={imageList[idx]} alt={section.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img 
+                      src={imageList[idx]} 
+                      alt={section.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    />
                   </div>
                 </div>
               </section>
