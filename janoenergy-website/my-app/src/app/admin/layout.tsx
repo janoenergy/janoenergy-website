@@ -16,7 +16,7 @@ import {
   Building2
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,6 +25,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [mounted, setMounted] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   // 检查是否是登录页面
   const isLoginPage = pathname === '/admin/login';
@@ -32,15 +33,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   useEffect(() => {
     setMounted(true);
     
-    // 登录页面不检查 token
+    // 登录页面不检查 token，直接显示
     if (isLoginPage) {
-      setIsAuthenticated(true);
       return;
     }
     
+    // 其他页面检查 token
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/admin/login';
+      router.replace('/admin/login');
       return;
     }
 
@@ -50,7 +51,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
     }
-  }, [isLoginPage]);
+  }, []); // 只在组件挂载时执行一次
 
   const handleLogout = () => {
     localStorage.removeItem('token');
