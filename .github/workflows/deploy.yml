@@ -75,6 +75,12 @@ jobs:
       working-directory: ./janoenergy-website/worker
       run: npm ci
     
+    - name: Generate Prisma Client
+      working-directory: ./janoenergy-website/worker
+      run: npx prisma generate
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    
     - name: Deploy Worker
       uses: cloudflare/wrangler-action@v3
       with:
