@@ -26,12 +26,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  // 检查是否是登录页面
+  const isLoginPage = pathname === '/admin/login';
+
   useEffect(() => {
     setMounted(true);
     
+    // 登录页面不检查 token
+    if (isLoginPage) {
+      setIsAuthenticated(true);
+      return;
+    }
+    
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/login';
+      window.location.href = '/admin/login';
       return;
     }
 
@@ -41,12 +50,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
     }
-  }, []);
+  }, [isLoginPage]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/login';
+    window.location.href = '/admin/login';
   };
 
   const menuItems = [
@@ -57,6 +66,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { id: 'company', label: '公司内容', icon: Building2, href: '/admin/company' },
     { id: 'settings', label: '系统设置', icon: Settings, href: '/admin/settings' },
   ];
+
+  // 登录页面只渲染内容，不渲染侧边栏
+  if (isLoginPage) {
+    return (
+      <>
+        <Toaster position="top-right" richColors />
+        {children}
+      </>
+    );
+  }
 
   if (!mounted) {
     return (
