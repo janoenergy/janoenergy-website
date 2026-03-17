@@ -28,7 +28,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
 
   // 检查是否是登录页面
-  const isLoginPage = pathname === '/login';
+  const isLoginPage = pathname.startsWith("/login")
 
   useEffect(() => {
     setMounted(true);
