@@ -1131,3 +1131,4 @@ app.delete('/api/honors/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60
     return c.json({ error: 'Failed to delete honor', message: error?.message }, 500);
   }
 });
+// Trigger redeploy
