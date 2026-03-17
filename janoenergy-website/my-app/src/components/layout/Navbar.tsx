@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
 import { Lang } from '@/lib/translations';
+import { useThemeStyles, useTheme } from '@/lib/theme';
 
-// Logo SVG 组件
 function LogoIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,36 +43,14 @@ export function Navbar({ lang, t }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    // 从 localStorage 读取主题
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    } else {
-      // 默认深色主题
-      setTheme('dark');
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    }
-  }, []);
+  const { theme, toggleTheme } = useTheme();
+  const styles = useThemeStyles();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-  };
 
   const navItems: NavItem[] = [
     { label: t.home, href: `/${lang}` },
@@ -96,8 +74,6 @@ export function Navbar({ lang, t }: NavbarProps) {
     setLangMenuOpen(false);
   };
 
-  // 始终渲染，不依赖 mounted
-
   return (
     <motion.nav 
       initial={{ y: -100 }}
@@ -105,8 +81,8 @@ export function Navbar({ lang, t }: NavbarProps) {
       transition={{ duration: 0.5 }}
       className={`sticky top-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'bg-slate-900/80 backdrop-blur-xl shadow-lg border-b border-slate-700/50' 
-          : 'bg-slate-900/50 backdrop-blur-sm border-b border-transparent'
+          ? `${styles.navBg} backdrop-blur-xl shadow-lg border-b ${styles.navBorder}` 
+          : `${styles.navBg} backdrop-blur-sm border-b border-transparent`
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,7 +98,7 @@ export function Navbar({ lang, t }: NavbarProps) {
               >
                 <LogoIcon className="w-10 h-10" />
               </motion.div>
-              <span className="text-xl font-bold text-white">JanoEnergy</span>
+              <span className={`text-xl font-bold ${styles.text}`}>JanoEnergy</span>
             </a>
           </motion.div>
 
@@ -135,11 +111,11 @@ export function Navbar({ lang, t }: NavbarProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 whileHover={{ y: -2 }}
-                className="relative text-slate-300 hover:text-emerald-400 font-medium transition-colors py-2 group"
+                className={`relative ${styles.navText} ${styles.navTextHover} font-medium transition-colors py-2 group`}
               >
                 {item.label}
                 <motion.span 
-                  className="absolute bottom-0 left-0 h-0.5 bg-emerald-400"
+                  className="absolute bottom-0 left-0 h-0.5 bg-emerald-500"
                   initial={{ width: 0 }}
                   whileHover={{ width: '100%' }}
                   transition={{ duration: 0.3 }}
@@ -152,7 +128,7 @@ export function Navbar({ lang, t }: NavbarProps) {
               onClick={toggleTheme}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white border border-slate-600 hover:border-slate-500 rounded-lg transition-all"
+              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium border rounded-lg transition-all ${styles.navText} ${styles.border} hover:border-emerald-400`}
             >
               {theme === 'dark' ? (
                 <>
@@ -173,7 +149,7 @@ export function Navbar({ lang, t }: NavbarProps) {
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white border border-slate-600 hover:border-slate-500 rounded-lg transition-all"
+                className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium border rounded-lg transition-all ${styles.navText} ${styles.border} hover:border-emerald-400`}
               >
                 <span className="text-base">{currentLang?.flag}</span>
                 <span>{currentLang?.label}</span>
@@ -190,7 +166,7 @@ export function Navbar({ lang, t }: NavbarProps) {
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  className="absolute right-0 mt-2 w-32 bg-slate-800/95 backdrop-blur-xl rounded-lg shadow-xl border border-slate-700 py-1 z-50"
+                  className={`absolute right-0 mt-2 w-32 ${styles.bgCard} backdrop-blur-xl rounded-lg shadow-xl border ${styles.border} py-1 z-50`}
                 >
                   {languages.map((l, idx) => (
                     <motion.button
@@ -201,7 +177,7 @@ export function Navbar({ lang, t }: NavbarProps) {
                       transition={{ delay: idx * 0.05 }}
                       whileHover={{ x: 5, backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
                       className={`w-full flex items-center gap-2 px-4 py-2 text-sm transition-colors ${
-                        l.code === lang ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-300'
+                        l.code === lang ? 'text-emerald-500 bg-emerald-500/10' : styles.navText
                       }`}
                     >
                       <span className="text-base">{l.flag}</span>
@@ -214,11 +190,10 @@ export function Navbar({ lang, t }: NavbarProps) {
           </div>
 
           <div className="md:hidden flex items-center gap-2">
-            {/* 移动端主题切换 */}
             <motion.button
               onClick={toggleTheme}
               whileTap={{ scale: 0.9 }}
-              className="p-2 text-slate-300 hover:text-white"
+              className={`p-2 ${styles.navText}`}
             >
               {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </motion.button>
@@ -226,7 +201,7 @@ export function Navbar({ lang, t }: NavbarProps) {
             <div className="relative">
               <button 
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="flex items-center gap-1 px-2 py-1 text-sm font-medium text-slate-300 border border-slate-600 rounded-lg"
+                className={`flex items-center gap-1 px-2 py-1 text-sm font-medium border rounded-lg ${styles.navText} ${styles.border}`}
               >
                 <span>{currentLang?.flag}</span>
                 <motion.div
@@ -241,14 +216,14 @@ export function Navbar({ lang, t }: NavbarProps) {
                 <motion.div 
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute right-0 mt-2 w-28 bg-slate-800 rounded-lg shadow-xl border border-slate-700 py-1 z-50"
+                  className={`absolute right-0 mt-2 w-28 ${styles.bgCard} rounded-lg shadow-xl border ${styles.border} py-1 z-50`}
                 >
                   {languages.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => switchLang(l.code)}
-                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-slate-700 ${
-                        l.code === lang ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-300'
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-emerald-500/10 ${
+                        l.code === lang ? 'text-emerald-500 bg-emerald-500/10' : styles.navText
                       }`}
                     >
                       <span>{l.flag}</span>
@@ -262,7 +237,7 @@ export function Navbar({ lang, t }: NavbarProps) {
             <motion.button 
               onClick={() => setIsOpen(!isOpen)} 
               whileTap={{ scale: 0.9 }}
-              className="text-slate-300 hover:text-white p-2"
+              className={`${styles.navText} p-2`}
             >
               <motion.div
                 animate={{ rotate: isOpen ? 90 : 0 }}
@@ -280,7 +255,7 @@ export function Navbar({ lang, t }: NavbarProps) {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-slate-800/95 backdrop-blur-xl border-t border-slate-700"
+          className={`md:hidden ${styles.bgCard} backdrop-blur-xl border-t ${styles.border}`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item, index) => (
@@ -290,7 +265,7 @@ export function Navbar({ lang, t }: NavbarProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="block px-3 py-2 text-slate-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-md transition-colors" 
+                className={`block px-3 py-2 ${styles.navText} ${styles.navTextHover} hover:bg-emerald-500/10 rounded-md transition-colors`} 
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
