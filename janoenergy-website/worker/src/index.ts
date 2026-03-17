@@ -578,3 +578,556 @@ app.get('/api/health', (c) => {
 });
 
 export default app;
+
+// ========== 公司内容管理 API ==========
+
+// 获取公司简介
+app.get('/api/company/info', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const prisma = getPrisma(c.env);
+    let info = await prisma.companyInfo.findFirst();
+    
+    if (!info) {
+      // 创建默认数据
+      info = await prisma.companyInfo.create({
+        data: {
+          intro: '江能新能源集团有限公司成立于2018年，总部位于中国·天津。公司专注于新能源领域的开发、投资、建设和运营，致力于成为行业领先的全产业链服务商。',
+          introEn: 'JanoEnergy New Energy Group Co., Ltd. was founded in 2018, headquartered in Tianjin, China. The company focuses on the development, investment, construction, and operation of new energy, committed to becoming an industry-leading full-chain service provider.',
+        }
+      });
+    }
+    
+    return c.json(info);
+  } catch (error: any) {
+    console.error('Get company info error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 更新公司简介
+app.put('/api/company/info', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    let info = await prisma.companyInfo.findFirst();
+    
+    if (info) {
+      info = await prisma.companyInfo.update({
+        where: { id: info.id },
+        data: {
+          intro: body.intro,
+          introEn: body.introEn,
+        }
+      });
+    } else {
+      info = await prisma.companyInfo.create({
+        data: {
+          intro: body.intro,
+          introEn: body.introEn,
+        }
+      });
+    }
+    
+    return c.json(info);
+  } catch (error: any) {
+    console.error('Update company info error:', error);
+    return c.json({ error: 'Failed to update company info', message: error?.message }, 500);
+  }
+});
+
+// ========== 发展历程 ==========
+
+// 获取发展历程列表
+app.get('/api/company/milestones', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const prisma = getPrisma(c.env);
+    const milestones = await prisma.milestone.findMany({
+      orderBy: { sortOrder: 'asc' }
+    });
+    return c.json(milestones);
+  } catch (error: any) {
+    console.error('Get milestones error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 创建发展历程
+app.post('/api/company/milestones', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const milestone = await prisma.milestone.create({
+      data: {
+        year: body.year,
+        title: body.title,
+        titleEn: body.titleEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        sortOrder: body.sortOrder || 0,
+      }
+    });
+    
+    return c.json(milestone, 201);
+  } catch (error: any) {
+    console.error('Create milestone error:', error);
+    return c.json({ error: 'Failed to create milestone', message: error?.message }, 500);
+  }
+});
+
+// 更新发展历程
+app.put('/api/company/milestones/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const milestone = await prisma.milestone.update({
+      where: { id },
+      data: {
+        year: body.year,
+        title: body.title,
+        titleEn: body.titleEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        sortOrder: body.sortOrder,
+      }
+    });
+    
+    return c.json(milestone);
+  } catch (error: any) {
+    console.error('Update milestone error:', error);
+    return c.json({ error: 'Failed to update milestone', message: error?.message }, 500);
+  }
+});
+
+// 删除发展历程
+app.delete('/api/company/milestones/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const prisma = getPrisma(c.env);
+    
+    await prisma.milestone.delete({ where: { id } });
+    
+    return c.json({ success: true });
+  } catch (error: any) {
+    console.error('Delete milestone error:', error);
+    return c.json({ error: 'Failed to delete milestone', message: error?.message }, 500);
+  }
+});
+
+// ========== 核心价值观 ==========
+
+// 获取价值观列表
+app.get('/api/company/values', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const prisma = getPrisma(c.env);
+    const values = await prisma.companyValue.findMany({
+      orderBy: { sortOrder: 'asc' }
+    });
+    return c.json(values);
+  } catch (error: any) {
+    console.error('Get company values error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 创建价值观
+app.post('/api/company/values', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const value = await prisma.companyValue.create({
+      data: {
+        title: body.title,
+        titleEn: body.titleEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        icon: body.icon,
+        sortOrder: body.sortOrder || 0,
+      }
+    });
+    
+    return c.json(value, 201);
+  } catch (error: any) {
+    console.error('Create company value error:', error);
+    return c.json({ error: 'Failed to create company value', message: error?.message }, 500);
+  }
+});
+
+// 更新价值观
+app.put('/api/company/values/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const value = await prisma.companyValue.update({
+      where: { id },
+      data: {
+        title: body.title,
+        titleEn: body.titleEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        icon: body.icon,
+        sortOrder: body.sortOrder,
+      }
+    });
+    
+    return c.json(value);
+  } catch (error: any) {
+    console.error('Update company value error:', error);
+    return c.json({ error: 'Failed to update company value', message: error?.message }, 500);
+  }
+});
+
+// 删除价值观
+app.delete('/api/company/values/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const prisma = getPrisma(c.env);
+    
+    await prisma.companyValue.delete({ where: { id } });
+    
+    return c.json({ success: true });
+  } catch (error: any) {
+    console.error('Delete company value error:', error);
+    return c.json({ error: 'Failed to delete company value', message: error?.message }, 500);
+  }
+});
+
+// ========== 管理团队 ==========
+
+// 获取团队成员列表
+app.get('/api/team/members', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const prisma = getPrisma(c.env);
+    const members = await prisma.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: 'asc' }
+    });
+    return c.json(members);
+  } catch (error: any) {
+    console.error('Get team members error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 创建团队成员
+app.post('/api/team/members', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const member = await prisma.teamMember.create({
+      data: {
+        name: body.name,
+        nameEn: body.nameEn,
+        title: body.title,
+        titleEn: body.titleEn,
+        imageUrl: body.imageUrl,
+        education: body.education,
+        educationEn: body.educationEn,
+        experience: body.experience,
+        experienceEn: body.experienceEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        sortOrder: body.sortOrder || 0,
+        isActive: body.isActive ?? true,
+      }
+    });
+    
+    return c.json(member, 201);
+  } catch (error: any) {
+    console.error('Create team member error:', error);
+    return c.json({ error: 'Failed to create team member', message: error?.message }, 500);
+  }
+});
+
+// 更新团队成员
+app.put('/api/team/members/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const member = await prisma.teamMember.update({
+      where: { id },
+      data: {
+        name: body.name,
+        nameEn: body.nameEn,
+        title: body.title,
+        titleEn: body.titleEn,
+        imageUrl: body.imageUrl,
+        education: body.education,
+        educationEn: body.educationEn,
+        experience: body.experience,
+        experienceEn: body.experienceEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        sortOrder: body.sortOrder,
+        isActive: body.isActive,
+      }
+    });
+    
+    return c.json(member);
+  } catch (error: any) {
+    console.error('Update team member error:', error);
+    return c.json({ error: 'Failed to update team member', message: error?.message }, 500);
+  }
+});
+
+// 删除团队成员
+app.delete('/api/team/members/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const prisma = getPrisma(c.env);
+    
+    await prisma.teamMember.delete({ where: { id } });
+    
+    return c.json({ success: true });
+  } catch (error: any) {
+    console.error('Delete team member error:', error);
+    return c.json({ error: 'Failed to delete team member', message: error?.message }, 500);
+  }
+});
+
+// ========== 业务板块 ==========
+
+// 获取业务板块列表
+app.get('/api/business/sections', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const prisma = getPrisma(c.env);
+    const sections = await prisma.businessSection.findMany({
+      orderBy: { sectionId: 'asc' }
+    });
+    return c.json(sections);
+  } catch (error: any) {
+    console.error('Get business sections error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 获取单个业务板块
+app.get('/api/business/sections/:id', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const sectionId = c.req.param('id');
+    const prisma = getPrisma(c.env);
+    
+    const section = await prisma.businessSection.findUnique({
+      where: { sectionId }
+    });
+    
+    if (!section) {
+      return c.json({ error: 'Section not found' }, 404);
+    }
+    
+    return c.json(section);
+  } catch (error: any) {
+    console.error('Get business section error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 更新业务板块
+app.put('/api/business/sections/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const sectionId = c.req.param('id');
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const section = await prisma.businessSection.update({
+      where: { sectionId },
+      data: {
+        title: body.title,
+        titleEn: body.titleEn,
+        subtitle: body.subtitle,
+        subtitleEn: body.subtitleEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        features: body.features,
+        featuresEn: body.featuresEn,
+        imageUrl: body.imageUrl,
+      }
+    });
+    
+    return c.json(section);
+  } catch (error: any) {
+    console.error('Update business section error:', error);
+    return c.json({ error: 'Failed to update business section', message: error?.message }, 500);
+  }
+});
+
+// ========== 资质证书 ==========
+
+// 获取证书列表
+app.get('/api/certificates', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const prisma = getPrisma(c.env);
+    const certificates = await prisma.certificate.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: 'asc' }
+    });
+    return c.json(certificates);
+  } catch (error: any) {
+    console.error('Get certificates error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 创建证书
+app.post('/api/certificates', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const certificate = await prisma.certificate.create({
+      data: {
+        title: body.title,
+        titleEn: body.titleEn,
+        issuer: body.issuer,
+        issuerEn: body.issuerEn,
+        issueDate: body.issueDate,
+        imageUrl: body.imageUrl,
+        sortOrder: body.sortOrder || 0,
+        isActive: body.isActive ?? true,
+      }
+    });
+    
+    return c.json(certificate, 201);
+  } catch (error: any) {
+    console.error('Create certificate error:', error);
+    return c.json({ error: 'Failed to create certificate', message: error?.message }, 500);
+  }
+});
+
+// 更新证书
+app.put('/api/certificates/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const certificate = await prisma.certificate.update({
+      where: { id },
+      data: {
+        title: body.title,
+        titleEn: body.titleEn,
+        issuer: body.issuer,
+        issuerEn: body.issuerEn,
+        issueDate: body.issueDate,
+        imageUrl: body.imageUrl,
+        sortOrder: body.sortOrder,
+        isActive: body.isActive,
+      }
+    });
+    
+    return c.json(certificate);
+  } catch (error: any) {
+    console.error('Update certificate error:', error);
+    return c.json({ error: 'Failed to update certificate', message: error?.message }, 500);
+  }
+});
+
+// 删除证书
+app.delete('/api/certificates/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const prisma = getPrisma(c.env);
+    
+    await prisma.certificate.delete({ where: { id } });
+    
+    return c.json({ success: true });
+  } catch (error: any) {
+    console.error('Delete certificate error:', error);
+    return c.json({ error: 'Failed to delete certificate', message: error?.message }, 500);
+  }
+});
+
+// ========== 荣誉奖项 ==========
+
+// 获取荣誉列表
+app.get('/api/honors', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
+  try {
+    const prisma = getPrisma(c.env);
+    const honors = await prisma.honor.findMany({
+      where: { isActive: true },
+      orderBy: { year: 'desc' }
+    });
+    return c.json(honors);
+  } catch (error: any) {
+    console.error('Get honors error:', error);
+    return c.json({ error: 'Database error', message: error?.message }, 500);
+  }
+});
+
+// 创建荣誉
+app.post('/api/honors', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const honor = await prisma.honor.create({
+      data: {
+        title: body.title,
+        titleEn: body.titleEn,
+        issuer: body.issuer,
+        issuerEn: body.issuerEn,
+        year: body.year,
+        imageUrl: body.imageUrl,
+        sortOrder: body.sortOrder || 0,
+        isActive: body.isActive ?? true,
+      }
+    });
+    
+    return c.json(honor, 201);
+  } catch (error: any) {
+    console.error('Create honor error:', error);
+    return c.json({ error: 'Failed to create honor', message: error?.message }, 500);
+  }
+});
+
+// 更新荣誉
+app.put('/api/honors/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const body = await c.req.json();
+    const prisma = getPrisma(c.env);
+    
+    const honor = await prisma.honor.update({
+      where: { id },
+      data: {
+        title: body.title,
+        titleEn: body.titleEn,
+        issuer: body.issuer,
+        issuerEn: body.issuerEn,
+        year: body.year,
+        imageUrl: body.imageUrl,
+        sortOrder: body.sortOrder,
+        isActive: body.isActive,
+      }
+    });
+    
+    return c.json(honor);
+  } catch (error: any) {
+    console.error('Update honor error:', error);
+    return c.json({ error: 'Failed to update honor', message: error?.message }, 500);
+  }
+});
+
+// 删除荣誉
+app.delete('/api/honors/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'));
+    const prisma = getPrisma(c.env);
+    
+    await prisma.honor.delete({ where: { id } });
+    
+    return c.json({ success: true });
+  } catch (error: any) {
+    console.error('Delete honor error:', error);
+    return c.json({ error: 'Failed to delete honor', message: error?.message }, 500);
+  }
+});

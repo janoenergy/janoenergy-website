@@ -93,3 +93,119 @@ model WorkflowStep {
 
   @@map("workflow_steps")
 }
+
+// ========== 公司内容管理 ==========
+
+// 公司简介
+model CompanyInfo {
+  id          Int    @id @default(autoincrement())
+  intro       String @db.Text
+  introEn     String @map("intro_en") @db.Text
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("company_info")
+}
+
+// 发展历程
+model Milestone {
+  id          Int    @id @default(autoincrement())
+  year        String
+  title       String
+  titleEn     String? @map("title_en")
+  description String  @db.Text
+  descriptionEn String? @map("description_en") @db.Text
+  sortOrder   Int     @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("milestones")
+}
+
+// 核心价值观
+model CompanyValue {
+  id          Int    @id @default(autoincrement())
+  title       String
+  titleEn     String? @map("title_en")
+  description String  @db.Text
+  descriptionEn String? @map("description_en") @db.Text
+  icon        String? // 图标名称
+  sortOrder   Int     @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("company_values")
+}
+
+// 管理团队
+model TeamMember {
+  id          Int    @id @default(autoincrement())
+  name        String
+  nameEn      String? @map("name_en")
+  title       String
+  titleEn     String? @map("title_en")
+  imageUrl    String? @map("image_url")
+  education   String? @db.Text
+  educationEn String? @map("education_en") @db.Text
+  experience  String? @db.Text
+  experienceEn String? @map("experience_en") @db.Text
+  description String? @db.Text
+  descriptionEn String? @map("description_en") @db.Text
+  sortOrder   Int     @default(0) @map("sort_order")
+  isActive    Boolean @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("team_members")
+}
+
+// 业务板块
+model BusinessSection {
+  id          Int    @id @default(autoincrement())
+  sectionId   String @unique @map("section_id") // development, investment, epc, operation
+  title       String
+  titleEn     String? @map("title_en")
+  subtitle    String?
+  subtitleEn  String? @map("subtitle_en")
+  description String  @db.Text
+  descriptionEn String? @map("description_en") @db.Text
+  features    String[] // 特点列表
+  featuresEn  String[] @map("features_en")
+  imageUrl    String? @map("image_url")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("business_sections")
+}
+
+// 资质证书
+model Certificate {
+  id          Int    @id @default(autoincrement())
+  title       String
+  titleEn     String? @map("title_en")
+  issuer      String
+  issuerEn    String? @map("issuer_en")
+  issueDate   String  @map("issue_date") // YYYY-MM
+  imageUrl    String? @map("image_url")
+  sortOrder   Int     @default(0) @map("sort_order")
+  isActive    Boolean @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("certificates")
+}
+
+// 荣誉奖项
+model Honor {
+  id          Int    @id @default(autoincrement())
+  title       String
+  titleEn     String? @map("title_en")
+  issuer      String
+  issuerEn    String? @map("issuer_en")
+  year        String  // YYYY
+  imageUrl    String? @map("image_url")
+  sortOrder   Int     @default(0) @map("sort_order")
+  isActive    Boolean @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("honors")
+}
