@@ -461,7 +461,11 @@ export default function HomeContent({ lang }: { lang: Lang }) {
                   className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-colors shadow-sm hover:shadow-lg"
                 >
                   <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                    {stat.isYear ? (
+                      <span>{stat.value}{stat.suffix}</span>
+                    ) : (
+                      <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                    )}
                   </div>
                   <div className="text-gray-600">{stat.label}</div>
                 </motion.div>
