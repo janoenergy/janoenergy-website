@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
-import { API_ENDPOINTS } from '@/lib/api';
+import { ErrorBoundary } from '@/components/error/ErrorBoundary';
 
-export default function LoginPage() {
+const API_BASE_URL = 'https://api.janoenergy.com';
+
+function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(API_ENDPOINTS.auth.login, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -111,5 +113,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <ErrorBoundary>
+      <LoginForm />
+    </ErrorBoundary>
   );
 }
