@@ -8,18 +8,141 @@ import { withAccelerate } from '@prisma/extension-accelerate';
 export interface Env {
   DATABASE_URL: string;
   JWT_SECRET: string;
+  // 可选：允许的域名列表，逗号分隔
+  ALLOWED_ORIGINS?: string;
 }
 
 const app = new Hono<{ Bindings: Env }>();
 
-// CORS
-app.use('/*', cors({
-  origin: '*',
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization'],
-}));
+// ========== 速率限制配置 ==========
+interface RateLimitConfig {
+  windowMs: number;
+  maxRequests: number;
+}
 
-// 获取 Prisma Client - 使用 Edge 版本
+// 存储请求记录（简单内存存储，生产环境建议用 Redis）
+const requestStore = new Map<string, { count: number; resetTime: number }>();
+
+// 清理过期的记录
+function cleanupExpiredRecords() {
+  const now = Date.now();
+  for (const [key, value] of requestStore.entries()) {
+    if (now > value.resetTime) {
+      requestStore.delete(key);
+    }
+  }
+}
+
+// 每 5 分钟清理一次
+setInterval(cleanupExpiredRecords, 5 * 60 * 1000);
+
+function checkRateLimit(
+  identifier: string,
+  config: RateLimitConfig = { windowMs: 60 * 1000, maxRequests: 100 }
+): { allowed: boolean; remaining: number; resetTime: number } {
+  const now = Date.now();
+  const record = requestStore.get(identifier);
+
+  if (!record || now > record.resetTime) {
+    requestStore.set(identifier, {
+      count: 1,
+      resetTime: now + config.windowMs,
+    });
+    return {
+      allowed: true,
+      remaining: config.maxRequests - 1,
+      resetTime: now + config.windowMs,
+    };
+  }
+
+  if (record.count >= config.maxRequests) {
+    return {
+      allowed: false,
+      remaining: 0,
+      resetTime: record.resetTime,
+    };
+  }
+
+  record.count++;
+  return {
+    allowed: true,
+    remaining: config.maxRequests - record.count,
+    resetTime: record.resetTime,
+  };
+}
+
+function getClientIP(c: any): string {
+  const forwarded = c.req.header('x-forwarded-for');
+  const realIP = c.req.header('x-real-ip');
+  
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+  
+  if (realIP) {
+    return realIP;
+  }
+  
+  return 'unknown';
+}
+
+// 速率限制中间件
+function rateLimitMiddleware(config: RateLimitConfig = { windowMs: 60 * 1000, maxRequests: 100 }) {
+  return async (c: any, next: any) => {
+    const identifier = getClientIP(c);
+    const result = checkRateLimit(identifier, config);
+    
+    // 添加速率限制响应头
+    c.header('X-RateLimit-Limit', config.maxRequests.toString());
+    c.header('X-RateLimit-Remaining', result.remaining.toString());
+    c.header('X-RateLimit-Reset', result.resetTime.toString());
+    
+    if (!result.allowed) {
+      return c.json({ 
+        error: 'Rate limit exceeded',
+        message: 'Too many requests, please try again later',
+        resetTime: result.resetTime 
+      }, 429);
+    }
+    
+    await next();
+  };
+}
+
+// ========== CORS 配置 ==========
+// 根据环境变量动态设置允许的域名
+function getCorsConfig(env: Env) {
+  const allowedOrigins = env.ALLOWED_ORIGINS 
+    ? env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+    : ['https://www.janoenergy.com', 'https://janoenergy.com'];
+  
+  return {
+    origin: (origin: string) => {
+      // 开发环境允许 localhost
+      if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return origin || '*';
+      }
+      // 检查是否在允许列表中
+      if (allowedOrigins.includes(origin)) {
+        return origin;
+      }
+      // 默认拒绝
+      return null;
+    },
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    maxAge: 86400,
+  };
+}
+
+// CORS 中间件
+app.use('/*', (c, next) => {
+  const corsMiddleware = cors(getCorsConfig(c.env));
+  return corsMiddleware(c, next);
+});
+
+// 获取 Prisma Client
 function getPrisma(env: Env) {
   const client = new PrismaClient({
     datasourceUrl: env.DATABASE_URL,
@@ -46,8 +169,8 @@ async function authMiddleware(c: any, next: any) {
 
 // ========== 项目管理 ==========
 
-// 获取项目列表
-app.get('/api/projects', async (c) => {
+// 获取项目列表 - 应用速率限制
+app.get('/api/projects', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
   try {
     const prisma = getPrisma(c.env);
     const projects = await prisma.project.findMany({
@@ -64,7 +187,7 @@ app.get('/api/projects', async (c) => {
 });
 
 // 获取单个项目
-app.get('/api/projects/:id', async (c) => {
+app.get('/api/projects/:id', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 100 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const prisma = getPrisma(c.env);
@@ -83,8 +206,8 @@ app.get('/api/projects/:id', async (c) => {
   }
 });
 
-// 创建项目
-app.post('/api/projects', async (c) => {
+// 创建项目 - 需要认证，更严格的速率限制
+app.post('/api/projects', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
   try {
     const body = await c.req.json();
     const prisma = getPrisma(c.env);
@@ -111,7 +234,7 @@ app.post('/api/projects', async (c) => {
 });
 
 // 更新项目
-app.put('/api/projects/:id', async (c) => {
+app.put('/api/projects/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const body = await c.req.json();
@@ -142,7 +265,7 @@ app.put('/api/projects/:id', async (c) => {
 });
 
 // 删除项目
-app.delete('/api/projects/:id', async (c) => {
+app.delete('/api/projects/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const prisma = getPrisma(c.env);
@@ -161,7 +284,7 @@ app.delete('/api/projects/:id', async (c) => {
 // ========== 新闻管理 ==========
 
 // 获取新闻列表
-app.get('/api/news', async (c) => {
+app.get('/api/news', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 60 }), async (c) => {
   try {
     const prisma = getPrisma(c.env);
     const news = await prisma.news.findMany({
@@ -175,7 +298,7 @@ app.get('/api/news', async (c) => {
 });
 
 // 获取单条新闻
-app.get('/api/news/:id', async (c) => {
+app.get('/api/news/:id', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 100 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const prisma = getPrisma(c.env);
@@ -195,7 +318,7 @@ app.get('/api/news/:id', async (c) => {
 });
 
 // 创建新闻
-app.post('/api/news', async (c) => {
+app.post('/api/news', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
   try {
     const body = await c.req.json();
     const prisma = getPrisma(c.env);
@@ -221,7 +344,7 @@ app.post('/api/news', async (c) => {
 });
 
 // 更新新闻
-app.put('/api/news/:id', async (c) => {
+app.put('/api/news/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const body = await c.req.json();
@@ -251,7 +374,7 @@ app.put('/api/news/:id', async (c) => {
 });
 
 // 删除新闻
-app.delete('/api/news/:id', async (c) => {
+app.delete('/api/news/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const prisma = getPrisma(c.env);
@@ -270,7 +393,7 @@ app.delete('/api/news/:id', async (c) => {
 // ========== 用户管理 ==========
 
 // 获取用户列表
-app.get('/api/users', async (c) => {
+app.get('/api/users', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 30 }), async (c) => {
   try {
     const prisma = getPrisma(c.env);
     const users = await prisma.user.findMany({
@@ -293,7 +416,7 @@ app.get('/api/users', async (c) => {
 });
 
 // 创建用户
-app.post('/api/users', async (c) => {
+app.post('/api/users', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 5 }), async (c) => {
   try {
     const body = await c.req.json();
     const prisma = getPrisma(c.env);
@@ -328,7 +451,7 @@ app.post('/api/users', async (c) => {
 });
 
 // 更新用户
-app.put('/api/users/:id', async (c) => {
+app.put('/api/users/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 10 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const body = await c.req.json();
@@ -360,7 +483,7 @@ app.put('/api/users/:id', async (c) => {
 });
 
 // 删除用户
-app.delete('/api/users/:id', async (c) => {
+app.delete('/api/users/:id', authMiddleware, rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 5 }), async (c) => {
   try {
     const id = parseInt(c.req.param('id'));
     const prisma = getPrisma(c.env);
@@ -378,8 +501,8 @@ app.delete('/api/users/:id', async (c) => {
 
 // ========== 认证 ==========
 
-// 登录
-app.post('/api/auth/login', async (c) => {
+// 登录 - 更严格的速率限制防止暴力破解
+app.post('/api/auth/login', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 5 }), async (c) => {
   try {
     const { username, password } = await c.req.json();
     
@@ -430,7 +553,7 @@ app.post('/api/auth/login', async (c) => {
 });
 
 // 验证 token
-app.get('/api/auth/session', async (c) => {
+app.get('/api/auth/session', rateLimitMiddleware({ windowMs: 60 * 1000, maxRequests: 30 }), async (c) => {
   try {
     const auth = c.req.header('Authorization');
     if (!auth?.startsWith('Bearer ')) {
@@ -444,6 +567,15 @@ app.get('/api/auth/session', async (c) => {
   } catch {
     return c.json({ error: 'Invalid token' }, 401);
   }
+});
+
+// 健康检查
+app.get('/api/health', (c) => {
+  return c.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  });
 });
 
 export default app;
