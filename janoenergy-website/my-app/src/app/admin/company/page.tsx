@@ -576,3 +576,82 @@ function HonorsSection({ data, onRefresh, loading }: { data: any[], onRefresh: (
     </Card>
   );
 }
+: '', issuerEn: '', year: '', imageUrl: '', sortOrder: 0, isActive: true });
+
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const method = editing ? 'PUT' : 'POST';
+      const url = editing ? `${API_BASE_URL}/api/honors/${editing.id}` : `${API_BASE_URL}/api/honors`;
+      const res = await fetch(url, {
+        method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(formData)
+      });
+      if (res.ok) { toast.success(editing ? '更新成功' : '创建成功'); setDialogOpen(false); setEditing(null); onRefresh(); }
+      else toast.error('操作失败');
+    } catch (error) { toast.error('操作失败'); }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('确定要删除吗？')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/api/honors/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+      if (res.ok) { toast.success('删除成功'); onRefresh(); } else toast.error('删除失败');
+    } catch (error) { toast.error('删除失败'); }
+  };
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle>荣誉奖项</CardTitle>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={() => { setEditing(null); setFormData({ title: '', titleEn: '', issuer: '', issuerEn: '', year: '', imageUrl: '', sortOrder: 0, isActive: true }); }}>
+              <Plus className="w-4 h-4 mr-2" /> 添加荣誉
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader><DialogTitle>{editing ? '编辑荣誉' : '添加荣誉'}</DialogTitle></DialogHeader>
+            <div className="space-y-4 pt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2"><Label>荣誉名称</Label><Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} /></div>
+                <div className="space-y-2"><Label>英文名称</Label><Input value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} /></div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2"><Label>颁发机构</Label><Input value={formData.issuer} onChange={(e) => setFormData({ ...formData, issuer: e.target.value })} /></div>
+                <div className="space-y-2"><Label>年份</Label><Input value={formData.year} onChange={(e) => setFormData({ ...formData, year: e.target.value })} placeholder="2024" /></div>
+              </div>
+              <div className="space-y-2"><Label>荣誉图片URL</Label><Input value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} /></div>
+              <div className="flex items-center gap-2">
+                <Switch checked={formData.isActive} onCheckedChange={(v) => setFormData({ ...formData, isActive: v })} />
+                <Label>启用</Label>
+              </div>
+              <Button onClick={handleSubmit} className="w-full">{editing ? '更新' : '创建'}</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </CardHeader>
+      <CardContent>
+        {loading ? <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin" /></div> : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {(data || []).map((item: any) => (
+              <div key={item.id} className="p-4 border rounded-lg">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="font-medium">{item.title}</h4>
+                    <p className="text-sm text-gray-500">{item.issuer} · {item.year}</p>
+                  </div>
+                  <div className="flex gap-1">
+                    <Button variant="ghost" size="sm" onClick={() => { setEditing(item); setFormData(item); setDialogOpen(true); }}><Edit2 className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)}><Trash2 className="w-4 h-4 text-red-500" /></Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
