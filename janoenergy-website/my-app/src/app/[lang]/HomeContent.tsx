@@ -68,11 +68,17 @@ const defaultStats: Stats = {
   year: 2018,
 };
 
-// 从容量字符串提取数字
+// 从容量字符串提取 MW 数值（只取 MW 部分，忽略 MWh）
 function parseCapacity(capacityStr: string): number {
   if (!capacityStr) return 0;
-  const match = capacityStr.match(/(\d+)/);
-  return match ? parseInt(match[1], 10) : 0;
+  // 匹配数字+MW 格式，返回 MW 数值
+  const mwMatch = capacityStr.match(/(\d+)\s*MW/i);
+  if (mwMatch) {
+    return parseInt(mwMatch[1], 10);
+  }
+  // 如果没有 MW，尝试匹配纯数字（MWh 情况）
+  const numMatch = capacityStr.match(/(\d+)/);
+  return numMatch ? parseInt(numMatch[1], 10) : 0;
 }
 
 // 从地址提取省份
@@ -440,10 +446,10 @@ export default function HomeContent({ lang }: { lang: Lang }) {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
-                { value: stats.capacity, suffix: '+', label: t.home.stats.capacity },
-                { value: stats.projects, suffix: '+', label: t.home.stats.projects },
-                { value: stats.provinces, suffix: '', label: t.home.stats.provinces },
-                { value: stats.year, suffix: '', label: t.home.stats.founded },
+                { value: stats.capacity, suffix: '+', label: t.home.stats.capacity, isYear: false },
+                { value: stats.projects, suffix: '+', label: t.home.stats.projects, isYear: false },
+                { value: stats.provinces, suffix: '', label: t.home.stats.provinces, isYear: false },
+                { value: stats.year, suffix: '', label: t.home.stats.founded, isYear: true },
               ].map((stat, index) => (
                 <motion.div 
                   key={index}
@@ -455,7 +461,12 @@ export default function HomeContent({ lang }: { lang: Lang }) {
                   className="p-6 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-colors shadow-sm hover:shadow-lg"
                 >
                   <div className="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                    {stat.isYear ? (
+                      // 年份直接显示，不使用动画计数器
+                      <span>{stat.value}{stat.suffix}</span>
+                    ) : (
+                      <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                    )}
                   </div>
                   <div className="text-gray-600">{stat.label}</div>
                 </motion.div>
