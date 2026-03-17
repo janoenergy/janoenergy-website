@@ -1,0 +1,2 @@
+/login /login/ 301
+/admin/* /admin/:splat 200
