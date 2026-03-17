@@ -23,7 +23,7 @@ interface Project {
   updatedAt: string;
 }
 
-// 真实的新能源项目照片
+// 真实的新能源项目照片 - 使用更精确的分类
 const projectImages = {
   wind: [
     'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 风电场
@@ -38,15 +38,31 @@ const projectImages = {
     'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop', // 太阳能板
   ],
   storage: [
-    'https://images.unsplash.com/photo-1620288627223-53302f4e8c74?w=800&auto=format&fit=crop', // 储能电池
+    'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 电力设施/变电站
+    'https://images.unsplash.com/photo-1620288627223-53302f4e8c74?w=800&auto=format&fit=crop', // 电池储能
     'https://images.unsplash.com/photo-1565514020176-dbf2277e4955?w=800&auto=format&fit=crop', // 储能设施
-    'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 电力设施
   ],
 };
 
+// 为特定项目分配特定图片
+const projectSpecificImages: Record<number, string> = {
+  // 甘肃酒泉储能项目 - 使用储能设施照片
+  1: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop',
+  // 浙江宁波光储一体化 - 使用光伏电站照片（光储一体化以光伏为主）
+  9: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop',
+  // 江苏盐城储能电站 - 使用储能设施照片
+  7: 'https://images.unsplash.com/photo-1565514020176-dbf2277e4955?w=800&auto=format&fit=crop',
+};
+
 // 获取项目图片
-function getProjectImage(category: string, index: number): string {
-  const images = projectImages[category as keyof typeof projectImages] || projectImages.wind;
+function getProjectImage(project: Project, index: number): string {
+  // 如果项目有特定图片配置，优先使用
+  if (projectSpecificImages[project.id]) {
+    return projectSpecificImages[project.id];
+  }
+  
+  // 否则根据类别获取
+  const images = projectImages[project.category as keyof typeof projectImages] || projectImages.wind;
   return images[index % images.length];
 }
 
@@ -132,7 +148,7 @@ function ProjectCard({ project, lang, index, onClick }: {
   };
 
   const status = getStatusBadge(project.status);
-  const imageUrl = project.imageUrl || getProjectImage(project.category, index);
+  const imageUrl = getProjectImage(project, index);
 
   return (
     <motion.div 
@@ -272,7 +288,7 @@ function ProjectModal({ project, lang, onClose }: {
   };
 
   const status = getStatusBadge(project.status);
-  const imageUrl = project.imageUrl || getProjectImage(project.category, project.id);
+  const imageUrl = getProjectImage(project, project.id);
 
   // 计算环保效益
   const capacity = parseFloat(project.capacity.match(/[\d.]+/)?.[0] || '0');
