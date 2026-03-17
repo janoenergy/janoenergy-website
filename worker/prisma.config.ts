@@ -8,7 +8,11 @@ export default defineConfig({
     async adapter() {
       const { PrismaPg } = await import('@prisma/adapter-pg')
       const { Pool } = await import('pg')
-      const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+      const connectionString = process.env.DIRECT_DATABASE_URL
+      if (!connectionString) {
+        throw new Error('DIRECT_DATABASE_URL environment variable is required')
+      }
+      const pool = new Pool({ connectionString })
       return new PrismaPg(pool)
     },
   },
