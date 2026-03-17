@@ -4,8 +4,8 @@ on:
   push:
     branches: [ main, master ]
     paths:
-      - 'janoenergy-website/my-app/**'
-      - 'janoenergy-website/worker/**'
+      - 'my-app/**'
+      - 'worker/**'
       - '.github/workflows/deploy.yml'
 
   # 允许手动触发
@@ -30,14 +30,14 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: janoenergy-website/my-app/package-lock.json
+        cache-dependency-path: my-app/package-lock.json
     
     - name: Install dependencies
-      working-directory: ./janoenergy-website/my-app
+      working-directory: ./my-app
       run: npm ci
     
     - name: Build
-      working-directory: ./janoenergy-website/my-app
+      working-directory: ./my-app
       run: npm run build
       env:
         NEXT_PUBLIC_API_URL: https://api.janoenergy.com
@@ -48,7 +48,7 @@ jobs:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         command: pages deploy dist --project-name=janoenergy-website --commit-dirty=true
-        workingDirectory: janoenergy-website/my-app
+        workingDirectory: my-app
 
   # 部署后端 Worker
   deploy-worker:
@@ -56,8 +56,8 @@ jobs:
     name: Deploy Worker
     # 只有 worker 目录有变更时才部署
     if: |
-      contains(github.event.head_commit.modified, 'janoenergy-website/worker/') ||
-      contains(github.event.head_commit.added, 'janoenergy-website/worker/') ||
+      contains(github.event.head_commit.modified, 'worker/') ||
+      contains(github.event.head_commit.added, 'worker/') ||
       github.event_name == 'workflow_dispatch'
     
     steps:
@@ -69,14 +69,14 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: janoenergy-website/worker/package-lock.json
+        cache-dependency-path: worker/package-lock.json
     
     - name: Install dependencies
-      working-directory: ./janoenergy-website/worker
+      working-directory: ./worker
       run: npm ci
     
     - name: Generate Prisma Client
-      working-directory: ./janoenergy-website/worker
+      working-directory: ./worker
       run: npx prisma generate
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -87,7 +87,7 @@ jobs:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         command: deploy
-        workingDirectory: janoenergy-website/worker
+        workingDirectory: worker
 
   # 发送部署通知
   notify:
