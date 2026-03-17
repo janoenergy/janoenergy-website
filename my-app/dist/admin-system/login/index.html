@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站后台管理 - 江能集团</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-cog text-3xl text-emerald-600"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900">网站后台管理</h1>
+            <p class="text-gray-500 mt-2">江能集团网站内容管理系统</p>
+        </div>
+
+        <div id="error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm"></div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">管理员账号</label>
+                <div class="relative">
+                    <i class="fas fa-user-shield absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input
+                        type="text"
+                        id="username"
+                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                        placeholder="请输入管理员账号"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input
+                        type="password"
+                        id="password"
+                        class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                        placeholder="请输入密码"
+                        required
+                    />
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                id="submitBtn"
+                class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-all hover:shadow-lg flex items-center justify-center"
+            >
+                <span id="btnText">登录</span>
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-gray-500">
+            <p>管理员账号: admin</p>
+            <p>默认密码: jano</p>
+        </div>
+
+        <div class="mt-6 pt-6 border-t text-center">
+            <a href="/oa/login/" class="text-sm text-gray-500 hover:text-blue-600">
+                <i class="fas fa-building mr-1"></i>OA 综合管理平台入口
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error');
+            const btnText = document.getElementById('btnText');
+            
+            btnText.textContent = '登录中...';
+            
+            // 网站后台管理员登录验证
+            if (username === 'admin' && password === 'jano') {
+                localStorage.setItem('admin_token', 'admin_token_' + Date.now());
+                localStorage.setItem('admin_user', JSON.stringify({
+                    name: '管理员',
+                    role: '超级管理员'
+                }));
+                window.location.href = '/admin-system/dashboard/';
+            } else {
+                errorDiv.textContent = '管理员账号或密码错误';
+                errorDiv.classList.remove('hidden');
+                btnText.textContent = '登录';
+            }
+        });
+
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
+</body>
+</html>

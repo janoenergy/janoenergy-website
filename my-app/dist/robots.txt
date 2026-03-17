@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.janoenergy.com/sitemap.xml
+
+# 禁止爬虫访问的路径
+Disallow: /admin/
+Disallow: /oa/
+Disallow: /api/
