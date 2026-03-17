@@ -14,7 +14,7 @@ const nextConfig = {
   swcMinify: true,
   compress: true,
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
     optimizePackageImports: ['lucide-react'],
   },
   inlineImageLimit: 8192,
