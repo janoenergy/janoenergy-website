@@ -28,7 +28,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
 
   // 检查是否是登录页面
-  const isLoginPage = pathname === '/admin/login';
+  const isLoginPage = pathname === '/login';
 
   useEffect(() => {
     setMounted(true);
@@ -41,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     // 其他页面检查 token
     const token = localStorage.getItem('token');
     if (!token) {
-      router.replace('/admin/login');
+      router.replace('/login');
       return;
     }
 
@@ -56,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/admin/login';
+    window.location.href = '/login';
   };
 
   const menuItems = [

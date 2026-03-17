@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
 import { API_ENDPOINTS } from '@/lib/api';
 
-export default function WebsiteAdminLoginPage() {
+export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -31,11 +31,9 @@ export default function WebsiteAdminLoginPage() {
 
       const data = await response.json();
       
-      // 保存 token
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
-      // 跳转到网站后台管理
       window.location.href = '/admin/dashboard';
     } catch (err) {
       setError('登录失败，请重试');
