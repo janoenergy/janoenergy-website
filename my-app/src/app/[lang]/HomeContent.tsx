@@ -253,14 +253,14 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               >
                 <a
                   href={`/${lang}/projects`}
-                  className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all"
+                  className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                 >
                   {lang === 'zh' ? '查看项目' : 'View Projects'}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
                   href={`/${lang}/contact`}
-                  className={`inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-xl transition-all ${styles.btnSecondary} ${styles.text}`}
+                  className={`inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${styles.btnSecondary} ${styles.text}`}
                 >
                   {lang === 'zh' ? '联系我们' : 'Contact Us'}
                 </a>
@@ -344,8 +344,8 @@ export default function HomeContent({ lang }: { lang: Lang }) {
                   className="group relative"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-r ${styles.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
-                  <div className={`relative h-full ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl p-8 transition-all`}>
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${type.color} flex items-center justify-center mb-6`}>
+                  <div className={`relative h-full ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${type.color} flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110`}>
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <h3 className={`text-2xl font-bold mb-3 ${styles.text}`}>
@@ -406,7 +406,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
                 <button
                   key={type.id}
                   onClick={() => setActiveType(type.id)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
                     activeType === type.id
                       ? 'bg-emerald-500 text-white'
                       : `${styles.bgCard} ${styles.textSecondary} ${styles.border} hover:border-emerald-400`
@@ -438,7 +438,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
           >
             <a
               href={`/${lang}/projects`}
-              className={`inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-xl transition-all ${styles.btnSecondary} ${styles.text}`}
+              className={`inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${styles.btnSecondary} ${styles.text}`}
             >
               {lang === 'zh' ? '查看全部项目' : 'View All Projects'}
               <ArrowRight className="w-5 h-5" />
@@ -473,7 +473,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             href={`/${lang}/contact`}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
           >
             {lang === 'zh' ? '联系我们' : 'Contact Us'}
             <ArrowRight className="w-5 h-5" />
@@ -496,7 +496,7 @@ function StatCard({ icon: Icon, value, label, trend, trendValue, delay = 0 }: an
       className="relative group"
     >
       <div className={`absolute inset-0 bg-gradient-to-r ${styles.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
-      <div className={`relative ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl p-6 transition-all`}>
+      <div className={`relative ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
         <div className="flex items-start justify-between mb-4">
           <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
             <Icon className="w-6 h-6 text-emerald-500" />
@@ -535,7 +535,7 @@ function ProjectCard({ project, index, lang }: { project: ApiProject; index: num
       className="group relative"
     >
       <div className={`absolute inset-0 bg-gradient-to-r ${styles.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
-      <div className={`relative ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl overflow-hidden transition-all`}>
+      <div className={`relative ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
         {/* 项目图片 */}
         {imageUrl && (
           <div className="relative aspect-video overflow-hidden">
@@ -578,7 +578,7 @@ function ProjectCard({ project, index, lang }: { project: ApiProject; index: num
               <div className="text-2xl font-bold text-emerald-500">{project.capacity}</div>
               <div className={`text-xs ${styles.textMuted}`}>{lang === 'zh' ? '装机容量' : 'Capacity'}</div>
             </div>
-            <ArrowRight className={`w-5 h-5 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all ${styles.textMuted}`} />
+            <ArrowRight className={`w-5 h-5 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${styles.textMuted}`} />
           </div>
         </div>
       </div>
