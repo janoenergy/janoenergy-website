@@ -135,13 +135,23 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
           </section>
 
           {/* Stats Section */}
-          <section className="py-12 bg-card">
+          <section className="py-16 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
-                  <div key={index} className="text-left">
+                  <div 
+                    key={index}
+                    className="group bg-card rounded-2xl p-6 shadow-lg border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  >
                     <div className="text-3xl md:text-4xl font-bold text-emerald-600 mb-2">{stat.value}</div>
-                    <div className="text-muted-foreground">{stat.label}</div>
+                    <div className="text-muted-foreground text-sm mb-3">{stat.label}</div>
+                    {/* 进度条装饰 */}
+                    <div className="h-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-emerald-500 rounded-full group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
+                        style={{ width: [`85%`, `60%`, `35%`, `75%`][index] }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

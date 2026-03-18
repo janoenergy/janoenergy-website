@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { translations, Lang } from '@/lib/translations';
 import { Compass, TrendingUp, Building2, Settings } from 'lucide-react';
@@ -81,16 +82,37 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
       />
 
       {/* 业务数据展示 */}
-      <div className="bg-emerald-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
-            {businessStats.map((stat) => (
-              <div key={stat.label}>
-                <div className="text-4xl md:text-5xl font-bold mb-2">
-                  <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+      <div className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 py-16 relative overflow-hidden">
+        {/* 微光背景动画 */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-pulse" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {businessStats.map((stat, index) => (
+              <motion.div 
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group text-center"
+              >
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                    <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="text-emerald-100 text-sm mb-3">{lang === 'zh' ? stat.label : stat.labelEn}</div>
+                  {/* 进度条装饰 */}
+                  <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${[80, 65, 70, 85][index]}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.5, delay: 0.5 }}
+                      className="h-full bg-white rounded-full"
+                    />
+                  </div>
                 </div>
-                <div className="text-emerald-100">{lang === 'zh' ? stat.label : stat.labelEn}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
