@@ -1,7 +1,12 @@
+'use client';
+
 import { Award, FileCheck, Shield } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { ThemeProvider } from '@/lib/theme';
+import { useThemeStyles } from '@/lib/theme';
+import PageHero from '@/components/PageHero';
 
 export function generateStaticParams() {
   return [{ lang: 'zh' }, { lang: 'en' }];
@@ -9,6 +14,7 @@ export function generateStaticParams() {
 
 export default function CertificatesPage({ params: { lang } }: { params: { lang: Lang } }) {
   const t = translations[lang];
+  const styles = useThemeStyles();
 
   const certificates = [
     { id: 1, title: lang === 'zh' ? '电力工程施工总承包一级' : 'First-Class Power Engineering', issuer: lang === 'zh' ? '住房和城乡建设部' : 'MOHURD', date: '2023-06' },
@@ -27,59 +33,56 @@ export default function CertificatesPage({ params: { lang } }: { params: { lang:
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar lang={lang} t={t.nav} />
-      <main className="flex-1 bg-gray-50">
-        <section className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 py-20">
-          <div className="max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              {lang === 'zh' ? '资质荣誉' : 'Certificates & Honors'}
-            </h1>
-            <p className="text-xl text-emerald-100">
-              {lang === 'zh' ? '权威认证，专业保障' : 'Authoritative certification, professional guarantee'}
-            </p>
-          </div>
-        </section>
+    <ThemeProvider>
+      <div className={`min-h-screen flex flex-col ${styles.bg}`}>
+        <Navbar lang={lang} t={t.nav} />
+        <main className="flex-1">
+          <PageHero 
+            title={lang === 'zh' ? '资质荣誉' : 'Certificates & Honors'}
+            subtitle={lang === 'zh' ? '权威认证，专业保障' : 'Authoritative certification, professional guarantee'}
+            lang={lang}
+          />
 
-        <section className="py-20">
-          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-left mb-12">{lang === 'zh' ? '资质证书' : 'Certificates'}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {certificates.map((cert) => (
-                <div key={cert.id} className="bg-white rounded-2xl p-6 shadow-lg">
-                  <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
-                    <Shield className="w-6 h-6 text-emerald-600" />
+          <section className="py-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className={`text-3xl font-bold text-left mb-12 ${styles.text}`}>{lang === 'zh' ? '资质证书' : 'Certificates'}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {certificates.map((cert) => (
+                  <div key={cert.id} className={`${styles.bgCard} rounded-2xl p-6 shadow-lg border ${styles.border}`}>
+                    <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
+                      <Shield className="w-6 h-6 text-emerald-600" />
+                    </div>
+                    <h3 className={`font-bold ${styles.text} mb-2`}>{cert.title}</h3>
+                    <p className={styles.textMuted}>{cert.issuer}</p>
+                    <p className={`text-sm ${styles.textMuted}`}>{cert.date}</p>
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">{cert.title}</h3>
-                  <p className="text-sm text-gray-500">{cert.issuer}</p>
-                  <p className="text-sm text-gray-400">{cert.date}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-left mb-12">{lang === 'zh' ? '荣誉奖项' : 'Honors'}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {honors.map((honor) => (
-                <div key={honor.id} className="flex items-center gap-4 p-6 bg-emerald-50 rounded-2xl">
-                  <div className="w-16 h-16 bg-emerald-500 rounded-xl flex items-center justify-center">
-                    <Award className="w-8 h-8 text-white" />
+          <section className={`py-20 ${styles.bgMuted}`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className={`text-3xl font-bold text-left mb-12 ${styles.text}`}>{lang === 'zh' ? '荣誉奖项' : 'Honors'}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {honors.map((honor) => (
+                  <div key={honor.id} className={`flex items-center gap-4 p-6 ${styles.bgCard} rounded-2xl border ${styles.border}`}>
+                    <div className="w-16 h-16 bg-emerald-500 rounded-xl flex items-center justify-center">
+                      <Award className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <span className="text-sm text-emerald-600 font-semibold">{honor.year}</span>
+                      <h3 className={`font-bold ${styles.text}`}>{honor.title}</h3>
+                      <p className={styles.textMuted}>{honor.issuer}</p>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-sm text-emerald-600 font-semibold">{honor.year}</span>
-                    <h3 className="font-bold text-gray-900">{honor.title}</h3>
-                    <p className="text-sm text-gray-600">{honor.issuer}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
-      </main>
-      <Footer lang={lang} t={t.footer} />
-    </div>
+          </section>
+        </main>
+        <Footer lang={lang} t={t.footer} />
+      </div>
+    </ThemeProvider>
   );
 }
