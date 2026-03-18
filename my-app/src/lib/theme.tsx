@@ -91,7 +91,7 @@ export const themeStyles = {
   dark: {
     // 背景 - 使用更舒适的深蓝灰色
     bg: 'bg-slate-900',
-    bgGradient: 'from-slate-900 via-slate-800 to-slate-900',
+    bgGradient: 'from-emerald-900 via-teal-800 to-cyan-900',
     bgCard: 'bg-slate-800',
     bgHover: 'hover:bg-slate-700',
     bgMuted: 'bg-slate-800/50',

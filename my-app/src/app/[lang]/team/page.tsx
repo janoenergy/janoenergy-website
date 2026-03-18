@@ -148,7 +148,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
                     {/* 进度条装饰 */}
                     <div className="h-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-emerald-500 rounded-full group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
+                        className="h-full bg-emerald-500 rounded-full group-hover:shadow-[0_0_15px_rgba(16,185,129,0.8)] group-hover:brightness-110 transition-all duration-1000"
                         style={{ width: [`85%`, `60%`, `35%`, `75%`][index] }}
                       />
                     </div>

@@ -97,7 +97,7 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
                 className="group text-center"
               >
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
-                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  <div className="text-4xl md:text-5xl font-bold text-emerald-400 mb-2">
                     <AnimatedNumber value={stat.value} suffix={stat.suffix} />
                   </div>
                   <div className="text-emerald-100 text-sm mb-3">{lang === 'zh' ? stat.label : stat.labelEn}</div>
