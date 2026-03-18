@@ -205,7 +205,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             {/* 左侧内容 */}
             <div>
               <motion.div
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-6 ${styles.bgCard} ${styles.border}`}
               >
@@ -214,7 +214,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               </motion.div>
 
               <motion.h1
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
                 className={`text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight ${styles.text}`}
@@ -235,7 +235,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               </motion.h1>
 
               <motion.p
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 className={`text-xl mb-8 max-w-xl ${styles.textMuted}`}
@@ -246,7 +246,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 className="flex flex-wrap gap-4"
@@ -268,7 +268,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
 
               {/* 核心数据 */}
               <motion.div
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
                 className={`mt-12 pt-8 border-t ${styles.border}`}
@@ -312,7 +312,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.div
-              initial={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-4 ${styles.bgCard} ${styles.border}`}
@@ -322,7 +322,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               <span className={styles.textMuted}>{lang === 'zh' ? '业务板块' : 'Business'}</span>
             </motion.div>
             <motion.h2
-              initial={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className={`text-4xl md:text-5xl font-bold mb-4 ${styles.text}`}
@@ -337,7 +337,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               return (
                 <motion.div
                   key={type.id}
-                  initial={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
@@ -372,7 +372,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
             <div>
               <motion.div
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-4 ${styles.bgCard} ${styles.border}`}
@@ -382,7 +382,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
                 <span className={styles.textMuted}>{lang === 'zh' ? '项目案例' : 'Projects'}</span>
               </motion.div>
               <motion.h2
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className={`text-4xl md:text-5xl font-bold ${styles.text}`}
@@ -392,7 +392,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             </div>
 
             <motion.div
-              initial={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="flex gap-2 mt-6 md:mt-0"
@@ -451,7 +451,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
       <section className={`py-24 relative overflow-hidden bg-gradient-to-br ${styles.bgGradient}`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2
-            initial={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className={`text-4xl md:text-5xl font-bold mb-6 ${styles.text}`}
@@ -459,7 +459,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             {lang === 'zh' ? '携手共创绿色未来' : 'Partner for a Green Future'}
           </motion.h2>
           <motion.p
-            initial={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className={`text-xl mb-8 ${styles.textMuted}`}
@@ -469,7 +469,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               : 'Whether project development, investment cooperation, or EPC contracting, we look forward to working with you'}
           </motion.p>
           <motion.a
-            initial={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             href={`/${lang}/contact`}
@@ -490,7 +490,7 @@ function StatCard({ icon: Icon, value, label, trend, trendValue, delay = 0 }: an
   
   return (
     <motion.div
-      initial={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
       className="relative group"
@@ -528,7 +528,7 @@ function ProjectCard({ project, index, lang }: { project: ApiProject; index: num
   
   return (
     <motion.div
-      initial={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
