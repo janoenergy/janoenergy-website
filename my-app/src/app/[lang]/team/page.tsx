@@ -122,11 +122,11 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
         <main className="flex-1">
           {/* Hero Section */}
           <section className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 {lang === 'zh' ? '管理团队' : 'Leadership Team'}
               </h1>
-              <p className="text-xl text-emerald-100 max-w-2xl mx-auto">
+              <p className="text-xl text-emerald-100 max-w-2xl">
                 {lang === 'zh' 
                   ? '专业、敬业、创新的精英团队，引领新能源行业发展'
                   : 'Professional, dedicated and innovative team leading the new energy industry'}
@@ -136,10 +136,10 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
 
           {/* Stats Section */}
           <section className="py-12 bg-card">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
+                  <div key={index} className="text-left">
                     <div className="text-3xl md:text-4xl font-bold text-emerald-600 mb-2">{stat.value}</div>
                     <div className="text-muted-foreground">{stat.label}</div>
                   </div>
@@ -150,7 +150,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
 
           {/* Executive Team */}
           <section className="py-20 bg-background">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {lang === 'zh' ? '核心管理层' : 'Executive Team'}
@@ -168,7 +168,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
                   >
                     <div className="flex flex-col md:flex-row gap-6">
                       {/* Avatar */}
-                      <div className="w-32 h-32 rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto md:mx-0 overflow-hidden">
+                      <div className="w-32 h-32 rounded-2xl flex items-center justify-center flex-shrink-0 md:mx-0 overflow-hidden">
                         <img 
                           src={exec.image} 
                           alt={lang === 'zh' ? exec.name : exec.nameEn}
@@ -208,7 +208,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
 
           {/* Departments */}
           <section className="py-20 bg-muted/50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {lang === 'zh' ? '组织架构' : 'Organization Structure'}
@@ -243,7 +243,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
 
           {/* Join Us CTA */}
           <section className="py-20 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="max-w-4xl px-4 sm:px-6 lg:px-8 text-left">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 {lang === 'zh' ? '加入我们' : 'Join Us'}
               </h2>
