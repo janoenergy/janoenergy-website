@@ -159,7 +159,7 @@ function ProjectCard({ project, lang, index, onClick, styles }: {
         <motion.img loading="lazy" 
           src={imageUrl}
           alt={lang === 'zh' ? project.title : project.titleEn}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           whileHover={{ scale: 1.1 }}
           transition={{ duration: 0.6 }}
         />
