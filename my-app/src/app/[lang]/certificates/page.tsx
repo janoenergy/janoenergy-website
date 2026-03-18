@@ -2,6 +2,7 @@ import { Award, Shield } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import PageHero from '@/components/PageHero';
 
 export function generateStaticParams() {
   return [{ lang: 'zh' }, { lang: 'en' }];

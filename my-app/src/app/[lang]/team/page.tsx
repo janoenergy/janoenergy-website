@@ -3,6 +3,7 @@ import { translations, Lang } from '@/lib/translations';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ThemeProvider } from '@/lib/theme';
+import PageHero from '@/components/PageHero';
 
 export function generateStaticParams() {
   return [{ lang: 'zh' }, { lang: 'en' }];
@@ -121,18 +122,13 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
         <Navbar lang={lang} t={t.nav} />
         <main className="flex-1">
           {/* Hero Section */}
-          <section className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 text-white py-16 md:py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-                {lang === 'zh' ? '管理团队' : 'Leadership Team'}
-              </h1>
-              <p className="text-lg md:text-xl text-emerald-100 max-w-2xl">
-                {lang === 'zh' 
-                  ? '专业、敬业、创新的精英团队，引领新能源行业发展'
-                  : 'Professional, dedicated and innovative team leading the new energy industry'}
-              </p>
-            </div>
-          </section>
+          <PageHero 
+            title={lang === 'zh' ? '管理团队' : 'Leadership Team'}
+            subtitle={lang === 'zh' 
+              ? '专业、敬业、创新的精英团队，引领新能源行业发展'
+              : 'Professional, dedicated and innovative team leading the new energy industry'}
+            lang={lang}
+          />
 
           {/* Stats Section */}
           <section className="py-16 bg-muted">

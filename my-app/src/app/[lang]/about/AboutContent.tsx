@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { translations } from '@/lib/translations';
 import { API_BASE_URL } from '@/lib/config';
+import PageHero from '@/components/PageHero';
 import { realImages, milestonesData, valuesData, teamData, certificatesData, honorsData } from '@/lib/real-data';
 
 // API 端点
@@ -272,14 +273,11 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl">
-            {lang === 'zh' ? '专注于新能源开发、投资、建设、运营的全产业链服务商' : 'Full-chain service provider in new energy development, investment, construction, and operation'}
-          </p>
-        </div>
-      </div>
+      <PageHero 
+        title={t.title}
+        subtitle={lang === 'zh' ? '专注于新能源开发、投资、建设、运营的全产业链服务商' : 'Full-chain service provider in new energy development, investment, construction, and operation'}
+        lang={lang}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {/* Intro */}
