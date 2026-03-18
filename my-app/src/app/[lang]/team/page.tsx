@@ -254,7 +254,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
               </p>
               <a 
                 href={`/${lang}/contact`}
-                className="inline-flex items-center px-8 py-4 bg-white text-emerald-700 font-semibold rounded-lg hover:scale-105 transition-transform"
+                className="inline-flex items-center px-8 py-4 styles.bgCard text-emerald-600 border border-emerald-200 font-semibold rounded-lg hover:scale-105 transition-transform"
               >
                 {lang === 'zh' ? '联系我们' : 'Contact Us'}
               </a>
