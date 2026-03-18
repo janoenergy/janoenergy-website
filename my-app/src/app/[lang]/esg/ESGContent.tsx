@@ -56,15 +56,15 @@ function ProgressBar({ label, target, progress, color = 'emerald' }: {
   color?: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg">
+    <div className="bg-card rounded-2xl p-6 shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">{label}</h3>
-          <p className="text-sm text-gray-500">目标: {target}</p>
+          <h3 className="text-lg font-semibold text-foreground">{label}</h3>
+          <p className="text-sm text-muted-foreground">目标: {target}</p>
         </div>
         <div className={`text-3xl font-bold text-${color}-600`}>{progress}%</div>
       </div>
-      <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-4 bg-muted rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${progress}%` }}
@@ -100,16 +100,16 @@ function DataCard({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay }}
       whileHover={{ scale: 1.02 }}
-      className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+      className="bg-card rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
     >
       <div className={`w-14 h-14 rounded-xl bg-${color}-100 flex items-center justify-center mb-4`}>
         <Icon className={`w-7 h-7 text-${color}-600`} />
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">
+      <div className="text-3xl font-bold text-foreground mb-1">
         {typeof value === 'number' ? value.toLocaleString() : value}
-        {unit && <span className="text-lg text-gray-500 ml-1">{unit}</span>}
+        {unit && <span className="text-lg text-muted-foreground ml-1">{unit}</span>}
       </div>
-      <div className="text-gray-600">{label}</div>
+      <div className="text-muted-foreground">{label}</div>
     </motion.div>
   );
 }
@@ -238,7 +238,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
         </section>
 
         {/* 双碳目标 */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-muted">
           <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -249,7 +249,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '双碳目标' : 'Dual Carbon Goals'}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {lang === 'zh' 
                   ? '积极响应国家"3060"双碳目标，制定科学的减排路线图' 
                   : 'Responding to national "3060" dual carbon goals'}
@@ -274,7 +274,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
         </section>
 
         {/* 环境数据 */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-card">
           <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -285,7 +285,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '环境效益' : 'Environmental Impact'}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {lang === 'zh' 
                   ? '以清洁能源助力生态文明建设，实现经济效益与环境效益双赢' 
                   : 'Promoting ecological civilization with clean energy'}
@@ -333,7 +333,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
         </section>
 
         {/* 社会责任 */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-muted">
           <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -344,7 +344,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '社会责任' : 'Social Responsibility'}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {lang === 'zh' 
                   ? '积极履行企业社会责任，助力乡村振兴，促进共同富裕' 
                   : 'Fulfilling corporate social responsibility'}
@@ -389,7 +389,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
         </section>
 
         {/* 公司治理 */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-card">
           <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -400,7 +400,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '公司治理' : 'Corporate Governance'}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {lang === 'zh' 
                   ? '建立健全ESG治理体系，实现企业可持续发展' 
                   : 'Establishing sound ESG governance system'}
@@ -451,7 +451,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
         </section>
 
         {/* 下载中心 */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-muted">
           <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -462,7 +462,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '下载中心' : 'Download Center'}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {lang === 'zh' ? '获取江能集团ESG相关报告与资料' : 'Download ESG reports and materials'}
               </p>
             </motion.div>
@@ -492,13 +492,13 @@ export default function ESGContent({ lang }: { lang: Lang }) {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+                  className="bg-card rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all cursor-pointer group"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
                       <FileText className="w-6 h-6 text-red-600" />
                     </div>
-                    <span className="text-sm text-gray-500">{doc.year}</span>
+                    <span className="text-sm text-muted-foreground">{doc.year}</span>
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                     {doc.title}
