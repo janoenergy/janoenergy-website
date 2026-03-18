@@ -17,7 +17,8 @@ export default function AnimatedCounter({
   duration = 2000,
   className = '',
 }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0);
+  // 初始直接显示目标值，避免SSR时显示0
+  const [count, setCount] = useState(target);
   const [hasAnimated, setHasAnimated] = useState(false);
   const targetRef = useRef(target);
 

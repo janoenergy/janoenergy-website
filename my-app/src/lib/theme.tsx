@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -8,9 +8,15 @@ interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
+  mounted: boolean;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType>({
+  theme: 'light',
+  toggleTheme: () => {},
+  setTheme: () => {},
+  mounted: false,
+});
 
 // 在 HTML 中执行的脚本，用于防止闪烁
 const themeScript = `
@@ -40,7 +46,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
     setMounted(true);
     // 确保 theme-loaded 类被添加
-    document.documentElement.classList.add("theme-loaded");
+    document.documentElement.classList.add('theme-loaded');
 
     // 监听系统主题变化
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -55,19 +61,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
-  };
+  }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-  };
+  }, [theme, setTheme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme, mounted }}>
       {/* 注入防止闪烁的脚本 */}
       <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       {children}
@@ -77,10 +83,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export function useTheme() {
   const context = useContext(ThemeContext);
-  if (context === undefined) {
-    // 返回默认值，避免在静态生成时出错
-    return { theme: 'light' as Theme, toggleTheme: () => {}, setTheme: () => {} };
-  }
   return context;
 }
 

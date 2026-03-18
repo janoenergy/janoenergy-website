@@ -9,6 +9,23 @@ import {
 import { translations, Lang } from '@/lib/translations';
 import AnimatedCounter from '@/components/AnimatedCounter';
 import { useThemeStyles } from '@/lib/theme';
+
+// 项目图片配置
+const projectImages: Record<number, string> = {
+  1: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 甘肃酒泉储能
+  2: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop', // 浙江宁波光储
+  3: 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=800&auto=format&fit=crop', // 云南大理光伏
+  4: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 山西大同风电
+  5: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&auto=format&fit=crop', // 内蒙古乌兰察布风电
+  6: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop', // 山东德州光伏
+  7: 'https://images.unsplash.com/photo-1565514020176-dbf2277e4955?w=800&auto=format&fit=crop', // 江苏盐城储能
+  8: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop', // 河北张家口光伏
+  9: 'https://images.unsplash.com/photo-1548337138-e87d889cc369?w=800&auto=format&fit=crop', // 湖南郴州风电
+  10: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop', // 广东清远光伏
+  11: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 四川凉山风电
+  12: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 西龙虎峪风电
+};
+
 interface ApiProject {
   id: number;
   title: string;
@@ -45,7 +62,7 @@ interface RealTimeData {
   homesPowered: number;
 }
 
-// 默认统计数据
+// 默认统计数据 - 使用真实数据作为默认值，避免SSR显示0
 const defaultStats: Stats = {
   capacity: 1135,
   projects: 12,
@@ -144,6 +161,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
         }));
       } catch (err) {
         console.error('Failed to fetch projects:', err);
+        // 使用默认数据，不显示错误
       } finally {
         setLoading(false);
       }
@@ -187,7 +205,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             {/* 左侧内容 */}
             <div>
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-6 ${styles.bgCard} ${styles.border}`}
               >
@@ -196,7 +214,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               </motion.div>
 
               <motion.h1
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
                 className={`text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight ${styles.text}`}
@@ -217,7 +235,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               </motion.h1>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 className={`text-xl mb-8 max-w-xl ${styles.textMuted}`}
@@ -228,7 +246,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 className="flex flex-wrap gap-4"
@@ -250,7 +268,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
 
               {/* 核心数据 */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
                 className={`mt-12 pt-8 border-t ${styles.border}`}
@@ -275,7 +293,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
 
             {/* 右侧实时数据 */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 1, x: 0 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
               className="grid grid-cols-2 gap-4"
@@ -294,7 +312,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-4 ${styles.bgCard} ${styles.border}`}
@@ -304,7 +322,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               <span className={styles.textMuted}>{lang === 'zh' ? '业务板块' : 'Business'}</span>
             </motion.div>
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className={`text-4xl md:text-5xl font-bold mb-4 ${styles.text}`}
@@ -319,7 +337,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               return (
                 <motion.div
                   key={type.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 1, y: 0 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
@@ -354,7 +372,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
             <div>
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-4 ${styles.bgCard} ${styles.border}`}
@@ -364,7 +382,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
                 <span className={styles.textMuted}>{lang === 'zh' ? '项目案例' : 'Projects'}</span>
               </motion.div>
               <motion.h2
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className={`text-4xl md:text-5xl font-bold ${styles.text}`}
@@ -374,7 +392,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="flex gap-2 mt-6 md:mt-0"
@@ -433,7 +451,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
       <section className={`py-24 relative overflow-hidden bg-gradient-to-br ${styles.bgGradient}`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className={`text-4xl md:text-5xl font-bold mb-6 ${styles.text}`}
@@ -441,7 +459,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
             {lang === 'zh' ? '携手共创绿色未来' : 'Partner for a Green Future'}
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className={`text-xl mb-8 ${styles.textMuted}`}
@@ -451,7 +469,7 @@ export default function HomeContent({ lang }: { lang: Lang }) {
               : 'Whether project development, investment cooperation, or EPC contracting, we look forward to working with you'}
           </motion.p>
           <motion.a
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             href={`/${lang}/contact`}
@@ -472,7 +490,7 @@ function StatCard({ icon: Icon, value, label, trend, trendValue, delay = 0 }: an
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
       className="relative group"
@@ -501,15 +519,16 @@ function StatCard({ icon: Icon, value, label, trend, trendValue, delay = 0 }: an
   );
 }
 
-// 项目卡片
+// 项目卡片 - 带图片
 function ProjectCard({ project, index, lang }: { project: ApiProject; index: number; lang: Lang }) {
   const styles = useThemeStyles();
   const typeConfig = projectTypes.find(t => t.id === project.category) || projectTypes[0];
   const Icon = typeConfig.icon;
+  const imageUrl = projectImages[project.id] || project.imageUrl || '';
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -517,22 +536,35 @@ function ProjectCard({ project, index, lang }: { project: ApiProject; index: num
     >
       <div className={`absolute inset-0 bg-gradient-to-r ${styles.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
       <div className={`relative ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl overflow-hidden transition-all`}>
-        <div className={`h-1 bg-gradient-to-r ${typeConfig.color}`} />
+        {/* 项目图片 */}
+        {imageUrl && (
+          <div className="relative aspect-video overflow-hidden">
+            <img 
+              src={imageUrl}
+              alt={lang === 'zh' ? project.title : project.titleEn}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+            <div className="absolute top-4 left-4">
+              <span className={`px-2 py-1 rounded-full text-xs font-medium text-white ${
+                project.status === 'operation' ? 'bg-emerald-500' :
+                project.status === 'construction' ? 'bg-amber-500' :
+                'bg-blue-500'
+              }`}>
+                {project.status === 'operation' ? (lang === 'zh' ? '运营中' : 'Operating') :
+                 project.status === 'construction' ? (lang === 'zh' ? '建设中' : 'Construction') :
+                 (lang === 'zh' ? '规划中' : 'Planning')}
+              </span>
+            </div>
+          </div>
+        )}
+        
         <div className="p-6">
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
               <Icon className="w-4 h-4 text-emerald-500" />
             </div>
             <span className={`text-sm ${styles.textMuted}`}>{lang === 'zh' ? typeConfig.name : typeConfig.nameEn}</span>
-            <span className={`ml-auto px-2 py-1 rounded-full text-xs ${
-              project.status === 'operation' ? 'bg-emerald-500/20 text-emerald-500' :
-              project.status === 'construction' ? 'bg-amber-500/20 text-amber-500' :
-              'bg-blue-500/20 text-blue-500'
-            }`}>
-              {project.status === 'operation' ? (lang === 'zh' ? '运营中' : 'Operating') :
-               project.status === 'construction' ? (lang === 'zh' ? '建设中' : 'Construction') :
-               (lang === 'zh' ? '规划中' : 'Planning')}
-            </span>
           </div>
           <h3 className={`text-xl font-bold mb-2 line-clamp-2 ${styles.text}`}>
             {lang === 'zh' ? project.title : project.titleEn}
