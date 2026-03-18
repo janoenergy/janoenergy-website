@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, Loader2 } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
 import { useThemeStyles } from '@/lib/theme';
+import PageHero from '@/components/PageHero';
 
 // Formspree 表单 ID
 const FORMSPREE_FORM_ID = 'mqakvnje';
@@ -52,12 +53,11 @@ export default function ContactContent({ lang }: { lang: Lang }) {
   return (
     <div className={`min-h-screen ${styles.bg}`}>
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-xl text-emerald-100">{t.subtitle}</p>
-        </div>
-      </div>
+      <PageHero 
+        title={t.title}
+        subtitle={lang === 'zh' ? '专注于新能源开发、投资、建设、运营的全产业链服务商' : 'Full-chain service provider in new energy development, investment, construction, and operation'}
+        lang={lang}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -66,7 +66,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
             <h2 className={`text-2xl font-bold ${styles.text} mb-8`}>{t.info.title}</h2>
             
             <div className="space-y-6">
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -76,7 +76,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Phone className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -86,7 +86,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -96,7 +96,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Clock className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -149,7 +149,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
 
           {/* Contact Form */}
           <div>
-            <div className={`${styles.bgCard} rounded-2xl shadow-lg p-8`}>
+            <div className={`${styles.bgCard} rounded-2xl shadow-lg p-8 border ${styles.border}`}>
               <h2 className={`text-2xl font-bold ${styles.text} mb-6`}>{t.form.title}</h2>
               
               {submitted ? (

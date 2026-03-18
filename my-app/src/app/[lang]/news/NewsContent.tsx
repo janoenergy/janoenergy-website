@@ -6,25 +6,25 @@ import { translations, Lang } from '@/lib/translations';
 import { FadeIn } from '@/components/Animations';
 import { news, NewsItem } from '@/data/news';
 import { useThemeStyles } from '@/lib/theme';
+import PageHero from '@/components/PageHero';
 
 // 新闻详情弹窗
-function NewsModal({ newsItem, lang, onClose }: { newsItem: NewsItem, lang: Lang, onClose: () => void }) {
+function NewsModal({ newsItem, lang, onClose, styles }: { newsItem: NewsItem, lang: Lang, onClose: () => void, styles: ReturnType<typeof useThemeStyles> }) {
   const categoryNames = {
     zh: { company: '公司动态', industry: '行业资讯', policy: '政策法规' },
     en: { company: 'Company', industry: 'Industry', policy: 'Policy' },
   };
-  const styles = useThemeStyles();
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className={`${styles.bgCard} rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto`} onClick={e => e.stopPropagation()}>
+      <div className={`${styles.bgCard} rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border ${styles.border}`} onClick={e => e.stopPropagation()}>
         <div className="relative">
           <img 
             src={newsItem.image}
             alt={lang === 'zh' ? newsItem.title : newsItem.titleEn}
             className="w-full h-64 object-cover"
           />
-          <button onClick={onClose} className={`absolute top-4 right-4 w-10 h-10 ${styles.bgCard} rounded-full flex items-center justify-center hover:opacity-80 transition-colors`}>
+          <button onClick={onClose} className={`absolute top-4 right-4 w-10 h-10 ${styles.bgCard} rounded-full flex items-center justify-center hover:opacity-80 transition-colors border ${styles.border}`}>
             <X className={`w-5 h-5 ${styles.text}`} />
           </button>
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
@@ -71,12 +71,11 @@ export default function NewsContent({ lang }: { lang: Lang }) {
   return (
     <div className={`min-h-screen ${styles.bg}`}>
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-xl text-emerald-100">{t.subtitle}</p>
-        </div>
-      </div>
+      <PageHero 
+        title={t.title}
+        subtitle={lang === 'zh' ? '专注于新能源开发、投资、建设、运营的全产业链服务商' : 'Full-chain service provider in new energy development, investment, construction, and operation'}
+        lang={lang}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* 分类筛选 */}
@@ -105,7 +104,7 @@ export default function NewsContent({ lang }: { lang: Lang }) {
         <FadeIn>
           <div className="mb-12">
             <h2 className={`text-xl font-bold ${styles.text} mb-6`}>{lang === 'zh' ? '热门文章' : 'Popular Articles'}</h2>
-            <div className={`${styles.bgCard} rounded-xl shadow-sm p-6`}>
+            <div className={`${styles.bgCard} rounded-xl shadow-sm p-6 border ${styles.border}`}>
               {news.slice(0, 3).map((newsItem, idx) => (
                 <div key={newsItem.id} className={`flex items-center gap-4 py-3 ${idx !== 2 ? `border-b ${styles.border}` : ''}`}>
                   <span className="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold">
@@ -172,7 +171,8 @@ export default function NewsContent({ lang }: { lang: Lang }) {
         <NewsModal 
           newsItem={selectedNews} 
           lang={lang} 
-          onClose={() => setSelectedNews(null)} 
+          onClose={() => setSelectedNews(null)}
+          styles={styles}
         />
       )}
     </div>
