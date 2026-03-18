@@ -46,7 +46,7 @@ export default function CertificatesPage({ params: { lang } }: { params: { lang:
             <h2 className="text-3xl font-bold text-foreground text-left mb-12">{lang === 'zh' ? '资质证书' : 'Certificates'}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {certificates.map((cert) => (
-                <div key={cert.id} className="bg-card rounded-2xl p-6 shadow-lg border border-border">
+                <div key={cert.id} className="bg-card rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-border">
                   <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
                     <Shield className="w-6 h-6 text-emerald-600" />
                   </div>

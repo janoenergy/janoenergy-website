@@ -116,7 +116,7 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
                   <p className={`text-lg ${styles.textSecondary} mb-6`}>{section.desc}</p>
                   <div className="grid grid-cols-2 gap-4">
                     {section.features.map((feature, i) => (
-                      <div key={i} className={`flex items-center gap-2 p-3 ${styles.bgCard} rounded-lg border ${styles.border} shadow-sm hover:shadow-md transition-shadow`}>
+                      <div key={i} className={`flex items-center gap-2 p-3 ${styles.bgCard} rounded-lg border ${styles.border} shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
                         <div className="w-2 h-2 bg-emerald-500 rounded-full" />
                         <span className={styles.textSecondary}>{feature}</span>
                       </div>
@@ -146,7 +146,7 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((item, idx) => (
-              <div key={idx} className={`${styles.bgCard} rounded-xl p-8 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border ${styles.border}`}>
+              <div key={idx} className={`${styles.bgCard} rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:-translate-y-1 border ${styles.border}`}>
                 <div className="text-4xl text-emerald-200 mb-4">&ldquo;</div>
                 <p className={`${styles.textSecondary} mb-6 leading-relaxed`}>
                   {lang === 'zh' ? item.content : item.contentEn}

@@ -152,7 +152,7 @@ function ProjectCard({ project, lang, index, onClick, styles }: {
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -10 }}
       onClick={onClick}
-      className={`group ${styles.bgCard} rounded-xl shadow-sm hover:shadow-2xl transition-all overflow-hidden border ${styles.border} cursor-pointer`}
+      className={`group ${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl hover:shadow-2xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden border ${styles.border} cursor-pointer`}
     >
       {/* Image Area */}
       <div className="relative aspect-video overflow-hidden">
@@ -309,7 +309,7 @@ export default function ProjectsContent({ lang }: { lang: Lang }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setSelectedCategory(category.id)}
-              className={`px-6 py-3 rounded-full font-medium transition-all ${
+              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${
                 selectedCategory === category.id
                   ? 'bg-emerald-500 text-white shadow-lg'
                   : `${styles.bgCard} ${styles.text} hover:opacity-80 border ${styles.border}`

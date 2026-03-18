@@ -56,7 +56,7 @@ function ProgressBar({ label, target, progress, color = 'emerald' }: {
   color?: string;
 }) {
   return (
-    <div className="bg-card rounded-2xl p-6 shadow-lg">
+    <div className="bg-card rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h3 className="text-lg font-semibold text-foreground">{label}</h3>
@@ -100,7 +100,7 @@ function DataCard({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay }}
       whileHover={{ scale: 1.02 }}
-      className="bg-card rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+      className="bg-card rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl transition-all"
     >
       <div className={`w-14 h-14 rounded-xl bg-${color}-100 flex items-center justify-center mb-4`}>
         <Icon className={`w-7 h-7 text-${color}-600`} />
@@ -179,7 +179,7 @@ function ChinaMap({ lang }: { lang: Lang }) {
       </svg>
       
       {/* 图例 */}
-      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
+      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
           <span>{lang === 'zh' ? '运营中项目' : 'Operating Projects'}</span>
@@ -492,7 +492,7 @@ export default function ESGContent({ lang }: { lang: Lang }) {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02 }}
-                  className="bg-card rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+                  className="bg-card rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl transition-all cursor-pointer group"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">

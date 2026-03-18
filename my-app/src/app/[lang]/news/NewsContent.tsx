@@ -89,7 +89,7 @@ export default function NewsContent({ lang }: { lang: Lang }) {
             <button
               key={item.key}
               onClick={() => setFilter(item.key)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
                 filter === item.key 
                   ? 'bg-emerald-600 text-white shadow-lg' 
                   : `${styles.bgCard} ${styles.textSecondary} hover:opacity-80 border ${styles.border}`
@@ -104,7 +104,7 @@ export default function NewsContent({ lang }: { lang: Lang }) {
         <FadeIn>
           <div className="mb-12">
             <h2 className={`text-xl font-bold ${styles.text} mb-6`}>{lang === 'zh' ? '热门文章' : 'Popular Articles'}</h2>
-            <div className={`${styles.bgCard} rounded-xl shadow-sm p-6 border ${styles.border}`}>
+            <div className={`${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl p-6 border ${styles.border}`}>
               {news.slice(0, 3).map((newsItem, idx) => (
                 <div key={newsItem.id} className={`flex items-center gap-4 py-3 ${idx !== 2 ? `border-b ${styles.border}` : ''}`}>
                   <span className="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold">
@@ -126,7 +126,7 @@ export default function NewsContent({ lang }: { lang: Lang }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredNews.map((newsItem, idx) => (
             <FadeIn key={newsItem.id} delay={idx * 100}>
-              <article className={`${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl transition-all overflow-hidden border ${styles.border} cursor-pointer group`} onClick={() => setSelectedNews(newsItem)}>
+              <article className={`${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl hover:shadow-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden border ${styles.border} cursor-pointer group`} onClick={() => setSelectedNews(newsItem)}>
                 <div className="aspect-video overflow-hidden">
                   <img 
                     src={newsItem.image}

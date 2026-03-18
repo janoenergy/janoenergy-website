@@ -66,7 +66,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
             <h2 className={`text-2xl font-bold ${styles.text} mb-8`}>{t.info.title}</h2>
             
             <div className="space-y-6">
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -76,7 +76,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Phone className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -86,7 +86,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -96,7 +96,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Clock className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -174,7 +174,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                         name="name"
                         required
                         disabled={submitting}
-                        className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:opacity-50 ${styles.bg} ${styles.text}`}
+                        className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 ${styles.bg} ${styles.text}`}
                         placeholder={t.form.namePlaceholder}
                         value={formData.name}
                         onChange={e => setFormData({...formData, name: e.target.value})}
@@ -187,7 +187,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                         name="phone"
                         required
                         disabled={submitting}
-                        className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:opacity-50 ${styles.bg} ${styles.text}`}
+                        className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 ${styles.bg} ${styles.text}`}
                         placeholder={t.form.phonePlaceholder}
                         value={formData.phone}
                         onChange={e => setFormData({...formData, phone: e.target.value})}
@@ -202,7 +202,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                       name="email"
                       required
                       disabled={submitting}
-                      className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:opacity-50 ${styles.bg} ${styles.text}`}
+                      className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 ${styles.bg} ${styles.text}`}
                       placeholder={t.form.emailPlaceholder}
                       value={formData.email}
                       onChange={e => setFormData({...formData, email: e.target.value})}
@@ -216,7 +216,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                       rows={4} 
                       required
                       disabled={submitting}
-                      className={`w-full px-4 py-3 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none disabled:opacity-50 ${styles.bg} ${styles.text}`}
+                      className={`w-full px-4 py-3 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 resize-none disabled:opacity-50 ${styles.bg} ${styles.text}`}
                       placeholder={t.form.contentPlaceholder}
                       value={formData.content}
                       onChange={e => setFormData({...formData, content: e.target.value})}
@@ -232,7 +232,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                   <button 
                     type="submit" 
                     disabled={submitting}
-                    className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition-all hover:shadow-lg flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2"
                   >
                     {submitting ? (
                       <>

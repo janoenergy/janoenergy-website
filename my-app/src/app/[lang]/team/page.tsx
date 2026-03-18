@@ -164,7 +164,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
                 {executives.map((exec) => (
                   <div 
                     key={exec.id}
-                    className="bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all"
+                    className="bg-card rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:shadow-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                   >
                     <div className="flex flex-col md:flex-row gap-6">
                       {/* Avatar */}
@@ -222,7 +222,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
                 {departments.map((dept) => (
                   <div 
                     key={dept.id}
-                    className="bg-card rounded-2xl p-6 hover:shadow-lg transition-all"
+                    className="bg-card rounded-2xl p-6 hover:shadow-lg hover:shadow-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                   >
                     <div className="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center mb-4">
                       <Award className="w-6 h-6 text-white" />
