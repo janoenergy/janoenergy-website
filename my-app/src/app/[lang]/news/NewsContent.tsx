@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Calendar, ArrowRight, X } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
-import { FadeIn } from '@/components/Animations';
 import { news, NewsItem } from '@/data/news';
 import { useThemeStyles } from '@/lib/theme';
 import PageHero from '@/components/PageHero';
@@ -101,7 +100,7 @@ export default function NewsContent({ lang }: { lang: Lang }) {
         </div>
 
         {/* 热门文章 */}
-        <FadeIn>
+        
           <div className="mb-12">
             <h2 className={`text-xl font-bold ${styles.text} mb-6`}>{lang === 'zh' ? '热门文章' : 'Popular Articles'}</h2>
             <div className={`${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl p-6 border ${styles.border}`}>
@@ -120,12 +119,12 @@ export default function NewsContent({ lang }: { lang: Lang }) {
               ))}
             </div>
           </div>
-        </FadeIn>
+        
 
         {/* News Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredNews.map((newsItem, idx) => (
-            <FadeIn key={newsItem.id} delay={idx * 100}>
+            
               <article className={`${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl hover:shadow-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden border ${styles.border} cursor-pointer group`} onClick={() => setSelectedNews(newsItem)}>
                 <div className="aspect-video overflow-hidden">
                   <img 
@@ -161,7 +160,7 @@ export default function NewsContent({ lang }: { lang: Lang }) {
                   </div>
                 </div>
               </article>
-            </FadeIn>
+            
           ))}
         </div>
       </div>
