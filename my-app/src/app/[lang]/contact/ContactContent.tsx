@@ -59,7 +59,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
         lang={lang}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div>
@@ -153,8 +153,8 @@ export default function ContactContent({ lang }: { lang: Lang }) {
               <h2 className={`text-2xl font-bold ${styles.text} mb-6`}>{t.form.title}</h2>
               
               {submitted ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="text-left py-12">
+                  <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
                     <Send className="w-8 h-8 text-emerald-600" />
                   </div>
                   <h3 className={`text-xl font-semibold ${styles.text} mb-2`}>

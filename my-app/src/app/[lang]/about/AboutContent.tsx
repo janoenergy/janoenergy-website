@@ -273,9 +273,9 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl">
             {lang === 'zh' ? '专注于新能源开发、投资、建设、运营的全产业链服务商' : 'Full-chain service provider in new energy development, investment, construction, and operation'}
           </p>
         </div>
@@ -331,7 +331,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         {/* 资质证书 */}
         {certificates.length > 0 && (
           <div className="mb-16 md:mb-24">
-            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 md:mb-8 text-center">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 md:mb-8 text-left">
               {lang === 'zh' ? '资质证书' : 'Certificates'}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -348,7 +348,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
                       </div>
                     )}
                   </div>
-                  <div className="p-3 md:p-4 text-center">
+                  <div className="p-3 md:p-4 text-left">
                     <h3 className="font-bold text-foreground text-sm md:text-base mb-1">
                       {lang === 'zh' ? cert.title : cert.titleEn}
                     </h3>
@@ -365,7 +365,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         {/* 管理团队 */}
         {teamMembers.length > 0 && (
           <div className="mb-16 md:mb-24">
-            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 md:mb-8 text-center">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6 md:mb-8 text-left">
               {lang === 'zh' ? '管理团队' : 'Leadership Team'}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -382,7 +382,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
                       </div>
                     )}
                   </div>
-                  <div className="p-3 md:p-4 text-center">
+                  <div className="p-3 md:p-4 text-left">
                     <h3 className="font-bold text-foreground text-sm md:text-base mb-1">
                       {lang === 'zh' ? member.name : member.nameEn}
                     </h3>
@@ -402,7 +402,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         {/* Timeline - 发展历程 */}
         {milestones.length > 0 && (
           <div className="mb-16 md:mb-24">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-10 md:mb-12 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-10 md:mb-12 text-left">
               {lang === 'zh' ? '发展历程' : 'Our History'}
             </h2>
             <div className="relative max-w-4xl mx-auto">
@@ -440,7 +440,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         {/* Values - 核心价值观 */}
         {values.length > 0 && (
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-10 md:mb-12 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-10 md:mb-12 text-left">
               {lang === 'zh' ? '核心价值观' : 'Core Values'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">

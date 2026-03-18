@@ -31,7 +31,7 @@ export default function CertificatesPage({ params: { lang } }: { params: { lang:
       <Navbar lang={lang} t={t.nav} />
       <main className="flex-1 bg-gray-50">
         <section className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               {lang === 'zh' ? '资质荣誉' : 'Certificates & Honors'}
             </h1>
@@ -42,8 +42,8 @@ export default function CertificatesPage({ params: { lang } }: { params: { lang:
         </section>
 
         <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center mb-12">{lang === 'zh' ? '资质证书' : 'Certificates'}</h2>
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-left mb-12">{lang === 'zh' ? '资质证书' : 'Certificates'}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {certificates.map((cert) => (
                 <div key={cert.id} className="bg-white rounded-2xl p-6 shadow-lg">
@@ -60,8 +60,8 @@ export default function CertificatesPage({ params: { lang } }: { params: { lang:
         </section>
 
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center mb-12">{lang === 'zh' ? '荣誉奖项' : 'Honors'}</h2>
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-left mb-12">{lang === 'zh' ? '荣誉奖项' : 'Honors'}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {honors.map((honor) => (
                 <div key={honor.id} className="flex items-center gap-4 p-6 bg-emerald-50 rounded-2xl">

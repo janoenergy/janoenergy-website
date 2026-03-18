@@ -219,11 +219,11 @@ export default function ESGContent({ lang }: { lang: Lang }) {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center max-w-3xl mx-auto"
+              className="text-left max-w-3xl mx-auto"
             >
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
                 {lang === 'zh' ? '可持续发展' : 'Sustainability'}
@@ -239,12 +239,12 @@ export default function ESGContent({ lang }: { lang: Lang }) {
 
         {/* 双碳目标 */}
         <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-left mb-12"
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '双碳目标' : 'Dual Carbon Goals'}
@@ -275,12 +275,12 @@ export default function ESGContent({ lang }: { lang: Lang }) {
 
         {/* 环境数据 */}
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-left mb-12"
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '环境效益' : 'Environmental Impact'}
@@ -334,12 +334,12 @@ export default function ESGContent({ lang }: { lang: Lang }) {
 
         {/* 社会责任 */}
         <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-left mb-12"
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '社会责任' : 'Social Responsibility'}
@@ -390,12 +390,12 @@ export default function ESGContent({ lang }: { lang: Lang }) {
 
         {/* 公司治理 */}
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-left mb-12"
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '公司治理' : 'Corporate Governance'}
@@ -452,12 +452,12 @@ export default function ESGContent({ lang }: { lang: Lang }) {
 
         {/* 下载中心 */}
         <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-left mb-12"
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {lang === 'zh' ? '下载中心' : 'Download Center'}
