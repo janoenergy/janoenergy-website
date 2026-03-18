@@ -275,7 +275,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
       <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 text-white py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-lg md:text-xl text-emerald-100 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto">
             {lang === 'zh' ? '专注于新能源开发、投资、建设、运营的全产业链服务商' : 'Full-chain service provider in new energy development, investment, construction, and operation'}
           </p>
         </div>
@@ -303,19 +303,19 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
             
             {/* 核心数据 - 动态计算 */}
             <div className="grid grid-cols-3 gap-4 md:gap-6 mt-8">
-              <div className="text-center p-3 md:p-4 bg-card rounded-xl shadow-sm">
+              <div className="p-3 md:p-4 bg-card rounded-xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
                   <AnimatedNumber value={stats.capacity} suffix="+" />
                 </div>
                 <div className="text-xs md:text-sm text-muted-foreground mt-1">MW{lang === 'zh' ? '装机' : ' Capacity'}</div>
               </div>
-              <div className="text-center p-3 md:p-4 bg-card rounded-xl shadow-sm">
+              <div className="p-3 md:p-4 bg-card rounded-xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
                   <AnimatedNumber value={stats.projects} />
                 </div>
                 <div className="text-xs md:text-sm text-muted-foreground mt-1">{lang === 'zh' ? '个项目' : 'Projects'}</div>
               </div>
-              <div className="text-center p-3 md:p-4 bg-card rounded-xl shadow-sm">
+              <div className="p-3 md:p-4 bg-card rounded-xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
                   <AnimatedNumber value={stats.provinces} />
                 </div>
@@ -445,7 +445,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {values.map((value) => (
-                <div key={value.id} className="bg-card rounded-xl p-6 md:p-8 text-center shadow-sm h-full">
+                <div key={value.id} className="bg-card rounded-xl p-6 md:p-8 shadow-sm h-full">
                   <h3 className="text-lg md:text-xl font-bold text-emerald-600 mb-3 md:mb-4">
                     {lang === 'zh' ? value.title : value.titleEn}
                   </h3>

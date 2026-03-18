@@ -126,7 +126,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 {lang === 'zh' ? '管理团队' : 'Leadership Team'}
               </h1>
-              <p className="text-xl text-emerald-100 max-w-3xl mx-auto">
+              <p className="text-xl text-emerald-100 max-w-2xl mx-auto">
                 {lang === 'zh' 
                   ? '专业、敬业、创新的精英团队，引领新能源行业发展'
                   : 'Professional, dedicated and innovative team leading the new energy industry'}
@@ -151,7 +151,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
           {/* Executive Team */}
           <section className="py-20 bg-background">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-16">
+              <div className="mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {lang === 'zh' ? '核心管理层' : 'Executive Team'}
                 </h2>
@@ -176,7 +176,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
                         />
                       </div>
                       
-                      <div className="flex-1 text-center md:text-left">
+                      <div className="flex-1 md:text-left">
                         <h3 className="text-2xl font-bold text-foreground mb-1">
                           {lang === 'zh' ? exec.name : exec.nameEn}
                         </h3>
@@ -209,7 +209,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
           {/* Departments */}
           <section className="py-20 bg-muted/50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-16">
+              <div className="mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {lang === 'zh' ? '组织架构' : 'Organization Structure'}
                 </h2>
