@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { translations, Lang } from '@/lib/translations';
 import { Compass, TrendingUp, Building2, Settings } from 'lucide-react';
+import { useThemeStyles } from '@/lib/theme';
+import PageHero from '@/components/PageHero';
 
 // 真实的新能源业务照片
 const images = {
@@ -66,17 +68,17 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 
 export default function BusinessContent({ lang }: { lang: Lang }) {
   const t = translations[lang].business;
+  const styles = useThemeStyles();
   const imageList = [images.development, images.investment, images.epc, images.operation];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${styles.bg}`}>
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-xl text-emerald-100">{t.subtitle}</p>
-        </div>
-      </div>
+      <PageHero 
+        title={t.title}
+        subtitle={lang === 'zh' ? '专注于新能源开发、投资、建设、运营的全产业链服务商' : 'Full-chain service provider in new energy development, investment, construction, and operation'}
+        lang={lang}
+      />
 
       {/* 业务数据展示 */}
       <div className="bg-emerald-600 py-16">
@@ -107,16 +109,16 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
                       <IconComponent className="w-6 h-6 text-emerald-600" />
                     </div>
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-900">{section.title}</h2>
-                      <p className="text-gray-500">{section.subtitle}</p>
+                      <h2 className={`text-3xl font-bold ${styles.text}`}>{section.title}</h2>
+                      <p className={styles.textMuted}>{section.subtitle}</p>
                     </div>
                   </div>
-                  <p className="text-lg text-gray-600 mb-6">{section.desc}</p>
+                  <p className={`text-lg ${styles.textSecondary} mb-6`}>{section.desc}</p>
                   <div className="grid grid-cols-2 gap-4">
                     {section.features.map((feature, i) => (
-                      <div key={i} className="flex items-center gap-2 p-3 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={i} className={`flex items-center gap-2 p-3 ${styles.bgCard} rounded-lg border ${styles.border} shadow-sm hover:shadow-md transition-shadow`}>
                         <div className="w-2 h-2 bg-emerald-500 rounded-full" />
-                        <span className="text-gray-700">{feature}</span>
+                        <span className={styles.textSecondary}>{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -137,16 +139,16 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
       </div>
 
       {/* 客户评价 */}
-      <div className="bg-gray-100 py-16">
+      <div className={`${styles.bgMuted} py-16`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-10 text-center">
+          <h2 className={`text-2xl font-bold ${styles.text} mb-10 text-center`}>
             {lang === 'zh' ? '客户评价' : 'Client Testimonials'}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((item, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+              <div key={idx} className={`${styles.bgCard} rounded-xl p-8 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border ${styles.border}`}>
                 <div className="text-4xl text-emerald-200 mb-4">&ldquo;</div>
-                <p className="text-gray-600 mb-6 leading-relaxed">
+                <p className={`${styles.textSecondary} mb-6 leading-relaxed`}>
                   {lang === 'zh' ? item.content : item.contentEn}
                 </p>
                 <div className="flex items-center gap-3">
@@ -155,7 +157,7 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
                       {(lang === 'zh' ? item.author : item.authorEn).charAt(0)}
                     </span>
                   </div>
-                  <span className="font-medium text-gray-900">
+                  <span className={`font-medium ${styles.text}`}>
                     {lang === 'zh' ? item.author : item.authorEn}
                   </span>
                 </div>

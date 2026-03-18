@@ -2,18 +2,21 @@
 
 import { useState } from 'react';
 import { Lock, User, Eye, EyeOff, Sun, Moon } from 'lucide-react';
-import { ErrorBoundary } from '@/components/error/ErrorBoundary';
-import { useTheme } from '@/lib/theme';
 
 const API_BASE_URL = 'https://api.janoenergy.com';
 
-function LoginForm() {
+export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const [isDark, setIsDark] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    document.documentElement.classList.toggle('dark');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,45 +49,67 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 flex items-center justify-center p-4">
+    <div className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${
+      isDark 
+        ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950' 
+        : 'bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900'
+    }`}>
       {/* Theme Toggle */}
       <button
         onClick={toggleTheme}
         className="absolute top-4 right-4 p-2 bg-white/10 backdrop-blur-sm rounded-lg text-white hover:bg-white/20 transition-colors"
-        title={theme === 'light' ? '切换到深色模式' : '切换到浅色模式'}
+        title={isDark ? '切换到浅色模式' : '切换到深色模式'}
       >
-        {theme === 'light' ? (
-          <Moon className="w-5 h-5" />
-        ) : (
+        {isDark ? (
           <Sun className="w-5 h-5" />
+        ) : (
+          <Moon className="w-5 h-5" />
         )}
       </button>
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-8">
+      <div className={`rounded-2xl shadow-2xl w-full max-w-md p-8 transition-colors duration-300 ${
+        isDark ? 'bg-slate-800' : 'bg-white'
+      }`}>
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl text-white font-bold">江</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">网站后台管理</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">江能集团官网管理系统</p>
+          <h1 className={`text-2xl font-bold transition-colors duration-300 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>网站后台管理</h1>
+          <p className={`mt-2 transition-colors duration-300 ${
+            isDark ? 'text-gray-400' : 'text-gray-500'
+          }`}>江能集团官网管理系统</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
+          <div className={`mb-4 p-3 rounded-lg text-sm ${
+            isDark 
+              ? 'bg-red-900/20 border-red-800 text-red-400' 
+              : 'bg-red-50 border-red-200 text-red-600'
+          } border`}>
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">管理员账号</label>
+            <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
+              isDark ? 'text-gray-300' : 'text-gray-700'
+            }`}>管理员账号</label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+              <User className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${
+                isDark ? 'text-gray-500' : 'text-gray-400'
+              }`} />
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-colors duration-300 ${
+                  isDark 
+                    ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-500' 
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                }`}
                 placeholder="请输入管理员账号"
                 required
               />
@@ -92,21 +117,31 @@ function LoginForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">密码</label>
+            <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
+              isDark ? 'text-gray-300' : 'text-gray-700'
+            }`}>密码</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+              <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${
+                isDark ? 'text-gray-500' : 'text-gray-400'
+              }`} />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-12 py-3 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-colors duration-300 ${
+                  isDark 
+                    ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-500' 
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                }`}
                 placeholder="请输入密码"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                className={`absolute right-3 top-1/2 -translate-y-1/2 transition-colors duration-300 ${
+                  isDark ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'
+                }`}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -126,18 +161,12 @@ function LoginForm() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div className={`mt-6 text-center text-sm transition-colors duration-300 ${
+          isDark ? 'text-gray-400' : 'text-gray-500'
+        }`}>
           <p>默认账号: admin / 密码: admin123</p>
         </div>
       </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <ErrorBoundary>
-      <LoginForm />
-    </ErrorBoundary>
   );
 }

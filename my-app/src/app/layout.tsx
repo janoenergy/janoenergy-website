@@ -4,11 +4,12 @@ import { BackToTop } from "@/components/BackToTop";
 import PageLoader from "@/components/PageLoader";
 import Analytics from "@/components/Analytics";
 import ChatWidget from "@/components/ChatWidget";
+import { ThemeProvider } from "@/lib/theme";
 
 export const metadata: Metadata = {
-  title: "江能集团 - 清洁能源，绿色未来",
-  description: "江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商",
-  keywords: "新能源,风电,光伏,储能,EPC,江能集团",
+  title: "江能集团 - 清洁能源，绿色未来 | JanoEnergy - Clean Energy, Green Future",
+  description: "江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商。覆盖12个省份，总装机容量1135MW+",
+  keywords: "新能源,风电,光伏,储能,EPC,江能集团,New Energy,Wind Power,Solar,Energy Storage",
   openGraph: {
     title: "江能集团 - 清洁能源，绿色未来",
     description: "江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商",
@@ -61,15 +62,17 @@ export default function RootLayout({
         <link rel="preconnect" href="https://api.janoenergy.com" />
         <link rel="dns-prefetch" href="https://api.janoenergy.com" />
         
-        {/* 预加载关键资源 */}
-        <link rel="preload" href="/fonts/main.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {/* 预加载关键图片资源 */}
+        <link rel="preload" href="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop" as="image" />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
-        <PageLoader />
-        {children}
-        <BackToTop />
-        <Analytics baiduId={BAIDU_ID} googleId={GOOGLE_ID} />
-        <ChatWidget lang="zh" />
+        <ThemeProvider>
+          <PageLoader />
+          {children}
+          <BackToTop />
+          <Analytics baiduId={BAIDU_ID} googleId={GOOGLE_ID} />
+          <ChatWidget lang="zh" />
+        </ThemeProvider>
       </body>
     </html>
   );

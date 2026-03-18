@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, Loader2 } from 'lucide-react';
 import { translations, Lang } from '@/lib/translations';
+import { useThemeStyles } from '@/lib/theme';
 
 // Formspree 表单 ID
 const FORMSPREE_FORM_ID = 'mqakvnje';
@@ -13,6 +14,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const styles = useThemeStyles();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +50,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${styles.bg}`}>
       {/* Header */}
       <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,101 +63,104 @@ export default function ContactContent({ lang }: { lang: Lang }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">{t.info.title}</h2>
+            <h2 className={`text-2xl font-bold ${styles.text} mb-8`}>{t.info.title}</h2>
             
             <div className="space-y-6">
-              <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{t.info.address}</h3>
-                  <p className="text-gray-600">{lang === 'zh' ? '天津市滨海新区开发区第三大街' : '3rd Avenue, Binhai Development Zone, Tianjin'}</p>
+                  <h3 className={`font-semibold ${styles.text} mb-1`}>{t.info.address}</h3>
+                  <p className={styles.textMuted}>{lang === 'zh' ? '天津市滨海新区开发区第三大街' : '3rd Avenue, Binhai Development Zone, Tianjin'}</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Phone className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{t.info.phone}</h3>
-                  <p className="text-gray-600">+86 400-888-9999</p>
+                  <h3 className={`font-semibold ${styles.text} mb-1`}>{t.info.phone}</h3>
+                  <p className={styles.textMuted}>+86 400-888-9999</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{t.info.email}</h3>
-                  <p className="text-gray-600">contact@janoenergy.com</p>
+                  <h3 className={`font-semibold ${styles.text} mb-1`}>{t.info.email}</h3>
+                  <p className={styles.textMuted}>contact@janoenergy.com</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Clock className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{t.info.hours}</h3>
-                  <p className="text-gray-600">{t.info.hoursValue}</p>
+                  <h3 className={`font-semibold ${styles.text} mb-1`}>{t.info.hours}</h3>
+                  <p className={styles.textMuted}>{t.info.hoursValue}</p>
                 </div>
               </div>
             </div>
 
             {/* 地图 */}
             <div className="mt-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{lang === 'zh' ? '公司位置' : 'Our Location'}</h3>
+              <h3 className={`text-lg font-semibold ${styles.text} mb-4`}>{lang === 'zh' ? '公司位置' : 'Our Location'}</h3>
               <div className="aspect-video bg-gray-200 rounded-xl overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center relative">
-                  <div className="absolute inset-0 opacity-30">
-                    <svg viewBox="0 0 400 300" className="w-full h-full">
-                      <defs>
-                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#94a3b8" strokeWidth="0.5"/>
-                        </pattern>
-                      </defs>
-                      <rect width="400" height="300" fill="url(#grid)" />
-                      <line x1="0" y1="150" x2="400" y2="150" stroke="#cbd5e1" strokeWidth="8" />
-                      <line x1="200" y1="0" x2="200" y2="300" stroke="#cbd5e1" strokeWidth="8" />
-                      <circle cx="200" cy="150" r="15" fill="#10b981" opacity="0.3" />
-                      <circle cx="200" cy="150" r="8" fill="#10b981" />
-                      <text x="220" y="145" fontSize="12" fill="#374151">JanoEnergy</text>
-                    </svg>
-                  </div>
-                  <div className="text-center z-10">
-                    <MapPin className="w-12 h-12 text-emerald-600 mx-auto mb-2" />
-                    <p className="text-gray-600 font-medium">Tianjin, China</p>
-                    <a 
-                      href="https://maps.google.com/?q=Tianjin,China" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-emerald-600 hover:text-emerald-700 text-sm mt-2 inline-block"
-                    >
-                      {lang === 'zh' ? '在 Google 地图中打开' : 'Open in Google Maps'} →
-                    </a>
-                  </div>
-                </div>
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  frameBorder="0" 
+                  scrolling="no" 
+                  src="https://uri.amap.com/marker?position=117.2009,39.0842&name=江能集团&src=janoenergy&coordinate=gaode&callnative=0"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="公司位置"
+                />
+              </div>
+              <div className="mt-4 flex gap-4">
+                <a 
+                  href="https://uri.amap.com/marker?position=117.2009,39.0842&name=江能集团&src=janoenergy&coordinate=gaode&callnative=1" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 text-sm"
+                >
+                  <MapPin className="w-4 h-4" />
+                  {lang === 'zh' ? '在高德地图中打开' : 'Open in Amap'} →
+                </a>
+                <a 
+                  href="https://maps.google.com/?q=39.0842,117.2009" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 text-sm"
+                >
+                  <MapPin className="w-4 h-4" />
+                  {lang === 'zh' ? '在 Google 地图中打开' : 'Open in Google Maps'} →
+                </a>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
           <div>
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.form.title}</h2>
+            <div className={`${styles.bgCard} rounded-2xl shadow-lg p-8`}>
+              <h2 className={`text-2xl font-bold ${styles.text} mb-6`}>{t.form.title}</h2>
               
               {submitted ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Send className="w-8 h-8 text-emerald-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  <h3 className={`text-xl font-semibold ${styles.text} mb-2`}>
                     {lang === 'zh' ? '提交成功！' : 'Submitted Successfully!'}
                   </h3>
-                  <p className="text-gray-600">
+                  <p className={styles.textMuted}>
                     {lang === 'zh' ? '我们会尽快与您联系' : 'We will contact you soon'}
                   </p>
                 </div>
@@ -163,26 +168,26 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">{t.form.name}</label>
+                      <label className={`block text-sm font-medium ${styles.textSecondary} mb-2`}>{t.form.name}</label>
                       <input 
                         type="text" 
                         name="name"
                         required
                         disabled={submitting}
-                        className="w-full px-4 h-12 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
+                        className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:opacity-50 ${styles.bg} ${styles.text}`}
                         placeholder={t.form.namePlaceholder}
                         value={formData.name}
                         onChange={e => setFormData({...formData, name: e.target.value})}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">{t.form.phone}</label>
+                      <label className={`block text-sm font-medium ${styles.textSecondary} mb-2`}>{t.form.phone}</label>
                       <input 
                         type="tel" 
                         name="phone"
                         required
                         disabled={submitting}
-                        className="w-full px-4 h-12 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
+                        className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:opacity-50 ${styles.bg} ${styles.text}`}
                         placeholder={t.form.phonePlaceholder}
                         value={formData.phone}
                         onChange={e => setFormData({...formData, phone: e.target.value})}
@@ -191,13 +196,13 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.form.email}</label>
+                    <label className={`block text-sm font-medium ${styles.textSecondary} mb-2`}>{t.form.email}</label>
                     <input 
                       type="email" 
                       name="email"
                       required
                       disabled={submitting}
-                      className="w-full px-4 h-12 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:bg-gray-100"
+                      className={`w-full px-4 h-12 py-0 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all disabled:opacity-50 ${styles.bg} ${styles.text}`}
                       placeholder={t.form.emailPlaceholder}
                       value={formData.email}
                       onChange={e => setFormData({...formData, email: e.target.value})}
@@ -205,13 +210,13 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.form.content}</label>
+                    <label className={`block text-sm font-medium ${styles.textSecondary} mb-2`}>{t.form.content}</label>
                     <textarea 
                       name="content"
                       rows={4} 
                       required
                       disabled={submitting}
-                      className="w-full px-4 h-12 py-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none disabled:bg-gray-100"
+                      className={`w-full px-4 py-3 border ${styles.border} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all resize-none disabled:opacity-50 ${styles.bg} ${styles.text}`}
                       placeholder={t.form.contentPlaceholder}
                       value={formData.content}
                       onChange={e => setFormData({...formData, content: e.target.value})}

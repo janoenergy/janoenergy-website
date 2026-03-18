@@ -78,6 +78,35 @@ interface Project {
   location: string;
 }
 
+// 默认静态数据（立即显示）
+const defaultMilestones: Milestone[] = milestonesData.map((m, i) => ({ 
+  ...m, 
+  id: i + 1, 
+  sortOrder: i 
+}));
+
+const defaultValues: CompanyValue[] = valuesData.map((v, i) => ({ 
+  ...v, 
+  id: i + 1, 
+  sortOrder: i 
+}));
+
+const defaultTeamMembers: TeamMember[] = teamData.map((t, i) => ({ 
+  ...t, 
+  id: i + 1, 
+  sortOrder: i, 
+  isActive: true, 
+  description: '', 
+  descriptionEn: '' 
+}));
+
+const defaultCertificates: Certificate[] = certificatesData.map((c, i) => ({ 
+  ...c, 
+  id: i + 1, 
+  sortOrder: i, 
+  isActive: true 
+}));
+
 // 数字动画组件
 function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
   const [displayValue, setDisplayValue] = useState(0);
@@ -118,14 +147,14 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
   const t = translations[lang].about;
   
-  // 数据状态
+  // 数据状态 - 使用静态数据作为初始值
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
-  const [milestones, setMilestones] = useState<Milestone[]>([]);
-  const [values, setValues] = useState<CompanyValue[]>([]);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [milestones, setMilestones] = useState<Milestone[]>(defaultMilestones);
+  const [values, setValues] = useState<CompanyValue[]>(defaultValues);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(defaultTeamMembers);
+  const [certificates, setCertificates] = useState<Certificate[]>(defaultCertificates);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // 初始为 false，因为有静态数据
   const [error, setError] = useState<string | null>(null);
 
   // 统计数据
@@ -158,15 +187,13 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
       try {
         setLoading(true);
         
+        // 设置 5 秒超时
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout')), 5000)
+        );
+        
         // 并行获取所有数据
-        const [
-          companyRes,
-          milestonesRes,
-          valuesRes,
-          teamRes,
-          certificatesRes,
-          projectsRes,
-        ] = await Promise.all([
+        const fetchPromise = Promise.all([
           fetch(API_ENDPOINTS.companyInfo),
           fetch(API_ENDPOINTS.milestones),
           fetch(API_ENDPOINTS.values),
@@ -174,6 +201,15 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
           fetch(API_ENDPOINTS.certificates),
           fetch(API_ENDPOINTS.projects),
         ]);
+        
+        const [
+          companyRes,
+          milestonesRes,
+          valuesRes,
+          teamRes,
+          certificatesRes,
+          projectsRes,
+        ] = await Promise.race([fetchPromise, timeoutPromise]) as any;
 
         // 处理公司简介
         if (companyRes.ok) {
@@ -184,33 +220,25 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         // 处理发展历程 - 使用真实数据作为后备
         if (milestonesRes.ok) {
           const data = await milestonesRes.json();
-          setMilestones(data.length > 0 ? data : milestonesData.map((m, i) => ({ ...m, id: i + 1, sortOrder: i })));
-        } else {
-          setMilestones(milestonesData.map((m, i) => ({ ...m, id: i + 1, sortOrder: i })));
+          if (data.length > 0) setMilestones(data);
         }
 
         // 处理价值观 - 使用真实数据作为后备
         if (valuesRes.ok) {
           const data = await valuesRes.json();
-          setValues(data.length > 0 ? data : valuesData.map((v, i) => ({ ...v, id: i + 1, sortOrder: i })));
-        } else {
-          setValues(valuesData.map((v, i) => ({ ...v, id: i + 1, sortOrder: i })));
+          if (data.length > 0) setValues(data);
         }
 
         // 处理团队成员 - 使用真实数据作为后备
         if (teamRes.ok) {
           const data = await teamRes.json();
-          setTeamMembers(data.length > 0 ? data : teamData.map((t, i) => ({ ...t, id: i + 1, sortOrder: i, isActive: true, description: '', descriptionEn: '' })));
-        } else {
-          setTeamMembers(teamData.map((t, i) => ({ ...t, id: i + 1, sortOrder: i, isActive: true, description: '', descriptionEn: '' })));
+          if (data.length > 0) setTeamMembers(data);
         }
 
         // 处理证书 - 使用真实数据作为后备
         if (certificatesRes.ok) {
           const data = await certificatesRes.json();
-          setCertificates(data.length > 0 ? data : certificatesData.map((c, i) => ({ ...c, id: i + 1, sortOrder: i, isActive: true })));
-        } else {
-          setCertificates(certificatesData.map((c, i) => ({ ...c, id: i + 1, sortOrder: i, isActive: true })));
+          if (data.length > 0) setCertificates(data);
         }
 
         // 处理项目（用于计算统计数据）
@@ -231,12 +259,8 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
         }
       } catch (err) {
         console.error('Failed to fetch about data:', err);
-        setError('数据加载失败，请稍后重试');
-        // 使用真实数据作为后备
-        setMilestones(milestonesData.map((m, i) => ({ ...m, id: i + 1, sortOrder: i })));
-        setValues(valuesData.map((v, i) => ({ ...v, id: i + 1, sortOrder: i })));
-        setTeamMembers(teamData.map((t, i) => ({ ...t, id: i + 1, sortOrder: i, isActive: true, description: '', descriptionEn: '' })));
-        setCertificates(certificatesData.map((c, i) => ({ ...c, id: i + 1, sortOrder: i, isActive: true })));
+        // 错误时保持静态数据，不显示错误
+        // 静态数据已经在初始状态中设置
       } finally {
         setLoading(false);
       }
@@ -244,35 +268,6 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
 
     fetchData();
   }, []);
-
-  // 加载中状态
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">加载中...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // 错误状态
-  if (error) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-destructive mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
-          >
-            重新加载
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
