@@ -123,7 +123,7 @@ export const themeStyles = {
   light: {
     // 背景
     bg: 'bg-gray-50',
-    bgGradient: 'from-white via-gray-50 to-white',
+    bgGradient: 'from-emerald-800 via-teal-700 to-cyan-800',
     bgCard: 'bg-white',
     bgHover: 'hover:bg-gray-100',
     bgMuted: 'bg-gray-100',
