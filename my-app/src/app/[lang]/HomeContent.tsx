@@ -12,18 +12,18 @@ import { useThemeStyles } from '@/lib/theme';
 
 // 项目图片配置
 const projectImages: Record<number, string> = {
-  1: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 甘肃酒泉储能
-  2: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop', // 浙江宁波光储
-  3: 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=800&auto=format&fit=crop', // 云南大理光伏
-  4: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 山西大同风电
-  5: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&auto=format&fit=crop', // 内蒙古乌兰察布风电
-  6: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop', // 山东德州光伏
-  7: 'https://images.unsplash.com/photo-1565514020176-dbf2277e4955?w=800&auto=format&fit=crop', // 江苏盐城储能
-  8: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop', // 河北张家口光伏
-  9: 'https://images.unsplash.com/photo-1548337138-e87d889cc369?w=800&auto=format&fit=crop', // 湖南郴州风电
-  10: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop', // 广东清远光伏
-  11: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 四川凉山风电
-  12: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 西龙虎峪风电
+  1: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 西龙虎峪风电
+  2: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop', // 广东清远光伏
+  3: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 四川凉山风电
+  4: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&auto=format&fit=crop', // 内蒙古乌兰察布风电
+  5: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&auto=format&fit=crop', // 山东德州光伏
+  6: 'https://images.unsplash.com/photo-1565514020176-dbf2277e4955?w=800&auto=format&fit=crop', // 江苏盐城储能
+  7: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop', // 河北张家口光伏
+  8: 'https://images.unsplash.com/photo-1548337138-e87d889cc369?w=800&auto=format&fit=crop', // 湖南郴州风电
+  9: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop', // 浙江宁波光储
+  10: 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=800&auto=format&fit=crop', // 云南大理光伏
+  11: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop', // 山西大同风电
+  12: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop', // 甘肃酒泉储能
 };
 
 interface ApiProject {
