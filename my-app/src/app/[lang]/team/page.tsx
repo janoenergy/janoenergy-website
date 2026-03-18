@@ -121,12 +121,12 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
         <Navbar lang={lang} t={t.nav} />
         <main className="flex-1">
           {/* Hero Section */}
-          <section className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 py-20">
-            <div className="max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <section className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 text-white py-16 md:py-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 {lang === 'zh' ? '管理团队' : 'Leadership Team'}
               </h1>
-              <p className="text-xl text-emerald-100 max-w-2xl">
+              <p className="text-lg md:text-xl text-emerald-100 max-w-2xl">
                 {lang === 'zh' 
                   ? '专业、敬业、创新的精英团队，引领新能源行业发展'
                   : 'Professional, dedicated and innovative team leading the new energy industry'}
@@ -136,7 +136,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
 
           {/* Stats Section */}
           <section className="py-12 bg-card">
-            <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 {stats.map((stat, index) => (
                   <div key={index} className="text-left">
@@ -149,8 +149,8 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
           </section>
 
           {/* Executive Team */}
-          <section className="py-20 bg-background">
-            <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
+          <section className="py-16 md:py-20 bg-background">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {lang === 'zh' ? '核心管理层' : 'Executive Team'}
@@ -207,8 +207,8 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
           </section>
 
           {/* Departments */}
-          <section className="py-20 bg-muted/50">
-            <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
+          <section className="py-16 md:py-20 bg-muted/50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {lang === 'zh' ? '组织架构' : 'Organization Structure'}
@@ -242,12 +242,12 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
           </section>
 
           {/* Join Us CTA */}
-          <section className="py-20 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950">
+          <section className="py-16 md:py-20 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950">
             <div className="max-w-4xl px-4 sm:px-6 lg:px-8 text-left">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 {lang === 'zh' ? '加入我们' : 'Join Us'}
               </h2>
-              <p className="text-xl text-emerald-100 mb-8">
+              <p className="text-lg md:text-xl text-emerald-100 mb-8">
                 {lang === 'zh' 
                   ? '与优秀的人一起，创造清洁能源的未来'
                   : 'Work with excellent people to create a clean energy future'}
