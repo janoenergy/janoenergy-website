@@ -82,7 +82,7 @@ export default function BusinessContent({ lang }: { lang: Lang }) {
       />
 
       {/* 业务数据展示 */}
-      <div className="bg-gradient-to-r from-slate-900 via-emerald-900 to-teal-900 dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950 py-16 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-950 py-16 relative overflow-hidden">
         {/* 微光背景动画 */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-pulse" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
