@@ -1,114 +1,297 @@
+/**
+ * SEO 优化配置
+ * 包含结构化数据、元数据模板、OpenGraph 配置等
+ */
+
 import { Metadata } from 'next';
 
+// 网站基本信息
 export const siteConfig = {
   name: '江能集团',
   nameEn: 'JanoEnergy',
-  description: '江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商，覆盖12个省份，总装机容量1135MW+',
-  descriptionEn: 'JanoEnergy Group - Full-chain new energy service provider specializing in wind, solar, and energy storage, covering 12 provinces with 1135MW+ capacity',
-  url: 'https://janoenergy.com',
-  ogImage: "https://janoenergy.com/og-image.svg",
+  description: '江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商',
+  descriptionEn: 'JanoEnergy - Full-chain service provider for new energy development, investment, construction, and operation',
+  url: 'https://www.janoenergy.com',
+  ogImage: 'https://www.janoenergy.com/og-image.svg',
+  twitter: '@janoenergy',
+  email: 'contact@janoenergy.com',
+  phone: '+86-xxx-xxxx-xxxx',
+  address: '中国',
+  foundedYear: 2010,
+  employees: '500+',
 };
 
+// 页面元数据模板
+export const pageMetadata = {
+  home: {
+    title: '江能集团 - 清洁能源，绿色未来',
+    titleEn: 'JanoEnergy - Clean Energy, Green Future',
+    description: '江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商。覆盖12个省份，总装机容量1135MW+',
+    descriptionEn: 'JanoEnergy - Full-chain service provider for wind power, solar, energy storage. Covering 12 provinces with 1135MW+ installed capacity',
+  },
+  about: {
+    title: '关于我们 - 江能集团',
+    titleEn: 'About Us - JanoEnergy',
+    description: '了解江能集团的发展历程、企业文化、核心团队和社会责任',
+    descriptionEn: 'Learn about JanoEnergy\'s history, culture, team and social responsibility',
+  },
+  business: {
+    title: '业务领域 - 江能集团',
+    titleEn: 'Business - JanoEnergy',
+    description: '风电、光伏、储能、EPC总承包等新能源全产业链服务',
+    descriptionEn: 'Wind power, solar, energy storage, EPC turnkey solutions',
+  },
+  projects: {
+    title: '项目案例 - 江能集团',
+    titleEn: 'Projects - JanoEnergy',
+    description: '查看江能集团在全国各地的清洁能源项目案例',
+    descriptionEn: 'Explore JanoEnergy\'s clean energy projects across the country',
+  },
+  news: {
+    title: '新闻中心 - 江能集团',
+    titleEn: 'News - JanoEnergy',
+    description: '了解江能集团最新动态、行业资讯和企业公告',
+    descriptionEn: 'Latest news, industry updates and announcements from JanoEnergy',
+  },
+  contact: {
+    title: '联系我们 - 江能集团',
+    titleEn: 'Contact - JanoEnergy',
+    description: '联系江能集团，获取新能源解决方案咨询',
+    descriptionEn: 'Contact JanoEnergy for new energy solutions consultation',
+  },
+  esg: {
+    title: 'ESG与可持续发展 - 江能集团',
+    titleEn: 'ESG & Sustainability - JanoEnergy',
+    description: '江能集团的ESG实践和可持续发展承诺',
+    descriptionEn: 'JanoEnergy\'s ESG practices and sustainability commitment',
+  },
+  certificates: {
+    title: '资质证书 - 江能集团',
+    titleEn: 'Certificates - JanoEnergy',
+    description: '江能集团的企业资质和行业认证',
+    descriptionEn: 'JanoEnergy\'s enterprise qualifications and industry certifications',
+  },
+};
+
+// 默认元数据模板
+export const defaultMetadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: `${siteConfig.name} - 清洁能源，绿色未来 | ${siteConfig.nameEn} - Clean Energy, Green Future`,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: [
+    '新能源',
+    '风电',
+    '光伏',
+    '储能',
+    'EPC',
+    '江能集团',
+    '清洁能源',
+    '绿色能源',
+    'New Energy',
+    'Wind Power',
+    'Solar Energy',
+    'Energy Storage',
+    'Clean Energy',
+    'Renewable Energy',
+  ],
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'zh_CN',
+    alternateLocale: 'en_US',
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: `${siteConfig.name} - 清洁能源，绿色未来`,
+    description: siteConfig.description,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
+        alt: `${siteConfig.name} - 清洁能源，绿色未来`,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${siteConfig.name} - 清洁能源，绿色未来`,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+    creator: siteConfig.twitter,
+  },
+  alternates: {
+    canonical: siteConfig.url,
+    languages: {
+      'zh-CN': `${siteConfig.url}/zh`,
+      'en-US': `${siteConfig.url}/en`,
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || '',
+    other: {
+      'baidu-site-verification': process.env.NEXT_PUBLIC_BAIDU_VERIFICATION || '',
+    },
+  },
+  category: 'energy',
+  classification: 'Business',
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    telephone: false,
+    date: false,
+    address: false,
+    email: false,
+  },
+};
+
+// 生成页面特定的元数据
 export function generateMetadata({
   title,
   description,
-  path = '',
+  path,
+  ogImage,
 }: {
   title: string;
   description: string;
-  path?: string;
+  path: string;
+  ogImage?: string;
 }): Metadata {
   const url = `${siteConfig.url}${path}`;
   
   return {
-    title: {
-      default: title,
-      template: `%s | ${siteConfig.name}`,
-    },
+    title,
     description,
-    keywords: ['新能源', '风电', '光伏', '储能', 'EPC', '江能集团', 'New Energy', 'Wind Power', 'Solar', 'Energy Storage'],
-    authors: [{ name: '江能集团' }],
-    creator: '江能集团',
-    metadataBase: new URL(siteConfig.url),
     alternates: {
       canonical: url,
-      languages: {
-        'zh-CN': `/zh${path}`,
-        'en-US': `/en${path}`,
-      },
     },
     openGraph: {
-      type: 'website',
-      locale: 'zh_CN',
-      url,
-      title: `${title} | ${siteConfig.name}`,
+      title,
       description,
-      siteName: siteConfig.name,
-      images: [
-        {
-          url: siteConfig.ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      url,
+      images: ogImage
+        ? [
+            {
+              url: ogImage,
+              width: 1200,
+              height: 630,
+              alt: title,
+            },
+          ]
+        : undefined,
     },
     twitter: {
-      card: 'summary_large_image',
-      title: `${title} | ${siteConfig.name}`,
+      title,
       description,
-      images: [siteConfig.ogImage],
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
+      images: ogImage ? [ogImage] : undefined,
     },
   };
 }
 
-// 各页面 metadata 配置 - 优化后的标题（50-60字符）
-export const pageMetadata = {
-  home: {
-    title: '江能集团 - 清洁能源，绿色未来 | 新能源开发投资运营平台',
-    titleEn: 'JanoEnergy - Clean Energy, Green Future | New Energy Platform',
-    description: '江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商，覆盖12个省份，总装机容量1135MW+',
-    descriptionEn: 'JanoEnergy Group - Full-chain new energy service provider specializing in wind, solar, and energy storage, covering 12 provinces with 1135MW+ capacity',
-  },
-  about: {
-    title: '关于江能集团 - 新能源行业领军企业 | 发展历程与企业文化',
-    titleEn: 'About JanoEnergy - Leading New Energy Enterprise | History & Culture',
-    description: '了解江能集团的发展历程、企业文化、核心价值观和管理团队。成立于2018年，专注新能源开发与运营。',
-    descriptionEn: 'Learn about JanoEnergy history, corporate culture, core values and management team. Established in 2018, focusing on new energy development.',
-  },
-  business: {
-    title: '业务板块 - 风电光伏储能全产业链服务 | EPC总承包',
-    titleEn: 'Business - Wind Solar Storage Full-Chain Services | EPC Contracting',
-    description: '新能源开发、投资、EPC总承包、运营管理全产业链服务。覆盖风电、光伏、储能等多种新能源形态。',
-    descriptionEn: 'Full-chain services: development, investment, EPC contracting, operation. Covering wind, solar, energy storage and more.',
-  },
-  projects: {
-    title: '项目案例 - 风电光伏储能项目展示 | 覆盖全国12个省份',
-    titleEn: 'Projects - Wind Solar Energy Storage Showcase | 12 Provinces Coverage',
-    description: '江能集团风电、光伏、储能项目案例展示。已成功开发和运营多个大型新能源项目，总装机容量1135MW+。',
-    descriptionEn: 'JanoEnergy wind, solar and energy storage project showcase. Successfully developed and operated multiple large-scale projects.',
-  },
-  news: {
-    title: '新闻中心 - 江能集团最新动态 | 新能源行业资讯',
-    titleEn: 'News - JanoEnergy Latest Updates | New Energy Industry Insights',
-    description: '江能集团最新动态、项目进展、企业新闻与新能源行业资讯。了解新能源政策、技术发展和市场趋势。',
-    descriptionEn: 'JanoEnergy latest updates, project progress, corporate news and new energy industry insights.',
-  },
-  contact: {
-    title: '联系我们 - 新能源项目合作咨询 | 江能集团联系方式',
-    titleEn: 'Contact - New Energy Project Cooperation | JanoEnergy Contact',
-    description: '期待与您的合作！联系江能集团进行新能源项目开发、投资合作、EPC总承包等业务咨询。',
-    descriptionEn: 'Looking forward to cooperating with you! Contact JanoEnergy for project development, investment, and EPC services.',
-  },
-};
+// 组织结构化数据 (JSON-LD)
+export function generateOrganizationSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteConfig.name,
+    alternateName: siteConfig.nameEn,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}/logo.svg`,
+    description: siteConfig.description,
+    email: siteConfig.email,
+    telephone: siteConfig.phone,
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'CN',
+    },
+    sameAs: [
+      // 社交媒体链接（如果有）
+      // 'https://twitter.com/janoenergy',
+      // 'https://linkedin.com/company/janoenergy',
+    ],
+    foundingDate: siteConfig.foundedYear.toString(),
+    numberOfEmployees: siteConfig.employees,
+    industry: 'Renewable Energy',
+  };
+}
+
+// 网站结构化数据
+export function generateWebsiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteConfig.name,
+    alternateName: siteConfig.nameEn,
+    url: siteConfig.url,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteConfig.url}/search?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
+
+// 面包屑结构化数据
+export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+// 本地企业结构化数据
+export function generateLocalBusinessSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: siteConfig.name,
+    image: `${siteConfig.url}/og-image.svg`,
+    '@id': siteConfig.url,
+    url: siteConfig.url,
+    telephone: siteConfig.phone,
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'CN',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      // 如果有具体坐标可以填写
+      // latitude: 39.9042,
+      // longitude: 116.4074,
+    },
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+    priceRange: '$$',
+  };
+}
+
+// 导出别名以兼容旧代码
+export { generateMetadata as generatePageMetadata };
+export { defaultMetadata as siteMetadata };

@@ -66,7 +66,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
             <h2 className={`text-2xl font-bold ${styles.text} mb-8`}>{t.info.title}</h2>
             
             <div className="space-y-6">
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -76,7 +76,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Phone className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -86,7 +86,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -96,7 +96,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
+              <div className={`flex items-start gap-4 p-4 ${styles.bgCard} rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${styles.border}`}>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Clock className="w-6 h-6 text-emerald-600" />
                 </div>
@@ -110,7 +110,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
             {/* 地图 */}
             <div className="mt-8">
               <h3 className={`text-lg font-semibold ${styles.text} mb-4`}>{lang === 'zh' ? '公司位置' : 'Our Location'}</h3>
-              <div className="aspect-video bg-gray-200 rounded-xl overflow-hidden">
+              <div className="aspect-video bg-gray-200 rounded-2xl overflow-hidden">
                 <iframe 
                   width="100%" 
                   height="100%" 
@@ -251,7 +251,7 @@ export default function ContactContent({ lang }: { lang: Lang }) {
             </div>
 
             {/* 在线客服 */}
-            <div className="mt-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 text-white">
+            <div className="mt-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl p-6 text-white">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                   <MessageCircle className="w-6 h-6" />

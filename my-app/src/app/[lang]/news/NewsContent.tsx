@@ -100,10 +100,10 @@ export default function NewsContent({ lang }: { lang: Lang }) {
         </div>
 
         {/* 热门文章 */}
-        
+
           <div className="mb-12">
             <h2 className={`text-xl font-bold ${styles.text} mb-6`}>{lang === 'zh' ? '热门文章' : 'Popular Articles'}</h2>
-            <div className={`${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl p-6 border ${styles.border}`}>
+            <div className={`${styles.bgCard} rounded-2xl shadow-sm hover:shadow-xl p-6 border ${styles.border}`}>
               {news.slice(0, 3).map((newsItem, idx) => (
                 <div key={newsItem.id} className={`flex items-center gap-4 py-3 ${idx !== 2 ? `border-b ${styles.border}` : ''}`}>
                   <span className="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-sm font-bold">
@@ -119,13 +119,12 @@ export default function NewsContent({ lang }: { lang: Lang }) {
               ))}
             </div>
           </div>
-        
 
         {/* News Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredNews.map((newsItem, idx) => (
-            
-              <article className={`${styles.bgCard} rounded-xl shadow-sm hover:shadow-xl hover:shadow-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden border ${styles.border} cursor-pointer group`} onClick={() => setSelectedNews(newsItem)}>
+
+              <article className={`${styles.bgCard} rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden border ${styles.border} cursor-pointer group`} onClick={() => setSelectedNews(newsItem)}>
                 <div className="aspect-video overflow-hidden">
                   <img 
                     src={newsItem.image}
@@ -160,7 +159,7 @@ export default function NewsContent({ lang }: { lang: Lang }) {
                   </div>
                 </div>
               </article>
-            
+
           ))}
         </div>
       </div>

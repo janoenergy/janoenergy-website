@@ -1,0 +1,68 @@
+/* 
+ * 字体加载策略
+ * 使用系统字体栈作为首选，Google Fonts 作为补充
+ * 字体文件可以通过 Google Fonts CDN 或本地加载
+ */
+
+/* 方法1: Google Fonts CDN (推荐用于开发) */
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap'); */
+
+/* 方法2: 本地字体文件 (推荐用于生产) */
+/* 字体文件已放置在 /public/fonts/ 目录下 */
+
+/* 系统字体栈 - 确保快速首屏渲染 */
+:root {
+  /* 中文系统字体栈 */
+  --font-zh-sans: 
+    -apple-system,          /* iOS/macOS 系统字体 */
+    BlinkMacSystemFont,     /* macOS Chrome */
+    "Segoe UI",             /* Windows */
+    Roboto,                 /* Android */
+    "Helvetica Neue",       /* 旧版 macOS */
+    Arial,                  /* 通用回退 */
+    "Noto Sans SC",         /* Google 中文 */
+    "PingFang SC",          /* macOS/iOS 中文 */
+    "Microsoft YaHei",      /* Windows 中文 */
+    "Hiragino Sans GB",     /* macOS 中文 */
+    "WenQuanYi Micro Hei",  /* Linux 中文 */
+    sans-serif;
+  
+  /* 英文系统字体栈 */
+  --font-en-sans:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  
+  /* 等宽字体 */
+  --font-mono:
+    ui-monospace,
+    SFMono-Regular,
+    "SF Mono",
+    Menlo,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace;
+}
+
+/* 字体加载优化类 */
+.font-optimized {
+  font-family: var(--font-zh-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* 字体加载状态 */
+.fonts-loading body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.fonts-loaded body {
+  font-family: var(--font-zh-sans);
+}

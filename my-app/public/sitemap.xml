@@ -1,75 +1,170 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- 首页 - 中文 -->
   <url>
     <loc>https://www.janoenergy.com/zh</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.janoenergy.com/og-image.svg</image:loc>
+      <image:title>江能集团 - 清洁能源，绿色未来</image:title>
+    </image:image>
   </url>
+  
+  <!-- 首页 - 英文 -->
   <url>
     <loc>https://www.janoenergy.com/en</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <!-- 关于我们 - 中文 -->
   <url>
     <loc>https://www.janoenergy.com/zh/about</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/about"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/about"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- 关于我们 - 英文 -->
   <url>
     <loc>https://www.janoenergy.com/en/about</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/about"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/about"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- 业务领域 - 中文 -->
   <url>
     <loc>https://www.janoenergy.com/zh/business</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/business"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/business"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- 业务领域 - 英文 -->
   <url>
     <loc>https://www.janoenergy.com/en/business</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/business"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/business"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- 项目案例 - 中文 -->
   <url>
     <loc>https://www.janoenergy.com/zh/projects</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/projects"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/projects"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- 项目案例 - 英文 -->
   <url>
     <loc>https://www.janoenergy.com/en/projects</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/projects"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/projects"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- 新闻中心 - 中文 -->
   <url>
     <loc>https://www.janoenergy.com/zh/news</loc>
-    <lastmod>2026-03-12</lastmod>
-    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/news"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/news"/>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- 新闻中心 - 英文 -->
   <url>
     <loc>https://www.janoenergy.com/en/news</loc>
-    <lastmod>2026-03-12</lastmod>
-    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/news"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/news"/>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- 联系我们 - 中文 -->
   <url>
     <loc>https://www.janoenergy.com/zh/contact</loc>
-    <lastmod>2026-03-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/contact"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/contact"/>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
+  
+  <!-- 联系我们 - 英文 -->
   <url>
     <loc>https://www.janoenergy.com/en/contact</loc>
-    <lastmod>2026-03-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/contact"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/contact"/>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- ESG/可持续发展 - 中文 -->
+  <url>
+    <loc>https://www.janoenergy.com/zh/esg</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/esg"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/esg"/>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- ESG/可持续发展 - 英文 -->
+  <url>
+    <loc>https://www.janoenergy.com/en/esg</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/esg"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/esg"/>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 资质证书 - 中文 -->
+  <url>
+    <loc>https://www.janoenergy.com/zh/certificates</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/certificates"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/certificates"/>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- 资质证书 - 英文 -->
+  <url>
+    <loc>https://www.janoenergy.com/en/certificates</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.janoenergy.com/zh/certificates"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://www.janoenergy.com/en/certificates"/>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 </urlset>

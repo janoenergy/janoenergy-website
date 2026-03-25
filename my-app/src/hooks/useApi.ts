@@ -49,187 +49,68 @@ export function useApi() {
   return { request, loading, error };
 }
 
-// 专门用于公司内容管理的 hook
+// 重新导出拆分的 hooks，保持兼容性
+export {
+  useCompanyInfo,
+  useMilestones,
+  useValues,
+  useTeamMembers,
+  useCertificates,
+  useHonors,
+} from './useCompany';
+
+// 为了向后兼容，保留 useCompanyApi 导出
 export function useCompanyApi() {
   const { request, loading, error } = useApi();
   
-  // 数据状态
-  const [companyInfo, setCompanyInfo] = useState<any>(null);
-  const [milestones, setMilestones] = useState<any[]>([]);
-  const [values, setValues] = useState<any[]>([]);
-  const [teamMembers, setTeamMembers] = useState<any[]>([]);
-  const [certificates, setCertificates] = useState<any[]>([]);
-  const [honors, setHonors] = useState<any[]>([]);
-
-  // 获取公司简介
-  const fetchCompanyInfo = useCallback(async () => {
-    const data = await request('/api/company/info');
-    if (data) setCompanyInfo(data);
-    return data;
-  }, [request]);
+  // 导入拆分的 hooks
+  const companyInfoHook = useCompanyInfo();
+  const milestonesHook = useMilestones();
+  const valuesHook = useValues();
+  const teamMembersHook = useTeamMembers();
+  const certificatesHook = useCertificates();
+  const honorsHook = useHonors();
   
-  // 更新公司简介
-  const updateCompanyInfo = useCallback(async (data: { intro: string; introEn: string }) => {
-    const result = await request('/api/company/info', { method: 'PUT' }, data);
-    if (result) setCompanyInfo(result);
-    return result;
-  }, [request]);
-
-  // 获取发展历程
-  const fetchMilestones = useCallback(async () => {
-    const data = await request('/api/company/milestones');
-    if (data) setMilestones(data);
-    return data;
-  }, [request]);
-
-  const createMilestone = useCallback(async (data: any) => {
-    const result = await request('/api/company/milestones', { method: 'POST' }, data);
-    if (result) await fetchMilestones();
-    return result;
-  }, [request, fetchMilestones]);
-
-  const updateMilestone = useCallback(async (id: number, data: any) => {
-    const result = await request(`/api/company/milestones/${id}`, { method: 'PUT' }, data);
-    if (result) await fetchMilestones();
-    return result;
-  }, [request, fetchMilestones]);
-
-  const deleteMilestone = useCallback(async (id: number) => {
-    const result = await request(`/api/company/milestones/${id}`, { method: 'DELETE' });
-    if (result) await fetchMilestones();
-    return result;
-  }, [request, fetchMilestones]);
-
-  // 获取价值观
-  const fetchValues = useCallback(async () => {
-    const data = await request('/api/company/values');
-    if (data) setValues(data);
-    return data;
-  }, [request]);
-
-  const createValue = useCallback(async (data: any) => {
-    const result = await request('/api/company/values', { method: 'POST' }, data);
-    if (result) await fetchValues();
-    return result;
-  }, [request, fetchValues]);
-
-  const updateValue = useCallback(async (id: number, data: any) => {
-    const result = await request(`/api/company/values/${id}`, { method: 'PUT' }, data);
-    if (result) await fetchValues();
-    return result;
-  }, [request, fetchValues]);
-
-  const deleteValue = useCallback(async (id: number) => {
-    const result = await request(`/api/company/values/${id}`, { method: 'DELETE' });
-    if (result) await fetchValues();
-    return result;
-  }, [request, fetchValues]);
-
-  // 获取团队成员
-  const fetchTeamMembers = useCallback(async () => {
-    const data = await request('/api/team/members');
-    if (data) setTeamMembers(data);
-    return data;
-  }, [request]);
-
-  const createTeamMember = useCallback(async (data: any) => {
-    const result = await request('/api/team/members', { method: 'POST' }, data);
-    if (result) await fetchTeamMembers();
-    return result;
-  }, [request, fetchTeamMembers]);
-
-  const updateTeamMember = useCallback(async (id: number, data: any) => {
-    const result = await request(`/api/team/members/${id}`, { method: 'PUT' }, data);
-    if (result) await fetchTeamMembers();
-    return result;
-  }, [request, fetchTeamMembers]);
-
-  const deleteTeamMember = useCallback(async (id: number) => {
-    const result = await request(`/api/team/members/${id}`, { method: 'DELETE' });
-    if (result) await fetchTeamMembers();
-    return result;
-  }, [request, fetchTeamMembers]);
-
-  // 获取证书
-  const fetchCertificates = useCallback(async () => {
-    const data = await request('/api/certificates');
-    if (data) setCertificates(data);
-    return data;
-  }, [request]);
-
-  const createCertificate = useCallback(async (data: any) => {
-    const result = await request('/api/certificates', { method: 'POST' }, data);
-    if (result) await fetchCertificates();
-    return result;
-  }, [request, fetchCertificates]);
-
-  const updateCertificate = useCallback(async (id: number, data: any) => {
-    const result = await request(`/api/certificates/${id}`, { method: 'PUT' }, data);
-    if (result) await fetchCertificates();
-    return result;
-  }, [request, fetchCertificates]);
-
-  const deleteCertificate = useCallback(async (id: number) => {
-    const result = await request(`/api/certificates/${id}`, { method: 'DELETE' });
-    if (result) await fetchCertificates();
-    return result;
-  }, [request, fetchCertificates]);
-
-  // 获取荣誉
-  const fetchHonors = useCallback(async () => {
-    const data = await request('/api/honors');
-    if (data) setHonors(data);
-    return data;
-  }, [request]);
-
-  const createHonor = useCallback(async (data: any) => {
-    const result = await request('/api/honors', { method: 'POST' }, data);
-    if (result) await fetchHonors();
-    return result;
-  }, [request, fetchHonors]);
-
-  const updateHonor = useCallback(async (id: number, data: any) => {
-    const result = await request(`/api/honors/${id}`, { method: 'PUT' }, data);
-    if (result) await fetchHonors();
-    return result;
-  }, [request, fetchHonors]);
-
-  const deleteHonor = useCallback(async (id: number) => {
-    const result = await request(`/api/honors/${id}`, { method: 'DELETE' });
-    if (result) await fetchHonors();
-    return result;
-  }, [request, fetchHonors]);
-
   return {
     loading,
     error,
-    companyInfo,
-    milestones,
-    values,
-    teamMembers,
-    certificates,
-    honors,
-    fetchCompanyInfo,
-    fetchMilestones,
-    fetchValues,
-    fetchTeamMembers,
-    fetchCertificates,
-    fetchHonors,
-    updateCompanyInfo,
-    createMilestone,
-    updateMilestone,
-    deleteMilestone,
-    createValue,
-    updateValue,
-    deleteValue,
-    createTeamMember,
-    updateTeamMember,
-    deleteTeamMember,
-    createCertificate,
-    updateCertificate,
-    deleteCertificate,
-    createHonor,
-    updateHonor,
-    deleteHonor,
+    companyInfo: companyInfoHook.companyInfo,
+    milestones: milestonesHook.milestones,
+    values: valuesHook.values,
+    teamMembers: teamMembersHook.teamMembers,
+    certificates: certificatesHook.certificates,
+    honors: honorsHook.honors,
+    fetchCompanyInfo: companyInfoHook.fetchCompanyInfo,
+    fetchMilestones: milestonesHook.fetchMilestones,
+    fetchValues: valuesHook.fetchValues,
+    fetchTeamMembers: teamMembersHook.fetchTeamMembers,
+    fetchCertificates: certificatesHook.fetchCertificates,
+    fetchHonors: honorsHook.fetchHonors,
+    updateCompanyInfo: companyInfoHook.updateCompanyInfo,
+    createMilestone: milestonesHook.createMilestone,
+    updateMilestone: milestonesHook.updateMilestone,
+    deleteMilestone: milestonesHook.deleteMilestone,
+    createValue: valuesHook.createValue,
+    updateValue: valuesHook.updateValue,
+    deleteValue: valuesHook.deleteValue,
+    createTeamMember: teamMembersHook.createTeamMember,
+    updateTeamMember: teamMembersHook.updateTeamMember,
+    deleteTeamMember: teamMembersHook.deleteTeamMember,
+    createCertificate: certificatesHook.createCertificate,
+    updateCertificate: certificatesHook.updateCertificate,
+    deleteCertificate: certificatesHook.deleteCertificate,
+    createHonor: honorsHook.createHonor,
+    updateHonor: honorsHook.updateHonor,
+    deleteHonor: honorsHook.deleteHonor,
   };
 }
+
+// 为了保持类型兼容，从 useCompany 导入类型
+import {
+  useCompanyInfo,
+  useMilestones,
+  useValues,
+  useTeamMembers,
+  useCertificates,
+  useHonors,
+} from './useCompany';

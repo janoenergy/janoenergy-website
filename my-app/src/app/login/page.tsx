@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { Lock, User, Eye, EyeOff, Sun, Moon } from 'lucide-react';
-
-const API_BASE_URL = 'https://api.janoenergy.com';
+import { API_ENDPOINTS } from '@/lib/api';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -24,7 +23,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      const response = await fetch(API_ENDPOINTS.auth.login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

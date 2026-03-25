@@ -301,19 +301,19 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
             
             {/* 核心数据 - 动态计算 */}
             <div className="grid grid-cols-3 gap-4 md:gap-6 mt-8">
-              <div className="p-3 md:p-4 bg-card rounded-xl shadow-sm">
+              <div className="p-3 md:p-4 bg-card rounded-2xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
                   <AnimatedNumber value={stats.capacity} suffix="+" />
                 </div>
                 <div className="text-xs md:text-sm text-muted-foreground mt-1">MW{lang === 'zh' ? '装机' : ' Capacity'}</div>
               </div>
-              <div className="p-3 md:p-4 bg-card rounded-xl shadow-sm">
+              <div className="p-3 md:p-4 bg-card rounded-2xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
                   <AnimatedNumber value={stats.projects} />
                 </div>
                 <div className="text-xs md:text-sm text-muted-foreground mt-1">{lang === 'zh' ? '个项目' : 'Projects'}</div>
               </div>
-              <div className="p-3 md:p-4 bg-card rounded-xl shadow-sm">
+              <div className="p-3 md:p-4 bg-card rounded-2xl shadow-sm">
                 <div className="text-2xl md:text-3xl font-bold text-emerald-600">
                   <AnimatedNumber value={stats.provinces} />
                 </div>
@@ -334,7 +334,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {certificates.map((cert) => (
-                <div key={cert.id} className="bg-card rounded-xl overflow-hidden shadow-sm">
+                <div key={cert.id} className="bg-card rounded-2xl overflow-hidden shadow-sm">
                   <div className="aspect-[4/3] overflow-hidden bg-muted">
                     {cert.imageUrl ? (
                       <img src={cert.imageUrl} alt={lang === 'zh' ? cert.title : cert.titleEn} className="w-full h-full object-cover" />
@@ -368,7 +368,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {teamMembers.map((member) => (
-                <div key={member.id} className="bg-card rounded-xl overflow-hidden shadow-sm">
+                <div key={member.id} className="bg-card rounded-2xl overflow-hidden shadow-sm">
                   <div className="aspect-square overflow-hidden bg-muted">
                     {member.imageUrl ? (
                       <img src={member.imageUrl} alt={lang === 'zh' ? member.name : member.nameEn} className="w-full h-full object-cover" />
@@ -413,7 +413,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
                   return (
                     <div key={item.id} className={`flex items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
                       <div className={`w-5/12 ${isLeft ? 'text-right pr-4 md:pr-8' : 'text-left pl-4 md:pl-8'}`}>
-                        <div className="bg-card rounded-xl p-4 md:p-6 shadow-sm">
+                        <div className="bg-card rounded-2xl p-4 md:p-6 shadow-sm">
                           <h3 className="text-2xl md:text-3xl font-bold text-emerald-600 mb-2">{item.year}</h3>
                           <h4 className="text-lg md:text-xl font-semibold text-foreground mb-2">
                             {lang === 'zh' ? item.title : item.titleEn}
@@ -443,7 +443,7 @@ export default function AboutContent({ lang }: { lang: "zh" | "en" }) {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {values.map((value) => (
-                <div key={value.id} className="bg-card rounded-xl p-6 md:p-8 shadow-sm h-full">
+                <div key={value.id} className="bg-card rounded-2xl p-6 md:p-8 shadow-sm h-full">
                   <h3 className="text-lg md:text-xl font-bold text-emerald-600 mb-3 md:mb-4">
                     {lang === 'zh' ? value.title : value.titleEn}
                   </h3>

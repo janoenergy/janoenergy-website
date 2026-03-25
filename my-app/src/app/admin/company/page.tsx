@@ -10,9 +10,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useCompanyApi } from '@/hooks/useApi';
-import { ErrorBoundary } from '@/components/error/ErrorBoundary';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ImageUpload } from '@/components/ui/image-upload';
+import type { 
+  CompanyInfo, 
+  Milestone, 
+  CompanyValue, 
+  TeamMember, 
+  Certificate, 
+  Honor 
+} from '@/types';
 
 const SECTIONS = [
   { id: 'intro', label: '公司简介', icon: Building2 },
@@ -21,10 +29,19 @@ const SECTIONS = [
   { id: 'team', label: '管理团队', icon: Users },
   { id: 'certificates', label: '资质证书', icon: Award },
   { id: 'honors', label: '荣誉奖项', icon: Trophy },
-];
+] as const;
+
+type SectionId = typeof SECTIONS[number]['id'];
 
 // 弹窗组件
-function Modal({ isOpen, onClose, title, children }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }) {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+}
+
+function Modal({ isOpen, onClose, title, children }: ModalProps) {
   if (!isOpen) return null;
   
   return (
@@ -59,8 +76,34 @@ function Modal({ isOpen, onClose, title, children }: { isOpen: boolean; onClose:
   );
 }
 
+// 公司简介表单数据类型
+interface IntroFormData {
+  intro: string;
+  introEn: string;
+}
+
+// 通用列表项类型
+interface ListItem {
+  id: number;
+  [key: string]: unknown;
+}
+
+// 通用列表管理组件 Props
+interface ListSectionProps<T extends ListItem> {
+  title: string;
+  data: T[] | null;
+  loading: boolean;
+  onCreate: (data: Record<string, unknown>) => Promise<boolean>;
+  onUpdate: (id: number, data: Record<string, unknown>) => Promise<boolean>;
+  onDelete: (id: number) => Promise<boolean>;
+  onRefresh: () => Promise<void>;
+  renderItem: (props: { item: T; onEdit: () => void; onDelete: () => void }) => React.ReactNode;
+  formFields: (props: { formData: Record<string, unknown>; setFormData: (data: Record<string, unknown>) => void }) => React.ReactNode;
+  emptyText?: string;
+}
+
 function CompanyContent() {
-  const [activeTab, setActiveTab] = useState('intro');
+  const [activeTab, setActiveTab] = useState<SectionId>('intro');
   const [saving, setSaving] = useState(false);
   
   const {
@@ -123,7 +166,7 @@ function CompanyContent() {
     }
   };
 
-  const handleSaveIntro = async (formData: { intro: string; introEn: string }) => {
+  const handleSaveIntro = async (formData: IntroFormData) => {
     setSaving(true);
     const result = await updateCompanyInfo(formData);
     if (result) {
@@ -157,7 +200,7 @@ function CompanyContent() {
         <p className="text-gray-500 mt-1">管理公司介绍、发展历程、团队等信息</p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as SectionId)}>
         <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2">
           {SECTIONS.map((section) => {
             const Icon = section.icon;
@@ -239,8 +282,15 @@ function CompanyContent() {
 }
 
 // 公司简介
-function IntroSection({ data, onSave, saving, loading }: { data: any, onSave: (data: any) => void, saving: boolean, loading: boolean }) {
-  const [formData, setFormData] = useState({ intro: '', introEn: '' });
+interface IntroSectionProps {
+  data: CompanyInfo | null;
+  onSave: (data: IntroFormData) => void;
+  saving: boolean;
+  loading: boolean;
+}
+
+function IntroSection({ data, onSave, saving, loading }: IntroSectionProps) {
+  const [formData, setFormData] = useState<IntroFormData>({ intro: '', introEn: '' });
 
   useEffect(() => {
     if (data) {
@@ -293,7 +343,7 @@ function IntroSection({ data, onSave, saving, loading }: { data: any, onSave: (d
 }
 
 // 通用列表管理组件
-function ListSection({ 
+function ListSection<T extends ListItem>({ 
   title, 
   data, 
   loading, 
@@ -304,10 +354,10 @@ function ListSection({
   renderItem,
   formFields,
   emptyText = '暂无数据'
-}: any) {
+}: ListSectionProps<T>) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
-  const [formData, setFormData] = useState<any>({});
+  const [editingItem, setEditingItem] = useState<T | null>(null);
+  const [formData, setFormData] = useState<Record<string, unknown>>({});
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
@@ -328,9 +378,9 @@ function ListSection({
     setSubmitting(false);
   };
 
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: T) => {
     setEditingItem(item);
-    setFormData(item);
+    setFormData(item as Record<string, unknown>);
     setIsModalOpen(true);
   };
 
@@ -368,7 +418,11 @@ function ListSection({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {data?.map((item: any) => renderItem({ item, onEdit: () => handleEdit(item), onDelete: () => handleDelete(item.id) }))}
+          {data?.map((item) => (
+            <div key={item.id}>
+              {renderItem({ item, onEdit: () => handleEdit(item), onDelete: () => handleDelete(item.id) })}
+            </div>
+          ))}
           {(!data || data.length === 0) && (
             <div className="text-center py-8 text-gray-500">{emptyText}</div>
           )}
@@ -392,12 +446,21 @@ function ListSection({
 }
 
 // 发展历程
-function MilestonesSection(props: any) {
+interface MilestonesSectionProps {
+  data: Milestone[] | null;
+  loading: boolean;
+  onCreate: (data: Record<string, unknown>) => Promise<boolean>;
+  onUpdate: (id: number, data: Record<string, unknown>) => Promise<boolean>;
+  onDelete: (id: number) => Promise<boolean>;
+  onRefresh: () => Promise<void>;
+}
+
+function MilestonesSection(props: MilestonesSectionProps) {
   return (
-    <ListSection
+    <ListSection<Milestone>
       {...props}
       title="发展历程"
-      renderItem={({ item, onEdit, onDelete }: any) => (
+      renderItem={({ item, onEdit, onDelete }) => (
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
           <div>
             <div className="flex items-center gap-2">
@@ -412,14 +475,14 @@ function MilestonesSection(props: any) {
           </div>
         </div>
       )}
-      formFields={({ formData, setFormData }: any) => (
+      formFields={({ formData, setFormData }) => (
         <>
-          <div><Label>年份 *</Label><Input value={formData.year || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} placeholder="如: 2024" /></div>
-          <div><Label>标题 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="中文标题" /></div>
-          <div><Label>英文标题</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} placeholder="English Title" /></div>
-          <div><Label>描述</Label><Textarea value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} /></div>
-          <div><Label>英文描述</Label><Textarea value={formData.descriptionEn || ''} onChange={(e) => setFormData({...formData, descriptionEn: e.target.value})} /></div>
-          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+          <div><Label>年份 *</Label><Input value={(formData.year as string) || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} placeholder="如: 2024" /></div>
+          <div><Label>标题 *</Label><Input value={(formData.title as string) || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="中文标题" /></div>
+          <div><Label>英文标题</Label><Input value={(formData.titleEn as string) || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} placeholder="English Title" /></div>
+          <div><Label>描述</Label><Textarea value={(formData.description as string) || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} /></div>
+          <div><Label>英文描述</Label><Textarea value={(formData.descriptionEn as string) || ''} onChange={(e) => setFormData({...formData, descriptionEn: e.target.value})} /></div>
+          <div><Label>排序</Label><Input type="number" value={(formData.sortOrder as number) || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
     />
@@ -427,12 +490,21 @@ function MilestonesSection(props: any) {
 }
 
 // 核心价值观
-function ValuesSection(props: any) {
+interface ValuesSectionProps {
+  data: CompanyValue[] | null;
+  loading: boolean;
+  onCreate: (data: Record<string, unknown>) => Promise<boolean>;
+  onUpdate: (id: number, data: Record<string, unknown>) => Promise<boolean>;
+  onDelete: (id: number) => Promise<boolean>;
+  onRefresh: () => Promise<void>;
+}
+
+function ValuesSection(props: ValuesSectionProps) {
   return (
-    <ListSection
+    <ListSection<CompanyValue>
       {...props}
       title="核心价值观"
-      renderItem={({ item, onEdit, onDelete }: any) => (
+      renderItem={({ item, onEdit, onDelete }) => (
         <div className="p-4 bg-gray-50 rounded-lg">
           <div className="flex items-start justify-between">
             <div>
@@ -446,13 +518,13 @@ function ValuesSection(props: any) {
           </div>
         </div>
       )}
-      formFields={({ formData, setFormData }: any) => (
+      formFields={({ formData, setFormData }) => (
         <>
-          <div><Label>标题 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
-          <div><Label>英文标题</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
-          <div><Label>描述</Label><Textarea value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} /></div>
-          <div><Label>英文描述</Label><Textarea value={formData.descriptionEn || ''} onChange={(e) => setFormData({...formData, descriptionEn: e.target.value})} /></div>
-          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+          <div><Label>标题 *</Label><Input value={(formData.title as string) || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+          <div><Label>英文标题</Label><Input value={(formData.titleEn as string) || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+          <div><Label>描述</Label><Textarea value={(formData.description as string) || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} /></div>
+          <div><Label>英文描述</Label><Textarea value={(formData.descriptionEn as string) || ''} onChange={(e) => setFormData({...formData, descriptionEn: e.target.value})} /></div>
+          <div><Label>排序</Label><Input type="number" value={(formData.sortOrder as number) || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
     />
@@ -460,12 +532,21 @@ function ValuesSection(props: any) {
 }
 
 // 管理团队
-function TeamSection(props: any) {
+interface TeamSectionProps {
+  data: TeamMember[] | null;
+  loading: boolean;
+  onCreate: (data: Record<string, unknown>) => Promise<boolean>;
+  onUpdate: (id: number, data: Record<string, unknown>) => Promise<boolean>;
+  onDelete: (id: number) => Promise<boolean>;
+  onRefresh: () => Promise<void>;
+}
+
+function TeamSection(props: TeamSectionProps) {
   return (
-    <ListSection
+    <ListSection<TeamMember>
       {...props}
       title="管理团队"
-      renderItem={({ item, onEdit, onDelete }: any) => (
+      renderItem={({ item, onEdit, onDelete }) => (
         <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
           <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
             {item.imageUrl ? (
@@ -484,25 +565,25 @@ function TeamSection(props: any) {
           </div>
         </div>
       )}
-      formFields={({ formData, setFormData }: any) => (
+      formFields={({ formData, setFormData }) => (
         <>
           <div className="grid grid-cols-2 gap-4">
-            <div><Label>姓名 *</Label><Input value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} /></div>
-            <div><Label>英文姓名</Label><Input value={formData.nameEn || ''} onChange={(e) => setFormData({...formData, nameEn: e.target.value})} /></div>
+            <div><Label>姓名 *</Label><Input value={(formData.name as string) || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} /></div>
+            <div><Label>英文姓名</Label><Input value={(formData.nameEn as string) || ''} onChange={(e) => setFormData({...formData, nameEn: e.target.value})} /></div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div><Label>职位 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
-            <div><Label>英文职位</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+            <div><Label>职位 *</Label><Input value={(formData.title as string) || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+            <div><Label>英文职位</Label><Input value={(formData.titleEn as string) || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
           </div>
           <div>
             <Label>照片</Label>
             <ImageUpload
-              value={formData.imageUrl}
+              value={(formData.imageUrl as string) || ''}
               onChange={(url) => setFormData({...formData, imageUrl: url})}
               className="mt-2"
             />
           </div>
-          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+          <div><Label>排序</Label><Input type="number" value={(formData.sortOrder as number) || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
     />
@@ -510,12 +591,21 @@ function TeamSection(props: any) {
 }
 
 // 资质证书
-function CertificatesSection(props: any) {
+interface CertificatesSectionProps {
+  data: Certificate[] | null;
+  loading: boolean;
+  onCreate: (data: Record<string, unknown>) => Promise<boolean>;
+  onUpdate: (id: number, data: Record<string, unknown>) => Promise<boolean>;
+  onDelete: (id: number) => Promise<boolean>;
+  onRefresh: () => Promise<void>;
+}
+
+function CertificatesSection(props: CertificatesSectionProps) {
   return (
-    <ListSection
+    <ListSection<Certificate>
       {...props}
       title="资质证书"
-      renderItem={({ item, onEdit, onDelete }: any) => (
+      renderItem={({ item, onEdit, onDelete }) => (
         <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
           <div className="w-16 h-16 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
             {item.imageUrl ? (
@@ -534,21 +624,21 @@ function CertificatesSection(props: any) {
           </div>
         </div>
       )}
-      formFields={({ formData, setFormData }: any) => (
+      formFields={({ formData, setFormData }) => (
         <>
-          <div><Label>证书名称 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
-          <div><Label>英文名称</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
-          <div><Label>颁发机构</Label><Input value={formData.issuer || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
-          <div><Label>颁发日期</Label><Input type="date" value={formData.issueDate || ''} onChange={(e) => setFormData({...formData, issueDate: e.target.value})} /></div>
+          <div><Label>证书名称 *</Label><Input value={(formData.title as string) || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+          <div><Label>英文名称</Label><Input value={(formData.titleEn as string) || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+          <div><Label>颁发机构</Label><Input value={(formData.issuer as string) || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
+          <div><Label>颁发日期</Label><Input type="date" value={(formData.issueDate as string) || ''} onChange={(e) => setFormData({...formData, issueDate: e.target.value})} /></div>
           <div>
             <Label>证书图片</Label>
             <ImageUpload
-              value={formData.imageUrl}
+              value={(formData.imageUrl as string) || ''}
               onChange={(url) => setFormData({...formData, imageUrl: url})}
               className="mt-2"
             />
           </div>
-          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+          <div><Label>排序</Label><Input type="number" value={(formData.sortOrder as number) || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
     />
@@ -556,12 +646,21 @@ function CertificatesSection(props: any) {
 }
 
 // 荣誉奖项
-function HonorsSection(props: any) {
+interface HonorsSectionProps {
+  data: Honor[] | null;
+  loading: boolean;
+  onCreate: (data: Record<string, unknown>) => Promise<boolean>;
+  onUpdate: (id: number, data: Record<string, unknown>) => Promise<boolean>;
+  onDelete: (id: number) => Promise<boolean>;
+  onRefresh: () => Promise<void>;
+}
+
+function HonorsSection(props: HonorsSectionProps) {
   return (
-    <ListSection
+    <ListSection<Honor>
       {...props}
       title="荣誉奖项"
-      renderItem={({ item, onEdit, onDelete }: any) => (
+      renderItem={({ item, onEdit, onDelete }) => (
         <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
           <div className="w-16 h-16 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
             {item.imageUrl ? (
@@ -580,21 +679,21 @@ function HonorsSection(props: any) {
           </div>
         </div>
       )}
-      formFields={({ formData, setFormData }: any) => (
+      formFields={({ formData, setFormData }) => (
         <>
-          <div><Label>奖项名称 *</Label><Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
-          <div><Label>英文名称</Label><Input value={formData.titleEn || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
-          <div><Label>颁发机构</Label><Input value={formData.issuer || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
-          <div><Label>年份</Label><Input value={formData.year || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} placeholder="如: 2024" /></div>
+          <div><Label>奖项名称 *</Label><Input value={(formData.title as string) || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} /></div>
+          <div><Label>英文名称</Label><Input value={(formData.titleEn as string) || ''} onChange={(e) => setFormData({...formData, titleEn: e.target.value})} /></div>
+          <div><Label>颁发机构</Label><Input value={(formData.issuer as string) || ''} onChange={(e) => setFormData({...formData, issuer: e.target.value})} /></div>
+          <div><Label>年份</Label><Input value={(formData.year as string) || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} placeholder="如: 2024" /></div>
           <div>
             <Label>奖项图片</Label>
             <ImageUpload
-              value={formData.imageUrl}
+              value={(formData.imageUrl as string) || ''}
               onChange={(url) => setFormData({...formData, imageUrl: url})}
               className="mt-2"
             />
           </div>
-          <div><Label>排序</Label><Input type="number" value={formData.sortOrder || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
+          <div><Label>排序</Label><Input type="number" value={(formData.sortOrder as number) || 0} onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})} /></div>
         </>
       )}
     />

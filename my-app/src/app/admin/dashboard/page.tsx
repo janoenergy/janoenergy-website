@@ -10,6 +10,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell 
 } from 'recharts';
+import type { Project, NewsItem } from '@/types';
 
 interface Stats {
   projects: number;
@@ -17,14 +18,20 @@ interface Stats {
   users: number;
 }
 
+interface ChartDataItem {
+  name: string;
+  value: number;
+  color?: string;
+}
+
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'];
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({ projects: 0, news: 0, users: 0 });
-  const [recentProjects, setRecentProjects] = useState([]);
-  const [recentNews, setRecentNews] = useState([]);
-  const [projectData, setProjectData] = useState([]);
-  const [categoryData, setCategoryData] = useState([]);
+  const [recentProjects, setRecentProjects] = useState<Project[]>([]);
+  const [recentNews, setRecentNews] = useState<NewsItem[]>([]);
+  const [projectData, setProjectData] = useState<ChartDataItem[]>([]);
+  const [categoryData, setCategoryData] = useState<ChartDataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
@@ -42,13 +49,13 @@ export default function DashboardPage() {
       ]);
 
       if (projectsRes.ok) {
-        const projects = await projectsRes.json();
+        const projects: Project[] = await projectsRes.json();
         setStats(prev => ({ ...prev, projects: projects.length }));
         setRecentProjects(projects.slice(0, 5));
         
         // 项目状态分布数据
-        const statusCount = { planning: 0, construction: 0, operation: 0 };
-        projects.forEach((p: any) => {
+        const statusCount: Record<string, number> = { planning: 0, construction: 0, operation: 0 };
+        projects.forEach((p) => {
           if (statusCount[p.status] !== undefined) statusCount[p.status]++;
         });
         setProjectData([
@@ -58,8 +65,8 @@ export default function DashboardPage() {
         ]);
         
         // 项目类型分布
-        const categoryCount = { wind: 0, solar: 0, storage: 0 };
-        projects.forEach((p: any) => {
+        const categoryCount: Record<string, number> = { wind: 0, solar: 0, storage: 0 };
+        projects.forEach((p) => {
           if (categoryCount[p.category] !== undefined) categoryCount[p.category]++;
         });
         setCategoryData([
@@ -69,7 +76,7 @@ export default function DashboardPage() {
         ]);
       }
       if (newsRes.ok) {
-        const news = await newsRes.json();
+        const news: NewsItem[] = await newsRes.json();
         setStats(prev => ({ ...prev, news: news.length }));
         setRecentNews(news.slice(0, 5));
       }
@@ -207,7 +214,7 @@ export default function DashboardPage() {
                   dataKey="value"
                 >
                   {projectData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -255,7 +262,7 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y divide-gray-200">
-            {recentProjects.map((project: any) => (
+            {recentProjects.map((project) => (
               <div key={project.id} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                 <div>
                   <p className="font-medium text-gray-900">{project.title}</p>
@@ -286,7 +293,7 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y divide-gray-200">
-            {recentNews.map((item: any) => (
+            {recentNews.map((item) => (
               <div key={item.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
                 <p className="font-medium text-gray-900 line-clamp-1">{item.title}</p>
                 <div className="flex items-center gap-2 mt-1">

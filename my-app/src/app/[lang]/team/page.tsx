@@ -20,7 +20,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
       nameEn: 'Zhang Minghua',
       title: '董事长 & CEO',
       titleEn: 'Chairman & CEO',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop',
+      image: '/images/team/member-1.jpg',
       education: lang === 'zh' ? '清华大学 电气工程博士' : 'Ph.D. in Electrical Engineering, Tsinghua University',
       experience: lang === 'zh' ? '20年新能源行业经验' : '20 years in new energy industry',
       description: lang === 'zh' 
@@ -33,7 +33,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
       nameEn: 'Li Jianguo',
       title: '首席技术官',
       titleEn: 'Chief Technology Officer',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop',
+      image: '/images/team/member-2.jpg',
       education: lang === 'zh' ? '华北电力大学 电力系统硕士' : 'M.S. in Power Systems, North China Electric Power University',
       experience: lang === 'zh' ? '15年风电技术研发经验' : '15 years wind power technology R&D',
       description: lang === 'zh'
@@ -46,7 +46,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
       nameEn: 'Wang Yaqin',
       title: '首席运营官',
       titleEn: 'Chief Operating Officer',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop',
+      image: '/images/team/member-3.jpg',
       education: lang === 'zh' ? '北京大学 MBA' : 'MBA, Peking University',
       experience: lang === 'zh' ? '12年新能源项目运营管理经验' : '12 years new energy project operation management',
       description: lang === 'zh'
@@ -59,7 +59,7 @@ export default function TeamPage({ params: { lang } }: { params: { lang: Lang } 
       nameEn: 'Chen Xiaoyan',
       title: '首席财务官',
       titleEn: 'Chief Financial Officer',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop',
+      image: '/images/team/member-4.jpg',
       education: lang === 'zh' ? '上海财经大学 会计学硕士' : 'M.S. in Accounting, Shanghai University of Finance and Economics',
       experience: lang === 'zh' ? '10年能源行业财务管理经验，CPA持证' : '10 years energy industry financial management, CPA certified',
       description: lang === 'zh'

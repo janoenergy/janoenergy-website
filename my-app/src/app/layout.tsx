@@ -1,49 +1,27 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { BackToTop } from "@/components/BackToTop";
 import PageLoader from "@/components/PageLoader";
 import Analytics from "@/components/Analytics";
 import ChatWidget from "@/components/ChatWidget";
 import { ThemeProvider } from "@/lib/theme";
+import { defaultMetadata, siteConfig } from "@/lib/seo";
+import { resourceHints } from "@/lib/performance";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { WebVitalsMonitor } from "@/components/WebVitalsMonitor";
 
-export const metadata: Metadata = {
-  title: "江能集团 - 清洁能源，绿色未来 | JanoEnergy - Clean Energy, Green Future",
-  description: "江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商。覆盖12个省份，总装机容量1135MW+",
-  keywords: "新能源,风电,光伏,储能,EPC,江能集团,New Energy,Wind Power,Solar,Energy Storage",
-  openGraph: {
-    title: "江能集团 - 清洁能源，绿色未来",
-    description: "江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商",
-    type: "website",
-    locale: "zh_CN",
-    url: "https://www.janoenergy.com",
-    siteName: "江能集团",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "江能集团 - 清洁能源，绿色未来",
-    description: "江能新能源集团 - 专注于风电、光伏、储能等新能源开发、投资、建设、运营的全产业链服务商",
-  },
-  alternates: {
-    canonical: "https://www.janoenergy.com",
-    languages: {
-      "zh-CN": "https://www.janoenergy.com/zh",
-      "en-US": "https://www.janoenergy.com/en",
-    },
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  verification: {
-    google: "your-google-verification-code",
-  },
+// 导出元数据
+export const metadata: Metadata = defaultMetadata;
+
+// 导出视口配置
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
 };
 
 // 统计配置（从环境变量读取）
@@ -58,12 +36,65 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="scroll-smooth">
       <head>
-        {/* 预连接优化 */}
-        <link rel="preconnect" href="https://api.janoenergy.com" />
-        <link rel="dns-prefetch" href="https://api.janoenergy.com" />
+        {/* DNS 预解析 */}
+        {resourceHints.dnsPrefetch.map((url) => (
+          <link key={url} rel="dns-prefetch" href={url} />
+        ))}
+        
+        {/* 预连接 */}
+        {resourceHints.preconnect.map((url) => (
+          <link key={url} rel="preconnect" href={url} crossOrigin="anonymous" />
+        ))}
+        
+        {/* 预加载关键字体 */}
+        <link 
+          rel="preload" 
+          href="/fonts/main.woff2" 
+          as="font" 
+          type="font/woff2" 
+          crossOrigin="anonymous"
+        />
         
         {/* 预加载关键图片资源 */}
-        <link rel="preload" href="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop" as="image" />
+        <link 
+          rel="preload" 
+          href="/images/projects/wind-farm.jpg" 
+          as="image" 
+        />
+        
+        {/* PWA 配置 */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="application-name" content={siteConfig.name} />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content={siteConfig.name} />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        
+        {/* 字体加载优化脚本 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // 字体加载优化
+                if ('fonts' in document) {
+                  document.fonts.ready.then(function() {
+                    document.documentElement.classList.add('fonts-loaded');
+                  });
+                } else {
+                  document.documentElement.classList.add('fonts-loaded');
+                }
+                
+                // 主题切换防闪烁
+                var theme = localStorage.getItem('theme') || 'light';
+                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                }
+                document.documentElement.classList.add('theme-loaded');
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
         <ThemeProvider>
@@ -72,6 +103,8 @@ export default function RootLayout({
           <BackToTop />
           <Analytics baiduId={BAIDU_ID} googleId={GOOGLE_ID} />
           <ChatWidget lang="zh" />
+          <ServiceWorkerRegister />
+          <WebVitalsMonitor />
         </ThemeProvider>
       </body>
     </html>

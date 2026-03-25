@@ -1,48 +1,48 @@
 // 真实的新能源行业图片 URL
-// 这些图片来自 Unsplash 等免费图库，代表真实的新能源场景
+// 使用本地图片路径
 
 export const realImages = {
   // 公司/团队照片
   company: {
-    office: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&auto=format&fit=crop',
-    meeting: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&auto=format&fit=crop',
-    team: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop',
+    office: '/images/about/office.jpg',
+    meeting: '/images/news/meeting.jpg',
+    team: '/images/about/team.jpg',
   },
-  
+
   // 风电项目
   wind: {
-    turbines: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1200&auto=format&fit=crop',
-    farm: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=1200&auto=format&fit=crop',
-    offshore: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&auto=format&fit=crop',
-    installation: 'https://images.unsplash.com/photo-1548337138-e87d889cc369?w=1200&auto=format&fit=crop',
+    turbines: '/images/projects/wind-farm.jpg',
+    farm: '/images/projects/wind-turbine.jpg',
+    offshore: '/images/projects/wind-offshore.jpg',
+    installation: '/images/projects/wind-installation.jpg',
   },
-  
+
   // 光伏项目
   solar: {
-    panels: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&auto=format&fit=crop',
-    farm: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1200&auto=format&fit=crop',
-    rooftop: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=1200&auto=format&fit=crop',
-    desert: 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=1200&auto=format&fit=crop',
+    panels: '/images/projects/solar-farm.jpg',
+    farm: '/images/projects/solar-farm.jpg',
+    rooftop: '/images/projects/solar-rooftop.jpg',
+    desert: '/images/projects/solar-desert.jpg',
   },
-  
+
   // 储能项目
   storage: {
-    battery: 'https://images.unsplash.com/photo-1620288627223-53302f4e8c74?w=1200&auto=format&fit=crop',
-    facility: 'https://images.unsplash.com/photo-1565514020176-dbf2277e4955?w=1200&auto=format&fit=crop',
+    battery: '/images/projects/storage-battery.jpg',
+    facility: '/images/projects/storage-facility.jpg',
   },
-  
+
   // 证书/荣誉
   certificate: {
-    iso: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&auto=format&fit=crop',
-    award: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=800&auto=format&fit=crop',
+    iso: '/images/certificates/iso9001.jpg',
+    award: '/images/certificates/award.jpg',
   },
-  
-  // 团队头像（使用占位服务生成真实风格头像）
+
+  // 团队头像
   avatars: {
-    ceo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop',
-    cto: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop',
-    coo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop',
-    cfo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop',
+    ceo: '/images/team/member-1.jpg',
+    cto: '/images/team/member-2.jpg',
+    coo: '/images/team/member-3.jpg',
+    cfo: '/images/team/member-4.jpg',
   },
 };
 
@@ -58,187 +58,172 @@ export const milestonesData = [
   {
     year: '2019',
     title: '首个风电项目并网',
-    titleEn: 'First Wind Project Grid-connected',
-    description: '河北张家口100MW风电项目成功并网发电，标志着公司正式进入风电运营领域。',
-    descriptionEn: 'The 100MW wind power project in Zhangjiakou, Hebei was successfully grid-connected, marking the company\'s official entry into wind power operation.',
+    titleEn: 'First Wind Farm Connected',
+    description: '西龙虎峪60MW风电项目成功并网发电，标志着公司正式进入新能源发电领域。',
+    descriptionEn: 'Xilonghu 60MW wind farm successfully connected to grid, marking the company\'s official entry into new energy power generation.',
   },
   {
     year: '2020',
-    title: '光伏业务突破',
-    titleEn: 'Solar Business Breakthrough',
-    description: '山东德州200MW光伏电站投产，年发电量达2.8亿千瓦时，减少碳排放23万吨。',
-    descriptionEn: 'The 200MW solar power station in Dezhou, Shandong was put into operation, with annual power generation of 280 million kWh and carbon emission reduction of 230,000 tons.',
+    title: '光伏业务拓展',
+    titleEn: 'Solar Business Expansion',
+    description: '成功开发广东清远120MW光伏项目，业务拓展至华南地区。',
+    descriptionEn: 'Successfully developed Guangdong Qingyuan 120MW solar project, expanding business to South China.',
   },
   {
     year: '2021',
-    title: '储能技术布局',
-    titleEn: 'Energy Storage Technology Layout',
-    description: '与宁德时代签署战略合作协议，进军电化学储能领域，首批储能项目启动建设。',
-    descriptionEn: 'Signed strategic cooperation agreement with CATL, entering the electrochemical energy storage field, and first batch of energy storage projects started construction.',
+    title: '储能业务启动',
+    titleEn: 'Energy Storage Business Launch',
+    description: '启动储能业务板块，江苏盐城100MW储能电站开工建设。',
+    descriptionEn: 'Launched energy storage business sector, Jiangsu Yancheng 100MW storage station started construction.',
   },
   {
     year: '2022',
-    title: '装机容量突破500MW',
-    titleEn: 'Installed Capacity Exceeded 500MW',
-    description: '累计装机容量达到500MW，业务覆盖华北、华东、华南等8个省份。',
-    descriptionEn: 'Total installed capacity reached 500MW, with business covering 8 provinces including North China, East China, and South China.',
+    title: '装机容量突破1GW',
+    titleEn: 'Installed Capacity Exceeds 1GW',
+    description: '累计并网装机容量突破1GW，年发电量超过20亿千瓦时。',
+    descriptionEn: 'Cumulative grid-connected installed capacity exceeded 1GW, annual power generation exceeds 2 billion kWh.',
   },
   {
     year: '2023',
-    title: '海上风电突破',
-    titleEn: 'Offshore Wind Power Breakthrough',
-    description: '广东阳江300MW海上风电项目开工，这是公司首个海上风电项目，标志着业务向深海进军。',
-    descriptionEn: 'The 300MW offshore wind power project in Yangjiang, Guangdong started construction. This is the company\'s first offshore wind power project, marking the business expansion to deep sea.',
-  },
-  {
-    year: '2024',
-    title: '装机容量破1000MW',
-    titleEn: 'Installed Capacity Exceeded 1000MW',
-    description: '累计装机容量突破1000MW，年发电量超过20亿千瓦时，服务超过100万户家庭用电。',
-    descriptionEn: 'Total installed capacity exceeded 1000MW, with annual power generation of over 2 billion kWh, serving more than 1 million households.',
-  },
-  {
-    year: '2025',
-    title: '全国布局完成',
-    titleEn: 'National Layout Completed',
-    description: '业务覆盖全国12个省份，总装机容量达1135MW，成为区域领先的新能源运营商。',
-    descriptionEn: 'Business covers 12 provinces nationwide, with total installed capacity of 1135MW, becoming a leading regional new energy operator.',
+    title: '行业领军企业',
+    titleEn: 'Industry Leading Enterprise',
+    description: '荣获"新能源行业领军企业"称号，多个项目获得行业奖项。',
+    descriptionEn: 'Awarded "New Energy Industry Leading Enterprise", multiple projects won industry awards.',
   },
 ];
 
-// 核心价值观
+// 核心价值观数据
 export const valuesData = [
   {
     title: '绿色发展',
     titleEn: 'Green Development',
-    description: '坚持可持续发展理念，推动清洁能源替代，为碳中和目标贡献力量。',
-    descriptionEn: 'Adhere to sustainable development concept, promote clean energy substitution, and contribute to carbon neutrality goals.',
+    description: '坚持可持续发展理念，为社会提供清洁能源',
+    descriptionEn: 'Adhere to sustainable development concept, provide clean energy for society',
     icon: 'Leaf',
   },
   {
     title: '创新驱动',
     titleEn: 'Innovation Driven',
-    description: '持续技术创新和管理创新，提升运营效率，降低度电成本。',
-    descriptionEn: 'Continuous technological and management innovation to improve operational efficiency and reduce cost per kWh.',
+    description: '持续技术创新，提升新能源利用效率',
+    descriptionEn: 'Continuous technological innovation, improve new energy utilization efficiency',
     icon: 'Zap',
   },
   {
     title: '合作共赢',
     titleEn: 'Win-Win Cooperation',
-    description: '与合作伙伴建立长期稳定的合作关系，共同推动新能源产业发展。',
-    descriptionEn: 'Establish long-term stable cooperative relationships with partners to jointly promote the development of new energy industry.',
+    description: '与合作伙伴共同发展，创造更大价值',
+    descriptionEn: 'Develop together with partners, create greater value',
     icon: 'Handshake',
+  },
+  {
+    title: '责任担当',
+    titleEn: 'Responsibility',
+    description: '履行社会责任，助力碳中和目标实现',
+    descriptionEn: 'Fulfill social responsibility, help achieve carbon neutrality goals',
+    icon: 'Shield',
   },
 ];
 
-// 管理团队数据
+// 团队数据
 export const teamData = [
   {
     name: '张明华',
     nameEn: 'Zhang Minghua',
     title: '董事长 & CEO',
     titleEn: 'Chairman & CEO',
-    imageUrl: realImages.avatars.ceo,
+    imageUrl: '/images/team/member-1.jpg',
     education: '清华大学 电气工程博士',
     educationEn: 'Ph.D. in Electrical Engineering, Tsinghua University',
-    experience: '20年新能源行业经验，曾任国家能源局专家委员会委员',
-    experienceEn: '20 years experience in new energy industry, former member of National Energy Administration Expert Committee',
+    experience: '20年新能源行业经验',
+    experienceEn: '20 years in new energy industry',
   },
   {
     name: '李建国',
     nameEn: 'Li Jianguo',
     title: '首席技术官',
     titleEn: 'Chief Technology Officer',
-    imageUrl: realImages.avatars.cto,
+    imageUrl: '/images/team/member-2.jpg',
     education: '华北电力大学 电力系统硕士',
     educationEn: 'M.S. in Power Systems, North China Electric Power University',
-    experience: '15年风电技术研发经验，主导多个大型风电项目技术方案',
-    experienceEn: '15 years wind power technology R&D experience, led technical solutions for multiple large-scale wind power projects',
+    experience: '15年风电技术研发经验',
+    experienceEn: '15 years wind power technology R&D',
   },
   {
     name: '王雅琴',
     nameEn: 'Wang Yaqin',
     title: '首席运营官',
     titleEn: 'Chief Operating Officer',
-    imageUrl: realImages.avatars.coo,
+    imageUrl: '/images/team/member-3.jpg',
     education: '北京大学 MBA',
     educationEn: 'MBA, Peking University',
-    experience: '12年新能源项目运营管理经验，擅长项目全生命周期管理',
-    experienceEn: '12 years new energy project operation management experience, proficient in full lifecycle project management',
+    experience: '18年企业运营管理经验',
+    experienceEn: '18 years enterprise operation management',
   },
   {
-    name: '陈晓燕',
-    nameEn: 'Chen Xiaoyan',
+    name: '陈志强',
+    nameEn: 'Chen Zhiqiang',
     title: '首席财务官',
     titleEn: 'Chief Financial Officer',
-    imageUrl: realImages.avatars.cfo,
+    imageUrl: '/images/team/member-4.jpg',
     education: '上海财经大学 会计学硕士',
     educationEn: 'M.S. in Accounting, Shanghai University of Finance and Economics',
-    experience: '10年能源行业财务管理经验，CPA持证',
-    experienceEn: '10 years energy industry financial management experience, CPA certified',
+    experience: '16年财务管理经验',
+    experienceEn: '16 years financial management experience',
   },
 ];
 
-// 资质证书数据
+// 证书数据
 export const certificatesData = [
   {
     title: 'ISO 9001质量管理体系认证',
-    titleEn: 'ISO 9001 Quality Management System Certification',
+    titleEn: 'ISO 9001 Quality Management System',
     issuer: '中国质量认证中心',
     issuerEn: 'China Quality Certification Center',
-    issueDate: '2020-06',
-    imageUrl: realImages.certificate.iso,
+    issueDate: '2020-06-15',
+    imageUrl: '/images/certificates/iso9001.jpg',
   },
   {
     title: 'ISO 14001环境管理体系认证',
-    titleEn: 'ISO 14001 Environmental Management System Certification',
+    titleEn: 'ISO 14001 Environmental Management System',
     issuer: '中国质量认证中心',
     issuerEn: 'China Quality Certification Center',
-    issueDate: '2020-06',
-    imageUrl: realImages.certificate.iso,
+    issueDate: '2020-06-15',
+    imageUrl: '/images/certificates/iso9001.jpg',
   },
   {
-    title: '电力业务许可证',
-    titleEn: 'Electric Power Business License',
-    issuer: '国家能源局',
-    issuerEn: 'National Energy Administration',
-    issueDate: '2019-03',
-    imageUrl: realImages.certificate.award,
-  },
-  {
-    title: '高新技术企业证书',
-    titleEn: 'High-Tech Enterprise Certificate',
-    issuer: '天津市科学技术局',
-    issuerEn: 'Tianjin Science and Technology Bureau',
-    issueDate: '2021-11',
-    imageUrl: realImages.certificate.award,
+    title: '电力工程施工总承包一级资质',
+    titleEn: 'First-Class Power Engineering Construction Qualification',
+    issuer: '住房和城乡建设部',
+    issuerEn: 'Ministry of Housing and Urban-Rural Development',
+    issueDate: '2019-03-20',
+    imageUrl: '/images/certificates/award.jpg',
   },
 ];
 
-// 荣誉奖项数据
+// 荣誉数据
 export const honorsData = [
   {
     title: '2023年度新能源行业领军企业',
     titleEn: '2023 New Energy Industry Leading Enterprise',
-    issuer: '中国可再生能源学会',
-    issuerEn: 'Chinese Renewable Energy Society',
     year: '2023',
-    imageUrl: realImages.certificate.award,
+    issuer: '中国新能源行业协会',
+    issuerEn: 'China New Energy Industry Association',
+    imageUrl: '/images/certificates/award.jpg',
   },
   {
-    title: '2022年度优秀风电运营商',
-    titleEn: '2022 Excellent Wind Power Operator',
-    issuer: '中国电力企业联合会',
-    issuerEn: 'China Electricity Council',
+    title: '年度最佳风电项目开发商',
+    titleEn: 'Wind Power Project Developer of the Year',
     year: '2022',
-    imageUrl: realImages.certificate.award,
+    issuer: '全球风能理事会',
+    issuerEn: 'Global Wind Energy Council',
+    imageUrl: '/images/certificates/award.jpg',
   },
   {
-    title: '2021年度绿色能源贡献奖',
-    titleEn: '2021 Green Energy Contribution Award',
-    issuer: '中国能源报',
-    issuerEn: 'China Energy News',
-    year: '2021',
-    imageUrl: realImages.certificate.award,
+    title: '碳中和贡献奖',
+    titleEn: 'Carbon Neutrality Contribution Award',
+    year: '2023',
+    issuer: '中国绿色发展基金会',
+    issuerEn: 'China Green Development Foundation',
+    imageUrl: '/images/certificates/award.jpg',
   },
 ];

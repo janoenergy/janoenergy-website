@@ -4,7 +4,38 @@ Allow: /
 # Sitemap
 Sitemap: https://www.janoenergy.com/sitemap.xml
 
+# 爬虫抓取延迟（秒）
+Crawl-delay: 1
+
 # 禁止爬虫访问的路径
 Disallow: /admin/
+Disallow: /admin-system/
 Disallow: /oa/
 Disallow: /api/
+Disallow: /login
+Disallow: /_next/
+Disallow: /404
+Disallow: /500
+
+# 允许访问静态资源
+Allow: /_next/static/
+
+# 特定爬虫规则
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 1
+
+# 禁止某些爬虫
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /

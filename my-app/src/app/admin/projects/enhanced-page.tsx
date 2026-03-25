@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Plus, Edit, Trash2, Search } from 'lucide-react';
+import { Plus, Edit, Trash2 } from 'lucide-react';
 import { API_ENDPOINTS } from '@/lib/api';
 import LoadingSpinner from '@/components/Loading';
 import { toast } from 'sonner';
@@ -11,19 +11,20 @@ import BatchActions from '@/components/BatchActions';
 import OperationLog, { LogEntry } from '@/components/OperationLog';
 import MobileTable from '@/components/MobileTable';
 
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  status: string;
-  capacity: string;
-  location: string;
+// 使用统一的 Project 类型
+import type { Project } from '@/types';
+
+// 扩展本地使用的 Project 类型
+interface LocalProject extends Project {
   createdAt: string;
 }
 
+// 定义可排序的字段类型
+type SortableField = 'title' | 'category' | 'status' | 'capacity' | 'location';
+
 export default function EnhancedProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<LocalProject[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<LocalProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -62,23 +63,36 @@ export default function EnhancedProjectsPage() {
   }, [searchQuery, projects]);
 
   // 排序功能
-  const handleSort = (column: string, direction: 'asc' | 'desc') => {
-    const sorted = [...filteredProjects].sort((a: any, b: any) => {
-      if (direction === 'asc') {
-        return a[column] > b[column] ? 1 : -1;
+  const handleSort = (column: SortableField, direction: 'asc' | 'desc') => {
+    const sorted = [...filteredProjects].sort((a, b) => {
+      const aValue = a[column];
+      const bValue = b[column];
+      
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        if (direction === 'asc') {
+          return aValue.localeCompare(bValue);
+        }
+        return bValue.localeCompare(aValue);
       }
-      return a[column] < b[column] ? 1 : -1;
+      
+      // 对于非字符串类型，转换为字符串比较
+      const aStr = String(aValue);
+      const bStr = String(bValue);
+      if (direction === 'asc') {
+        return aStr.localeCompare(bStr);
+      }
+      return bStr.localeCompare(aStr);
     });
     setFilteredProjects(sorted);
   };
 
   // 筛选功能
-  const handleFilter = (column: string, value: string) => {
+  const handleFilter = (column: SortableField, value: string) => {
     if (!value) {
       setFilteredProjects(projects);
       return;
     }
-    const filtered = projects.filter((p: any) => p[column] === value);
+    const filtered = projects.filter((p) => p[column] === value);
     setFilteredProjects(filtered);
   };
 
@@ -148,7 +162,7 @@ export default function EnhancedProjectsPage() {
   };
 
   // CSV转换
-  const convertToCSV = (data: Project[]) => {
+  const convertToCSV = (data: LocalProject[]) => {
     const headers = ['ID', '标题', '类型', '状态', '容量', '地点'];
     const rows = data.map(p => [p.id, p.title, p.category, p.status, p.capacity, p.location]);
     return [headers, ...rows].map(row => row.join(',')).join('\n');
@@ -191,8 +205,8 @@ export default function EnhancedProjectsPage() {
           { key: 'category', label: '类型' },
           { key: 'status', label: '状态' },
         ]}
-        onFilter={handleFilter}
-        onSort={handleSort}
+        onFilter={(column, value) => handleFilter(column as SortableField, value)}
+        onSort={(column, direction) => handleSort(column as SortableField, direction)}
         filters={[
           { key: 'category', label: '项目类型', options: ['wind', 'solar', 'storage'] },
           { key: 'status', label: '项目状态', options: ['planning', 'construction', 'operation'] },
@@ -273,7 +287,7 @@ export default function EnhancedProjectsPage() {
           { key: 'capacity', label: '容量' },
           { key: 'location', label: '地点' },
         ]}
-        actions={(item) => (
+        actions={() => (
           <div className="flex items-center gap-2">
             <button className="p-1 text-blue-600 hover:bg-blue-50 rounded">
               <Edit className="w-4 h-4" />
