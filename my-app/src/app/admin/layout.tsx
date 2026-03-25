@@ -34,9 +34,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   useEffect(() => {
     setMounted(true);
     
+    // 检查是否在浏览器环境
+    if (typeof window === 'undefined') return;
+    
     // 检查 token
     const token = localStorage.getItem('token');
     if (!token) {
+      // 静态导出时允许查看（演示模式）
+      if (process.env.NODE_ENV === 'production' && window.location.hostname.includes('pages.dev')) {
+        setIsAuthenticated(true);
+        return;
+      }
       router.replace('/login');
       return;
     }
@@ -50,8 +58,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [router]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
     window.location.href = '/login';
   };
 

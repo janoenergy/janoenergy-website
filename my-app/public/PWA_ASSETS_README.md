@@ -1,59 +1,78 @@
-# PWA 资源准备清单
+# PWA 资源生成完成
 
-## 图标 (icons/)
+## ✅ 已生成的资源
 
-需要准备以下尺寸的 PNG 图标：
-
-| 文件名 | 尺寸 | 用途 |
-|--------|------|------|
-| icon-72x72.png | 72x72 | 安卓启动图标 |
-| icon-96x96.png | 96x96 | 安卓启动图标 |
-| icon-128x128.png | 128x128 | Chrome 商店 |
-| icon-144x144.png | 144x144 | 安卓启动图标 |
-| icon-152x152.png | 152x152 | iOS 主屏幕 |
-| icon-192x192.png | 192x192 | 安卓启动图标 |
-| icon-384x384.png | 384x384 | 安卓启动图标 |
-| icon-512x512.png | 512x512 | 安卓启动图标、PWA 安装 |
+### 图标 (public/icons/)
+| 文件 | 尺寸 | 用途 |
+|------|------|------|
+| icon-72x72.png | 72x72 | 基础图标 |
+| icon-96x96.png | 96x96 | 基础图标 |
+| icon-128x128.png | 128x128 | 基础图标 |
+| icon-144x144.png | 144x144 | 基础图标 |
+| icon-152x152.png | 152x152 | iOS 图标 |
+| icon-192x192.png | 192x192 | PWA 图标 |
+| icon-384x384.png | 384x384 | PWA 图标 |
+| icon-512x512.png | 512x512 | PWA 图标 |
+| maskable-icon-192x192.png | 192x192 | 自适应图标 |
+| maskable-icon-512x512.png | 512x512 | 自适应图标 |
 | apple-touch-icon.png | 180x180 | iOS 主屏幕 |
-| favicon-16x16.png | 16x16 | 浏览器标签 |
 | favicon-32x32.png | 32x32 | 浏览器标签 |
 
-## 截图 (screenshots/)
+### 截图 (public/screenshots/)
+| 文件 | 尺寸 | 用途 |
+|------|------|------|
+| home.png | 1280x720 | 桌面端展示 |
+| mobile.png | 750x1334 | 移动端展示 |
+| about.png | 1280x720 | 关于页面 |
+| mobile-narrow.png | 750x1334 | 移动端窄屏 |
 
-需要准备以下截图用于 PWA 安装提示：
+### Manifest 更新
+- ✅ 添加了 maskable 图标支持
+- ✅ 添加了 shortcuts (快捷入口)
+- ✅ 截图配置完整
 
-| 文件名 | 尺寸 | 用途 |
-|--------|------|------|
-| screenshot-wide.png | 1280x720 | 宽屏展示 |
-| screenshot-narrow.png | 720x1280 | 移动端展示 |
+## 📝 后续建议
 
-## 设计建议
+### 1. 替换为实际品牌图标
+当前生成的图标是占位符（显示"江"字），建议替换为：
+- 品牌 Logo SVG
+- 使用设计工具导出各尺寸 PNG
 
-### 图标设计
-- 使用公司 Logo
-- 背景色：#10b981 ( emerald-500 )
-- 图标主体：白色
-- 圆角：20%
-- 格式：PNG (透明背景)
+### 2. 添加更多截图
+建议添加以下页面的截图：
+- 业务领域 (/zh/business)
+- 项目案例 (/zh/projects)
+- 新闻中心 (/zh/news)
+- ESG页面 (/zh/esg)
 
-### 截图内容
-- 首页 Hero 区域
-- 项目展示页面
-- 数据统计区域
-- 确保展示网站核心功能
-
-## 生成工具
-
-可以使用以下工具生成：
-1. **Figma** - 设计图标和导出
-2. **PWA Asset Generator** - 自动生成各种尺寸
-3. **RealFaviconGenerator** - 生成 favicon
-
-## 安装 PWA Asset Generator
-
+### 3. 测试 PWA 安装
 ```bash
-npm install -g pwa-asset-generator
+# 本地测试
+npm run build
+npx serve dist
 
-# 使用示例
-pwa-asset-generator logo.png ./public/icons --background "#10b981"
+# 打开 Chrome DevTools → Lighthouse
+# 运行 PWA 审计
 ```
+
+### 4. 验证清单
+- [ ] Chrome 地址栏出现安装图标
+- [ ] 移动端可以添加到主屏幕
+- [ ] 离线状态下可以访问缓存页面
+- [ ] PWA 启动画面正常显示
+
+## 🔧 重新生成图标
+
+如需重新生成图标：
+```bash
+# 使用脚本
+cd my-app
+bash scripts/generate-pwa-icons.sh
+
+# 或使用 Node.js
+cd my-app
+node scripts/generate-icons.js
+```
+
+---
+生成时间: 2026-03-26

@@ -9,6 +9,7 @@ import { defaultMetadata, siteConfig } from "@/lib/seo";
 import { resourceHints } from "@/lib/performance";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { WebVitalsMonitor } from "@/components/WebVitalsMonitor";
+import { SafeComponentLoader, DeferredLoader } from "@/components/SafeLoader";
 
 // 导出元数据
 export const metadata: Metadata = defaultMetadata;
@@ -71,6 +72,25 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-152x152.png" />
+        
+        {/* Favicon */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        
+        {/* Safari Pinned Tab */}
+        <link rel="mask-icon" href="/icons/icon-192x192.png" color="#10b981" />
+        
+        {/* MS Tile */}
+        <meta name="msapplication-TileColor" content="#10b981" />
+        <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        
         {/* 字体加载优化脚本 */}
         <script
           dangerouslySetInnerHTML={{
@@ -86,11 +106,16 @@ export default function RootLayout({
                 }
                 
                 // 主题切换防闪烁
-                var theme = localStorage.getItem('theme') || 'light';
-                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
+                try {
+                  var theme = localStorage.getItem('theme') || 'light';
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                  document.documentElement.classList.add('theme-loaded');
+                } catch (e) {
+                  // localStorage 可能被禁用
+                  document.documentElement.classList.add('theme-loaded');
                 }
-                document.documentElement.classList.add('theme-loaded');
               })();
             `,
           }}
@@ -101,10 +126,29 @@ export default function RootLayout({
           <PageLoader />
           {children}
           <BackToTop />
-          <Analytics baiduId={BAIDU_ID} googleId={GOOGLE_ID} />
-          <ChatWidget lang="zh" />
-          <ServiceWorkerRegister />
-          <WebVitalsMonitor />
+          
+          {/* 安全加载可能出错的组件 */}
+          <SafeComponentLoader fallback={null}>
+            <DeferredLoader delay={2000}>
+              <Analytics baiduId={BAIDU_ID} googleId={GOOGLE_ID} />
+            </DeferredLoader>
+          </SafeComponentLoader>
+          
+          <SafeComponentLoader fallback={null}>
+            <ChatWidget lang="zh" />
+          </SafeComponentLoader>
+          
+          <SafeComponentLoader fallback={null}>
+            <DeferredLoader delay={3000}>
+              <ServiceWorkerRegister />
+            </DeferredLoader>
+          </SafeComponentLoader>
+          
+          <SafeComponentLoader fallback={null}>
+            <DeferredLoader delay={1500}>
+              <WebVitalsMonitor />
+            </DeferredLoader>
+          </SafeComponentLoader>
         </ThemeProvider>
       </body>
     </html>
