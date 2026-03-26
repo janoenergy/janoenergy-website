@@ -45,42 +45,34 @@ export function BusinessSection({ lang }: BusinessSectionProps) {
   return (
     <section className={`py-24 relative ${styles.bg}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 大标题 */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 1, y: 0 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-4 ${styles.bgCard} ${styles.border}`}
-          >
-            <span>01</span>
-            <span className={`w-8 h-px ${styles.border.replace('border-', 'bg-')}`} />
-            <span className={styles.textMuted}>{lang === 'zh' ? '业务板块' : 'Business'}</span>
-          </motion.div>
           <motion.h2
-            initial={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className={`text-4xl md:text-5xl font-bold mb-4 ${styles.text}`}
+            className={`text-4xl md:text-5xl font-bold ${styles.text}`}
           >
-            {lang === 'zh' ? '覆盖多种新能源形态' : 'Multiple Clean Energy Solutions'}
+            {lang === 'zh' ? '覆盖多种新能源形态' : 'Covering Multiple New Energy Forms'}
           </motion.h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8">
           {projectTypes.map((type, index) => {
             const Icon = type.icon;
             return (
               <motion.div
                 key={type.id}
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
                 className="group relative"
               >
-                <div className={`absolute inset-0 bg-gradient-to-r ${styles.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
-                <div className={`relative h-full ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${type.color} flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110`}>
+                <div className={`absolute inset-0 bg-gradient-to-r ${type.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                <div className={`relative ${styles.bgCard} backdrop-blur-xl border ${styles.border} ${styles.borderHover} rounded-2xl p-8 transition-all duration-300 hover:shadow-xl`}>
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${type.color} flex items-center justify-center mb-6`}>
                     <Icon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className={`text-2xl font-bold mb-3 ${styles.text}`}>
@@ -89,7 +81,10 @@ export function BusinessSection({ lang }: BusinessSectionProps) {
                   <p className={`mb-6 ${styles.textMuted}`}>
                     {lang === 'zh' ? type.desc : type.descEn}
                   </p>
-                  <a href={`/${lang}/projects?type=${type.id}`} className="inline-flex items-center gap-2 text-emerald-500 hover:text-emerald-400">
+                  <a
+                    href={`/${lang}/projects?type=${type.id}`}
+                    className={`inline-flex items-center gap-2 font-medium transition-colors hover:text-emerald-500 ${styles.textSecondary}`}
+                  >
                     {lang === 'zh' ? '了解更多' : 'Learn More'}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>

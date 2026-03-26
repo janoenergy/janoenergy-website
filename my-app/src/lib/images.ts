@@ -1,6 +1,7 @@
 // ============================================
 // 图片资源配置中心
 // 统一管理系统所有图片资源，便于本地化替换
+// 使用国内可访问的图片源（Pexels CDN）
 // ============================================
 
 // 项目展示图片
@@ -56,13 +57,55 @@ export const teamImages = {
   member2: '/images/team/member-2.jpg',
   member3: '/images/team/member-3.jpg',
   member4: '/images/team/member-4.jpg',
+  // 高管图片
+  ceo: '/images/team/ceo.jpg',
+  cfo: '/images/team/cfo.jpg',
+  cto: '/images/team/cto.jpg',
+  coo: '/images/team/coo.jpg',
+};
+
+// 新闻图片
+export const newsImages = {
+  news1: '/images/news/news-1.jpg',
+  news2: '/images/news/news-2.jpg',
+  news3: '/images/news/news-3.jpg',
+  news4: '/images/news/news-4.jpg',
+  news5: '/images/news/news-5.jpg',
+  news6: '/images/news/news-6.jpg',
+};
+
+// 证书图片
+export const certificateImages = {
+  iso9001: '/images/certificates/iso9001.jpg',
+  iso14001: '/images/certificates/iso14001.jpg',
+  iso45001: '/images/certificates/iso45001.jpg',
+  cert1: '/images/certificates/cert-1.jpg',
+  cert2: '/images/certificates/cert-2.jpg',
+  cert3: '/images/certificates/cert-3.jpg',
+  cert4: '/images/certificates/cert-4.jpg',
+};
+
+// 关于我们页面图片
+export const aboutImages = {
+  company: '/images/about/company.jpg',
+  team: '/images/about/team.jpg',
+};
+
+// 首页轮播图
+export const heroImages = {
+  hero1: '/images/hero/hero-1.jpg',
+  hero2: '/images/hero/hero-2.jpg',
+  hero3: '/images/hero/hero-3.jpg',
+  hero: '/images/hero/hero.jpg',
 };
 
 // 默认占位图
 export const placeholderImages = {
-  project: '/images/placeholder-project.jpg',
-  avatar: '/images/placeholder-avatar.jpg',
-  hero: '/images/hero-bg.jpg',
+  project: '/images/projects/wind-farm.jpg',
+  avatar: '/images/team/member-1.jpg',
+  hero: '/images/hero/hero.jpg',
+  news: '/images/news/news-1.jpg',
+  certificate: '/images/certificates/cert-1.jpg',
 };
 
 // 获取项目图片（支持回退）
@@ -73,4 +116,27 @@ export function getProjectImage(id: number): string {
 // 获取业务图片
 export function getBusinessImage(type: keyof typeof businessImages): string {
   return businessImages[type] || placeholderImages.project;
+}
+
+// 获取团队图片
+export function getTeamImage(member: keyof typeof teamImages): string {
+  return teamImages[member] || placeholderImages.avatar;
+}
+
+// 获取新闻图片
+export function getNewsImage(index: number): string {
+  const key = `news${index}` as keyof typeof newsImages;
+  return newsImages[key] || placeholderImages.news;
+}
+
+// 获取证书图片
+export function getCertificateImage(index: number): string {
+  const key = `cert${index}` as keyof typeof certificateImages;
+  return certificateImages[key] || placeholderImages.certificate;
+}
+
+// 获取首页轮播图
+export function getHeroImage(index: number): string {
+  const key = `hero${index}` as keyof typeof heroImages;
+  return heroImages[key] || placeholderImages.hero;
 }
